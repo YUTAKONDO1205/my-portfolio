@@ -12,13 +12,50 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://kondo-yuta-my-portfolio.vercel.app";
+const personName = "\u8fd1\u85e4\u60a0\u592a";
+const siteName = `${personName}\u306e\u30dd\u30fc\u30c8\u30d5\u30a9\u30ea\u30aa`;
+const siteDescription =
+  "\u8fd1\u85e4\u60a0\u592a\u306e\u30dd\u30fc\u30c8\u30d5\u30a9\u30ea\u30aa\u30b5\u30a4\u30c8\u3002Spresense\u3001AI\u3001\u7570\u5e38\u691c\u77e5\u3001\u30c9\u30ed\u30fc\u30f3\u958b\u767a\u306a\u3069\u306e\u7814\u7a76\u30fb\u5236\u4f5c\u5b9f\u7e3e\u3092\u7d39\u4ecb\u3002";
+
 export const metadata: Metadata = {
-  title: "近藤悠太 | ポートフォリオ",
-  description: "近藤悠太のポートフォリオサイト。Spresense、AI、異常検知、ドローン開発などの研究・制作実績を紹介。",
-  verification: {
-    google: "CwhzEcI0iAakMI33bJudYRWuHz4CuGDhMH39CAHmMjM", // ← contentの中身だけ入れる
-    // <meta name="google-site-verification" content="CwhzEcI0iAakMI33bJudYRWuHz4CuGDhMH39CAHmMjM" />
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: `${personName} | \u30dd\u30fc\u30c8\u30d5\u30a9\u30ea\u30aa`,
+    template: `%s | ${personName}`,
   },
+  description: siteDescription,
+  applicationName: siteName,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: "/",
+    title: `${personName} | \u30dd\u30fc\u30c8\u30d5\u30a9\u30ea\u30aa`,
+    description: siteDescription,
+    siteName,
+    locale: "ja_JP",
+  },
+  verification: {
+    google: "CwhzEcI0iAakMI33bJudYRWuHz4CuGDhMH39CAHmMjM",
+  },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteName,
+  alternateName: personName,
+  description: siteDescription,
+  url: siteUrl,
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: personName,
+  url: siteUrl,
 };
 
 export default function RootLayout({
@@ -28,10 +65,20 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
