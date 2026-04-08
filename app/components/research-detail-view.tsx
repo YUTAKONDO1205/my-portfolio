@@ -244,10 +244,10 @@ export function ResearchDetailView({
         </motion.div>
 
         <motion.div className="project-story-grid" variants={groupVariants}>
-          {project.sections.map((section) => (
+          {project.sections.map((section, index) => (
             <MotionCardShell key={section.title}>
               <article className="project-story-card">
-                <p className="card-label">{section.title}</p>
+                <p className="project-story-index">0{index + 1}</p>
                 <h2>{section.title}</h2>
                 <p>{section.body}</p>
               </article>
@@ -265,7 +265,7 @@ export function ResearchDetailView({
       >
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Highlights</p>
-          <h2>この研究のポイント。</h2>
+          <h2>ポイント</h2>
         </div>
 
         <motion.div className="project-highlight-grid" variants={groupVariants}>
@@ -306,7 +306,7 @@ export function ResearchDetailView({
       >
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Other Projects</p>
-          <h2>ほかの研究テーマ。</h2>
+          <h2>ほかの研究</h2>
         </div>
 
         <motion.div className="project-mini-grid" variants={groupVariants}>

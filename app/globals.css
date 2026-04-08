@@ -415,6 +415,7 @@ img {
 .project-hero-copy {
   position: relative;
   z-index: 1;
+  min-width: 0;
 }
 
 .base-hero-copy-wide {
@@ -446,7 +447,7 @@ img {
   margin: 0;
   font-family: var(--font-heading);
   font-weight: 500;
-  line-height: 0.98;
+  line-height: 1.01;
   letter-spacing: -0.045em;
   text-wrap: pretty;
 }
@@ -488,13 +489,15 @@ img {
   max-width: 42rem;
   margin-top: 26px;
   font-size: clamp(1rem, 1.8vw, 1.12rem);
+  line-height: 1.92;
 }
 
 .section-intro {
   max-width: 48rem;
   margin: 4px 0 0;
   color: var(--muted);
-  line-height: 1.82;
+  line-height: 1.8;
+  text-wrap: pretty;
 }
 
 .hero-actions {
@@ -599,8 +602,10 @@ img {
   position: relative;
   z-index: 1;
   display: grid;
-  gap: 8px;
-  padding: 18px;
+  gap: 10px;
+  align-content: start;
+  min-width: 0;
+  padding: 20px 20px 18px;
   border-radius: 22px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.06);
@@ -613,21 +618,53 @@ img {
     box-shadow 220ms ease;
 }
 
-.hero-stage-card:nth-of-type(3) {
-  margin-left: 0;
+.hero-stage-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 20px 12px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0)
+  );
+  opacity: 0.72;
 }
 
 .hero-stage-card strong {
   font-family: var(--font-heading);
   font-weight: 500;
   font-size: 1.8rem;
-  line-height: 1;
+  line-height: 1.02;
+  overflow-wrap: anywhere;
 }
 
 .hero-stage-card p {
   margin: 0;
   color: rgba(245, 247, 255, 0.8);
-  line-height: 1.7;
+  max-width: 26ch;
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+.hero-stage-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin-top: 4px;
+  color: rgba(255, 245, 240, 0.9);
+  font-family: var(--font-heading);
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-stage-card-cta::after {
+  content: "\2192";
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
 .hero-stage-card:hover,
@@ -666,6 +703,19 @@ img {
 .hero-band-item p {
   margin: 0;
   color: var(--muted);
+}
+
+.hero-stage > *,
+.hero-band > *,
+.axis-flow > *,
+.project-preview-grid > *,
+.archive-grid > *,
+.platform-grid-light > *,
+.project-story-grid > *,
+.project-highlight-grid > *,
+.project-mini-grid > *,
+.research-axis-strip > * {
+  min-width: 0;
 }
 
 .dark-panel,
@@ -716,6 +766,7 @@ img {
   font-size: clamp(2.2rem, 5vw, 4.4rem);
   line-break: strict;
   word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 .section-heading-inverse h2,
@@ -838,6 +889,7 @@ img {
 .platform-card-dark strong {
   font-size: 1.56rem;
   color: #ffffff;
+  overflow-wrap: anywhere;
 }
 
 .card-label {
@@ -929,7 +981,8 @@ img {
   display: grid;
   align-content: end;
   min-height: 100%;
-  gap: 14px;
+  gap: 12px;
+  min-width: 0;
   padding: 24px;
 }
 
@@ -937,13 +990,14 @@ img {
 .project-mini-card strong {
   font-size: 2rem;
   color: #ffffff;
+  line-height: 1.02;
   overflow-wrap: anywhere;
 }
 
 .project-preview-subtitle {
   margin: 0;
   color: rgba(245, 247, 255, 0.84);
-  line-height: 1.7;
+  line-height: 1.58;
   text-wrap: pretty;
 }
 
@@ -952,6 +1006,11 @@ img {
 .project-hero-subtitle,
 .project-hero-summary {
   text-wrap: pretty;
+}
+
+.project-preview-summary,
+.project-mini-card p {
+  max-width: 28ch;
 }
 
 .tag-row {
@@ -1064,6 +1123,8 @@ img {
   font-family: var(--font-heading);
   color: #ffffff !important;
   font-size: 1.05rem;
+  line-height: 1.24;
+  overflow-wrap: anywhere;
 }
 
 .recognition-org {
@@ -1173,6 +1234,7 @@ img {
   max-width: 8ch;
   font-size: clamp(3.8rem, 9vw, 6.8rem);
   color: #ffffff;
+  overflow-wrap: anywhere;
 }
 
 .project-hero-subtitle,
@@ -1353,6 +1415,7 @@ img {
   color: var(--project-muted);
 }
 
+.project-story-index,
 .project-highlight-index {
   font-family: var(--font-mono-stack);
   color: rgba(245, 248, 255, 0.5);
@@ -1920,6 +1983,7 @@ a:focus-visible,
   .project-hero h1 {
     max-width: 100%;
     font-size: clamp(2.8rem, 14vw, 4.6rem);
+    line-height: 1.02;
   }
 
   .base-hero-lead,
@@ -1936,15 +2000,62 @@ a:focus-visible,
 
   .hero-stage {
     min-height: auto;
-    padding: 18px;
-  }
-
-  .hero-stage-card {
+    gap: 12px;
     padding: 16px;
   }
 
+  .hero-stage-card {
+    gap: 8px;
+    padding: 18px 16px 16px;
+  }
+
+  .hero-stage::before,
+  .hero-stage::after {
+    opacity: 0.5;
+  }
+
+  .hero-stage-beam {
+    display: none;
+  }
+
+  .hero-stage-card strong {
+    font-size: 1.56rem;
+  }
+
+  .hero-stage-card p {
+    max-width: 100%;
+    font-size: 0.94rem;
+    line-height: 1.56;
+  }
+
+  .hero-stage-card-cta {
+    font-size: 0.72rem;
+  }
+
   .project-preview-card {
-    min-height: 260px;
+    min-height: 300px;
+  }
+
+  .project-preview-inner {
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .project-preview-card h3,
+  .project-mini-card strong {
+    font-size: 1.68rem;
+  }
+
+  .project-preview-subtitle,
+  .project-mini-card p {
+    font-size: 0.94rem;
+    line-height: 1.58;
+  }
+
+  .project-preview-summary {
+    max-width: 100%;
+    font-size: 0.94rem;
+    line-height: 1.72;
   }
 
   .project-mini-card {
@@ -1958,10 +2069,22 @@ a:focus-visible,
     flex-wrap: wrap;
   }
 
+  .project-hero-english {
+    font-size: 0.84rem;
+    line-height: 1.5;
+    letter-spacing: 0.06em;
+  }
+
   .project-hero-photo {
     inset: 38% -18% 4% -6%;
     opacity: 0.24;
     mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.88) 24%, rgba(0, 0, 0, 1) 64%, transparent 100%);
+  }
+
+  .theme-drone .project-hero::before,
+  .theme-pdm .project-hero::before,
+  .theme-anomaly .project-hero::before {
+    display: none;
   }
 
   .project-preview-photo,

@@ -227,9 +227,9 @@ export function HomePageView({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.74, ease: easeOutExpo, delay: 0.34 }}
             >
-              画像、振動、音響のような信号を現場で拾い、SPRESENSE 級で判断し、
+              画像、振動、音響を現場で取り、SPRESENSE 級で判断し、
               GitHub と Elchika で公開しています。
-              このサイトでは、その流れの中にある研究テーマを順に見ていけます。
+              研究ごとのサイトから、その流れを順にたどれます。
             </motion.p>
 
             <motion.div
@@ -296,6 +296,7 @@ export function HomePageView({
                   <span className="quick-link-label">{project.heroKicker}</span>
                   <strong>{project.title}</strong>
                   <p>{project.subtitle}</p>
+                  <span className="hero-stage-card-cta">詳しく見る</span>
                 </Link>
               </motion.div>
             ))}
@@ -337,7 +338,7 @@ export function HomePageView({
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">{siteAxis.label}</p>
           <h2>研究の軸</h2>
-          <p className="section-intro">{siteAxis.detail}</p>
+          <p className="section-intro">{siteAxis.summary}</p>
         </div>
 
         <motion.div className="axis-flow" variants={groupVariants}>
@@ -384,6 +385,9 @@ export function HomePageView({
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Project Sites</p>
           <h2>研究テーマ</h2>
+          <p className="section-intro">
+            気になる研究から個別ページに入り、背景、構成、現在地まで追えます。
+          </p>
         </div>
 
         <motion.div className="project-preview-grid" variants={groupVariants}>
@@ -408,7 +412,7 @@ export function HomePageView({
                   </div>
                   <div className="link-row">
                     <Link href={`/research/${project.slug}`} className="arrow-link">
-                      Open Site
+                      詳しく見る
                     </Link>
                   </div>
                 </div>
@@ -428,7 +432,10 @@ export function HomePageView({
       >
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Archive</p>
-          <h2>記事と受賞・評価</h2>
+          <h2>記事と受賞</h2>
+          <p className="section-intro">
+            公開記事と受賞歴をまとめて見られるようにしています。
+          </p>
         </div>
 
         <div className="archive-grid">
@@ -511,7 +518,10 @@ export function HomePageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Platforms</p>
-          <h2>研究の公開先</h2>
+          <h2>公開先</h2>
+          <p className="section-intro">
+            実装、記事、プロフィールの入口をここに集約しています。
+          </p>
         </div>
 
         <motion.div className="platform-grid-light" variants={groupVariants}>

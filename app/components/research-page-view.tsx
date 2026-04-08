@@ -174,7 +174,7 @@ export function ResearchPageView({
             transition={{ duration: 0.84, ease: easeOutExpo, delay: 0.18 }}
             style={reduceMotion ? undefined : { transformPerspective: 1200 }}
           >
-            公開中の研究テーマ。
+            公開中の研究
           </motion.h1>
           <motion.p
             className="base-hero-lead"
@@ -182,9 +182,8 @@ export function ResearchPageView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.72, ease: easeOutExpo, delay: 0.28 }}
           >
-            このページでは {siteAxis.steps[0].en} / {siteAxis.steps[1].en} /{" "}
-            {siteAxis.steps[2].en} の流れの中で、各研究がどこを担うかを見渡せるように整理しています。
-            詳細な説明や実装は、それぞれの個別ページで掘り下げています。
+            3つの研究を一覧で見渡せるページです。役割を短くつかみ、
+            詳しい説明や実装はそれぞれの個別ページで見られます。
           </motion.p>
 
           <motion.div
@@ -233,7 +232,10 @@ export function ResearchPageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Project Sites</p>
-          <h2>詳しく見たい研究から入れます。</h2>
+          <h2>研究から見る</h2>
+          <p className="section-intro">
+            それぞれの研究は個別サイトで、背景から構成まで詳しく紹介しています。
+          </p>
         </div>
 
         <motion.div className="project-preview-grid" variants={groupVariants}>
@@ -258,7 +260,7 @@ export function ResearchPageView({
                   </div>
                   <div className="link-row">
                     <Link href={`/research/${project.slug}`} className="arrow-link">
-                      Open Site
+                      詳しく見る
                     </Link>
                   </div>
                 </div>
@@ -278,7 +280,10 @@ export function ResearchPageView({
       >
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Archive</p>
-          <h2>公開記事と受賞・評価</h2>
+          <h2>記事と受賞</h2>
+          <p className="section-intro">
+            公開記事と外部評価を、研究全体の流れとしてまとめています。
+          </p>
         </div>
 
         <div className="archive-grid">
@@ -361,7 +366,10 @@ export function ResearchPageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Platforms</p>
-          <h2>研究の公開先</h2>
+          <h2>公開先</h2>
+          <p className="section-intro">
+            実装、記事、活動の窓口をここにまとめています。
+          </p>
         </div>
 
         <motion.div className="platform-grid-light" variants={groupVariants}>
