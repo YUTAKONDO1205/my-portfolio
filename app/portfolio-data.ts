@@ -115,7 +115,7 @@ export const focusAreas: readonly FocusArea[] = [
 
 export const siteAxis: SiteAxis = {
   label: "Research Flow",
-  title: "現場の信号を、判断と公開へつないでいく。",
+  title: "現場の信号を、判断と公開へつないでいく",
   summary:
     "このサイトの軸は、センサで拾った信号をエッジで読み、公開しながら次の研究へつなげる流れです。",
   detail:
