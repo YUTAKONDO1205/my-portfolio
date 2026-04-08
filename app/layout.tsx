@@ -1,22 +1,39 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Cormorant_Garamond,
+  Geist_Mono,
+  Manrope,
+  Noto_Serif_JP,
+} from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const bodySans = Manrope({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const displaySerif = Cormorant_Garamond({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const japaneseSerif = Noto_Serif_JP({
+  variable: "--font-serif",
+  weight: ["400", "500", "600", "700"],
+  preload: false,
+});
+
+const mono = Geist_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
 const siteUrl = "https://kondo-yuta-my-portfolio.vercel.app";
 const personName = "近藤悠太";
-const siteName = `${personName} | Portfolio`;
+const siteName = `${personName} | Research Portfolio`;
 const siteDescription =
-  "近藤悠太のポートフォリオサイト。SPRESENSE、ELTRES、センシング、AI、振動解析を軸にした研究とプロトタイピングの実績を紹介します。";
+  "近藤悠太の研究ポートフォリオ。DroneInspector、pdm_edge、anomaly-event-api を中心に、SPRESENSE、ELTRES、エッジAI、異常検知の研究と公開実装を紹介します。";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -29,12 +46,14 @@ export const metadata: Metadata = {
   keywords: [
     "近藤悠太",
     "Yuta Kondo",
-    "Portfolio",
+    "Research Portfolio",
+    "DroneInspector",
+    "pdm_edge",
+    "anomaly-event-api",
     "SPRESENSE",
     "ELTRES",
-    "AI",
-    "センシング",
-    "振動解析",
+    "エッジAI",
+    "異常検知",
   ],
   authors: [{ name: personName, url: siteUrl }],
   creator: personName,
@@ -48,11 +67,18 @@ export const metadata: Metadata = {
     description: siteDescription,
     siteName,
     locale: "ja_JP",
+    images: [
+      {
+        url: "/images/yuta-kondo-portrait.jpeg",
+        alt: `${personName} portrait`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteName,
     description: siteDescription,
+    images: ["/images/yuta-kondo-portrait.jpeg"],
   },
   verification: {
     google: "CwhzEcI0iAakMI33bJudYRWuHz4CuGDhMH39CAHmMjM",
@@ -88,7 +114,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${bodySans.variable} ${displaySerif.variable} ${japaneseSerif.variable} ${mono.variable} h-full antialiased`}
     >
       <body className="site-body">
         <script
