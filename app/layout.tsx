@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Oswald } from "next/font/google";
 import { RouteIndicator } from "./components/route-indicator";
+import { SiteMotionChrome } from "./components/site-motion";
 import "./globals.css";
 
 const headingFont = Oswald({
@@ -105,6 +106,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
+        <SiteMotionChrome />
         <RouteIndicator />
         {children}
       </body>

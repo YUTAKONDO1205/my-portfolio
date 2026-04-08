@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "motion/react";
 import { researchProjects } from "../portfolio-data";
 
 function getRouteLabel(pathname: string) {
@@ -62,11 +63,32 @@ export function RouteIndicator() {
   }
 
   return (
-    <div className="route-indicator" aria-live="polite">
+    <motion.div
+      className="route-indicator"
+      aria-live="polite"
+      initial={{ opacity: 0, y: -12, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        duration: 0.52,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
       <span className="route-indicator-label">{label.section}</span>
-      <strong key={pathname} className="route-indicator-value">
-        {label.detail}
-      </strong>
-    </div>
+      <AnimatePresence mode="wait">
+        <motion.strong
+          key={pathname}
+          className="route-indicator-value"
+          initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -8, filter: "blur(8px)" }}
+          transition={{
+            duration: 0.4,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
+          {label.detail}
+        </motion.strong>
+      </AnimatePresence>
+    </motion.div>
   );
 }

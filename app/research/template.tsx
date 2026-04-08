@@ -1,7 +1,9 @@
+import { RouteTemplateMotion } from "../components/site-motion";
+
 export default function ResearchTemplate({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="route-template route-template-detail">{children}</div>;
+  return <RouteTemplateMotion detail>{children}</RouteTemplateMotion>;
 }

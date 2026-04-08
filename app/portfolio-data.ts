@@ -55,6 +55,7 @@ export type ResearchProject = {
   heroKicker: string;
   heroEnglish: string;
   themeClass: "theme-drone" | "theme-pdm" | "theme-anomaly";
+  ambientClass: "ambient-clouds" | "ambient-machine" | "ambient-server";
   tags: readonly string[];
   links: readonly {
     href: string;
@@ -154,6 +155,7 @@ export const researchProjects: readonly ResearchProject[] = [
     heroKicker: "Skyborne Inspection",
     heroEnglish: "Read the scene before the signal is lost.",
     themeClass: "theme-drone",
+    ambientClass: "ambient-clouds",
     tags: [
       "Spresense",
       "Drone",
@@ -207,6 +209,7 @@ export const researchProjects: readonly ResearchProject[] = [
     heroKicker: "Signal and Spectrum",
     heroEnglish: "Turn vibration into a readable edge.",
     themeClass: "theme-pdm",
+    ambientClass: "ambient-machine",
     tags: [
       "SPRESENSE",
       "FFT",
@@ -260,6 +263,7 @@ export const researchProjects: readonly ResearchProject[] = [
     heroKicker: "Operational Layer",
     heroEnglish: "From anomaly to action.",
     themeClass: "theme-anomaly",
+    ambientClass: "ambient-server",
     tags: [
       "Node.js",
       "TypeScript",
