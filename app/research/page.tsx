@@ -6,6 +6,7 @@ import {
   publicationTimeline,
   recognitions,
   researchProjects,
+  siteAxis,
 } from "../portfolio-data";
 
 export const metadata: Metadata = {
@@ -38,7 +39,7 @@ export default function ResearchPage() {
         <header className="landing-header">
           <div>
             <p className="site-mark">Research Index</p>
-            <p className="site-caption">Overview of current public projects</p>
+            <p className="site-caption">Sense / Decide / Share</p>
           </div>
 
           <nav className="hero-nav" aria-label="研究ページナビゲーション">
@@ -50,11 +51,21 @@ export default function ResearchPage() {
 
         <div className="base-hero-copy base-hero-copy-wide">
           <p className="eyebrow">Research</p>
-          <h1 className="base-hero-title">研究一覧。</h1>
+          <h1 className="base-hero-title">研究の見取り図。</h1>
           <p className="base-hero-lead">
-            ここでは研究テーマの入口だけを簡潔に置いています。
-            詳細な説明や構成は、それぞれの個別ページに分けて見せる形にしています。
+            このページでは {siteAxis.steps[0].en} / {siteAxis.steps[1].en} /{" "}
+            {siteAxis.steps[2].en} の流れの中で、各研究がどこを担うかを見渡せるように整理しています。
+            詳細な説明や実装は、それぞれの個別ページで掘り下げています。
           </p>
+
+          <div className="research-axis-strip" aria-label="サイトの軸">
+            {siteAxis.steps.map((step) => (
+              <div key={step.en} className="research-axis-chip">
+                <strong>{step.en}</strong>
+                <span>{step.ja}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

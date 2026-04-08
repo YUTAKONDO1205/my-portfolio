@@ -1,32 +1,17 @@
 import type { Metadata } from "next";
-import {
-  Cormorant_Garamond,
-  Geist_Mono,
-  Manrope,
-  Noto_Serif_JP,
-} from "next/font/google";
+import { Geist_Mono, Oswald } from "next/font/google";
 import { RouteIndicator } from "./components/route-indicator";
 import "./globals.css";
 
-const bodySans = Manrope({
-  variable: "--font-body",
+const headingFont = Oswald({
+  variable: "--font-oswald",
   subsets: ["latin"],
-});
-
-const displaySerif = Cormorant_Garamond({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const japaneseSerif = Noto_Serif_JP({
-  variable: "--font-serif",
-  weight: ["400", "500", "600", "700"],
-  preload: false,
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
 const mono = Geist_Mono({
-  variable: "--font-mono",
+  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -34,7 +19,7 @@ const siteUrl = "https://kondo-yuta-my-portfolio.vercel.app";
 const personName = "近藤悠太";
 const siteName = `${personName} | Portfolio`;
 const siteDescription =
-  "近藤悠太の紹介サイト。DroneInspector、pdm_edge、anomaly-event-api を中心に、SPRESENSE、ELTRES、エッジAI、異常検知の研究と公開実装を紹介します。";
+  "近藤悠太の紹介サイト。現場の信号を取得し、軽量に判断し、GitHub と Elchika で公開する流れを軸に、DroneInspector、pdm_edge、anomaly-event-api を紹介します。";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -55,6 +40,7 @@ export const metadata: Metadata = {
     "ELTRES",
     "エッジAI",
     "異常検知",
+    "Sense Decide Share",
   ],
   authors: [{ name: personName, url: siteUrl }],
   creator: personName,
@@ -108,7 +94,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${bodySans.variable} ${displaySerif.variable} ${japaneseSerif.variable} ${mono.variable} h-full antialiased`}
+      className={`${headingFont.variable} ${mono.variable} h-full antialiased`}
     >
       <body className="site-body">
         <script

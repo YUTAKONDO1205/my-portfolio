@@ -11,6 +11,20 @@ export type FocusArea = {
   description: string;
 };
 
+export type SiteAxisStep = {
+  en: string;
+  ja: string;
+  description: string;
+};
+
+export type SiteAxis = {
+  label: string;
+  title: string;
+  summary: string;
+  detail: string;
+  steps: readonly SiteAxisStep[];
+};
+
 export type PublicationEntry = {
   id: string;
   date: string;
@@ -98,6 +112,35 @@ export const focusAreas: readonly FocusArea[] = [
   },
 ] as const;
 
+export const siteAxis: SiteAxis = {
+  label: "Site Axis",
+  title: "現場の信号が、判断と公開へ流れていく。",
+  summary:
+    "このサイトの軸は、センサで拾った信号をエッジで読み、公開しながら次の研究へつなげる流れです。",
+  detail:
+    "トップでは流れ全体を見せ、研究一覧では見取り図を整理し、各個別ページではテーマごとの空気感と実装の中身へ入れる構成にしています。",
+  steps: [
+    {
+      en: "Sense",
+      ja: "現場で拾う",
+      description:
+        "画像、振動、音響、位置情報のような信号を、実験だけで終わらない粒度で現場から取る。",
+    },
+    {
+      en: "Decide",
+      ja: "軽量に判断する",
+      description:
+        "SPRESENSE 級の制約を前提に、特徴量設計や軽量モデルで判断をデバイス側へ寄せる。",
+    },
+    {
+      en: "Share",
+      ja: "公開して次へつなぐ",
+      description:
+        "GitHub、Elchika、受賞歴まで含めて研究の流れを公開し、次のテーマに接続していく。",
+    },
+  ],
+} as const;
+
 export const researchProjects: readonly ResearchProject[] = [
   {
     slug: "drone-inspector",
@@ -131,17 +174,17 @@ export const researchProjects: readonly ResearchProject[] = [
     ],
     sections: [
       {
-        title: "Vision",
+        title: "着眼点",
         body:
           "トンネルや水道管のような通信条件の悪い場所では、単に撮影して持ち帰るだけでは作業の負荷が大きく残ります。そこで、機体側で画像取得と証跡保存を完結させつつ、必要な情報だけを扱う方向に寄せています。",
       },
       {
-        title: "Build",
+        title: "構成",
         body:
           "ファームウェア側では JPEG 保存、IMU 記録、microSD 保存、BLE 通知、TensorFlow Lite Micro の読み込みを一連化しています。学習済みモデルを `.tflite` から C++ 配列へ変換する流れも切り分けています。",
       },
       {
-        title: "Now",
+        title: "現在地",
         body:
           "現状は取得、保存、ログ化の流れが安定しており、完全な機体側推論へ向けて生画像経路とメモリ調整を詰めている段階です。",
       },
@@ -184,17 +227,17 @@ export const researchProjects: readonly ResearchProject[] = [
     ],
     sections: [
       {
-        title: "Vision",
+        title: "着眼点",
         body:
           "通信前提の大きな解析系ではなく、設備のすぐ近くで異常兆候を拾える最小構成を作ることを目的にしています。現場に置ける軽量さと再現性を優先しています。",
       },
       {
-        title: "Build",
+        title: "構成",
         body:
           "1 kHz の時系列を FFT で周波数特徴へ変換し、0 から 500 Hz を固定 bin に要約して Random Forest へ渡します。学習後はヘッダ化して SPRESENSE へ持ち込めるようにしています。",
       },
       {
-        title: "Now",
+        title: "現在地",
         body:
           "学習、評価、ヘッダ再生成、SPRESENSE 側呼び出しまでが揃っており、異常再現率を重視した軽量構成としてまとまっています。",
       },
@@ -233,17 +276,17 @@ export const researchProjects: readonly ResearchProject[] = [
     ],
     sections: [
       {
-        title: "Vision",
+        title: "着眼点",
         body:
           "現場で本当に必要なのは、判定の有無だけではなく、その結果を保存し、見返し、状態を変えられることだと考えています。そのため異常検知をイベント運用へつなげています。",
       },
       {
-        title: "Build",
+        title: "構成",
         body:
           "Node.js + TypeScript の API 層に Python 推論を接続し、Grad-CAM、focus regions、attention grid といった説明情報も返すようにしています。local と AWS のモード差もサービス層で吸収しています。",
       },
       {
-        title: "Now",
+        title: "現在地",
         body:
           "検知、イベント化、可視化、provider 切り替えが揃い、研究の成果を現場オペレーションへ近づける基盤として機能しています。",
       },

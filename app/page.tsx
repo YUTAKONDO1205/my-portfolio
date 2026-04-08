@@ -1,11 +1,11 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import {
-  focusAreas,
   platformLinks,
   publicationTimeline,
   recognitions,
   researchProjects,
+  siteAxis,
 } from "./portfolio-data";
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
         <header className="landing-header">
           <div>
             <p className="site-mark">Yuta Kondo</p>
-            <p className="site-caption">Research Portfolio / Embedded AI / Public Works</p>
+            <p className="site-caption">Sense / Decide / Share</p>
           </div>
 
           <nav className="hero-nav" aria-label="サイト内ナビゲーション">
@@ -28,15 +28,12 @@ export default function Home() {
         <div className="base-hero-grid">
           <div className="base-hero-copy">
             <p className="eyebrow">Portfolio</p>
-            <h1 className="base-hero-title">
-              近藤悠太の
-              <br />
-              紹介サイト。
-            </h1>
+            <p className="hero-personal">近藤悠太の紹介サイト</p>
+            <h1 className="base-hero-title">{siteAxis.title}</h1>
             <p className="base-hero-lead">
-              センシング、組み込み、エッジ AI、異常検知を軸に、
-              現場で動く研究テーマを公開しています。一覧は簡潔に、
-              各研究は個別ページで世界観ごと切り替えて見せる構成にしています。
+              画像、振動、音響のような信号を現場で拾い、SPRESENSE 級で判断し、
+              GitHub と Elchika で公開する。この流れを一本の軸として、
+              研究ごとに違う空気感の個別サイトへつないでいます。
             </p>
 
             <div className="hero-actions">
@@ -97,24 +94,28 @@ export default function Home() {
 
       <section className="shell section dark-panel">
         <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">Focus</p>
-          <h2>現場の信号を、実装までつなげる。</h2>
+          <p className="eyebrow">{siteAxis.label}</p>
+          <h2>{siteAxis.title}</h2>
+          <p className="section-intro">{siteAxis.detail}</p>
         </div>
 
-        <div className="focus-grid">
-          {focusAreas.map((area, index) => (
+        <div className="axis-flow">
+          {siteAxis.steps.map((step, index) => (
             <article
-              key={area.title}
-              className="focus-card focus-card-dark"
+              key={step.en}
+              className="axis-step"
               style={
                 {
                   "--card-delay": `${index * 120}ms`,
                 } as CSSProperties
               }
             >
-              <p className="card-label card-label-inverse">{area.label}</p>
-              <h3>{area.title}</h3>
-              <p>{area.description}</p>
+              <span className="axis-step-index">0{index + 1}</span>
+              <div className="axis-step-heading">
+                <strong>{step.en}</strong>
+                <span>{step.ja}</span>
+              </div>
+              <p className="axis-step-copy">{step.description}</p>
             </article>
           ))}
         </div>
