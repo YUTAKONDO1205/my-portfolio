@@ -180,7 +180,7 @@ export function HomePageView({
               className="base-hero-title"
               style={reduceMotion ? undefined : { transformPerspective: 1200 }}
             >
-              {["現場の信号を、", "判断と公開へ", "つないでいく。"].map(
+              {["現場の信号を", "判断と公開へ", "つないでいく"].map(
                 (line, index) => (
                   <motion.span
                     key={line}
@@ -405,7 +405,7 @@ export function HomePageView({
       >
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Archive</p>
-          <h2>公開記事と受賞・評価。</h2>
+          <h2>公開記事と受賞・評価</h2>
         </div>
 
         <div className="archive-grid">
@@ -488,7 +488,7 @@ export function HomePageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Platforms</p>
-          <h2>研究の公開先。</h2>
+          <h2>研究の公開先</h2>
         </div>
 
         <motion.div className="platform-grid-light" variants={groupVariants}>
