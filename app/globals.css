@@ -35,6 +35,9 @@
     "YuGothic",
     "Noto Sans JP",
     sans-serif;
+  --title-outline: rgba(255, 245, 240, 0.14);
+  --title-shadow: rgba(8, 5, 7, 0.52);
+  --subtitle-shadow: rgba(8, 5, 7, 0.36);
   --font-mono-stack:
     var(--font-geist-mono),
     "SFMono-Regular",
@@ -446,10 +449,15 @@ img {
 .project-hero h1 {
   margin: 0;
   font-family: var(--font-heading);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.01;
   letter-spacing: -0.045em;
   text-wrap: pretty;
+  -webkit-text-stroke: 0.012em var(--title-outline);
+  paint-order: stroke fill;
+  text-shadow:
+    0 1px 0 var(--title-shadow),
+    0 0 20px rgba(255, 244, 240, 0.04);
 }
 
 .base-hero-title {
@@ -466,9 +474,12 @@ img {
 
 .hero-personal {
   margin: 0 0 10px;
+  font-family: var(--font-heading);
+  font-weight: 600;
   color: rgba(247, 239, 230, 0.72);
   font-size: 0.98rem;
   line-height: 1.5;
+  text-shadow: 0 1px 0 var(--subtitle-shadow);
 }
 
 .base-hero-lead,
@@ -642,10 +653,13 @@ img {
 
 .hero-stage-card p {
   margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
   color: rgba(245, 247, 255, 0.8);
   max-width: 26ch;
   line-height: 1.62;
   text-wrap: pretty;
+  text-shadow: 0 1px 0 var(--subtitle-shadow);
 }
 
 .hero-stage-card-cta {
@@ -996,9 +1010,12 @@ img {
 
 .project-preview-subtitle {
   margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
   color: rgba(245, 247, 255, 0.84);
   line-height: 1.58;
   text-wrap: pretty;
+  text-shadow: 0 1px 0 var(--subtitle-shadow);
 }
 
 .project-preview-summary,
@@ -1245,9 +1262,12 @@ img {
 
 .project-hero-subtitle {
   margin-top: 18px;
+  font-family: var(--font-heading);
+  font-weight: 600;
   color: rgba(245, 248, 255, 0.72);
   font-size: 1.08rem;
   line-height: 1.6;
+  text-shadow: 0 1px 0 var(--subtitle-shadow);
 }
 
 .project-hero-summary {
