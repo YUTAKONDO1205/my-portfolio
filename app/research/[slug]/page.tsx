@@ -139,7 +139,7 @@ export default async function ResearchDetailPage({ params }: Props) {
       <section className="shell section project-content-panel project-content-panel-alt">
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Highlights</p>
-          <h2>このテーマで見せたい核。</h2>
+          <h2>この研究のポイント。</h2>
         </div>
 
         <div className="project-highlight-grid">
@@ -163,7 +163,7 @@ export default async function ResearchDetailPage({ params }: Props) {
       <section className="shell section project-content-panel">
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Other Projects</p>
-          <h2>別のテーマも、それぞれ別のページで見せています。</h2>
+          <h2>ほかの研究テーマ。</h2>
         </div>
 
         <div className="project-mini-grid">

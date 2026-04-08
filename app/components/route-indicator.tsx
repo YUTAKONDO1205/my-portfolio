@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { researchProjects } from "../portfolio-data";
 
@@ -38,8 +38,28 @@ function getRouteLabel(pathname: string) {
 
 export function RouteIndicator() {
   const pathname = usePathname();
+  const [isCompactViewport, setIsCompactViewport] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+
+    const updateViewport = () => {
+      setIsCompactViewport(mediaQuery.matches);
+    };
+
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateViewport);
+    };
+  }, []);
 
   const label = useMemo(() => getRouteLabel(pathname), [pathname]);
+
+  if (isCompactViewport) {
+    return null;
+  }
 
   return (
     <div className="route-indicator" aria-live="polite">

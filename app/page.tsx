@@ -29,11 +29,15 @@ export default function Home() {
           <div className="base-hero-copy">
             <p className="eyebrow">Portfolio</p>
             <p className="hero-personal">近藤悠太の紹介サイト</p>
-            <h1 className="base-hero-title">{siteAxis.title}</h1>
+            <h1 className="base-hero-title">
+              <span>現場の信号を、</span>
+              <span>判断と公開へ</span>
+              <span>つないでいく。</span>
+            </h1>
             <p className="base-hero-lead">
               画像、振動、音響のような信号を現場で拾い、SPRESENSE 級で判断し、
-              GitHub と Elchika で公開する。この流れを一本の軸として、
-              研究ごとに違う空気感の個別サイトへつないでいます。
+              GitHub と Elchika で公開しています。
+              このサイトでは、その流れの中にある研究テーマを順に見ていけます。
             </p>
 
             <div className="hero-actions">
@@ -95,7 +99,7 @@ export default function Home() {
       <section className="shell section dark-panel">
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">{siteAxis.label}</p>
-          <h2>{siteAxis.title}</h2>
+          <h2>研究の流れ。</h2>
           <p className="section-intro">{siteAxis.detail}</p>
         </div>
 
@@ -124,7 +128,7 @@ export default function Home() {
       <section id="projects" className="shell section dark-panel">
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Project Sites</p>
-          <h2>各研究は、テーマごとの空気感で見せる。</h2>
+          <h2>現在公開している研究テーマ。</h2>
         </div>
 
         <div className="project-preview-grid">
@@ -164,7 +168,7 @@ export default function Home() {
       <section id="archive" className="shell section archive-panel">
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Archive</p>
-          <h2>公開記事と受賞歴。</h2>
+          <h2>公開記事と受賞・評価。</h2>
         </div>
 
         <div className="archive-grid">
@@ -251,7 +255,7 @@ export default function Home() {
       <section className="shell section dark-panel">
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Platforms</p>
-          <h2>コードと記事の両方で公開している。</h2>
+          <h2>研究の公開先。</h2>
         </div>
 
         <div className="platform-grid-light">

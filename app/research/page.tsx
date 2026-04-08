@@ -51,7 +51,7 @@ export default function ResearchPage() {
 
         <div className="base-hero-copy base-hero-copy-wide">
           <p className="eyebrow">Research</p>
-          <h1 className="base-hero-title">研究の見取り図。</h1>
+          <h1 className="base-hero-title">公開中の研究テーマ。</h1>
           <p className="base-hero-lead">
             このページでは {siteAxis.steps[0].en} / {siteAxis.steps[1].en} /{" "}
             {siteAxis.steps[2].en} の流れの中で、各研究がどこを担うかを見渡せるように整理しています。
@@ -72,7 +72,7 @@ export default function ResearchPage() {
       <section id="project-sites" className="shell section dark-panel">
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Project Sites</p>
-          <h2>研究ごとに違う質感で見せる。</h2>
+          <h2>詳しく見たい研究から入れます。</h2>
         </div>
 
         <div className="project-preview-grid">
@@ -112,7 +112,7 @@ export default function ResearchPage() {
       <section id="research-archive" className="shell section archive-panel">
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Archive</p>
-          <h2>公開記事と受賞歴。</h2>
+          <h2>公開記事と受賞・評価。</h2>
         </div>
 
         <div className="archive-grid">
@@ -199,7 +199,7 @@ export default function ResearchPage() {
       <section className="shell section dark-panel">
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Platforms</p>
-          <h2>研究の外部導線。</h2>
+          <h2>研究の公開先。</h2>
         </div>
 
         <div className="platform-grid-light">

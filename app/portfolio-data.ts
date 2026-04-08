@@ -113,12 +113,12 @@ export const focusAreas: readonly FocusArea[] = [
 ] as const;
 
 export const siteAxis: SiteAxis = {
-  label: "Site Axis",
-  title: "現場の信号が、判断と公開へ流れていく。",
+  label: "Research Flow",
+  title: "現場の信号を、判断と公開へつないでいく。",
   summary:
     "このサイトの軸は、センサで拾った信号をエッジで読み、公開しながら次の研究へつなげる流れです。",
   detail:
-    "トップでは流れ全体を見せ、研究一覧では見取り図を整理し、各個別ページではテーマごとの空気感と実装の中身へ入れる構成にしています。",
+    "現場で信号を取り、軽量に判断し、GitHub と Elchika で公開するまでの流れを、このサイト全体の軸にしています。",
   steps: [
     {
       en: "Sense",
