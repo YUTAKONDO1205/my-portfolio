@@ -11,71 +11,57 @@ import {
 export const metadata: Metadata = {
   title: "Research",
   description:
-    "近藤悠太の研究一覧ページ。各研究は個別ページで世界観を分けて紹介し、ここでは全体の見取り図として簡潔にまとめています。",
+    "近藤悠太の研究一覧。各研究は個別ページで世界観を分けて紹介し、ここでは研究全体の見取り図としてまとめています。",
   alternates: {
     canonical: "/research",
   },
   openGraph: {
     title: "Research | 近藤悠太",
     description:
-      "近藤悠太の研究一覧ページ。各研究は個別ページで世界観を分けて紹介し、ここでは全体の見取り図として簡潔にまとめています。",
+      "近藤悠太の研究一覧。各研究は個別ページで世界観を分けて紹介し、ここでは研究全体の見取り図としてまとめています。",
     url: "/research",
     type: "website",
     locale: "ja_JP",
-    images: [
-      {
-        url: "/images/yuta-kondo-portrait.jpeg",
-        alt: "近藤悠太のポートレート",
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Research | 近藤悠太",
     description:
-      "近藤悠太の研究一覧ページ。各研究は個別ページで世界観を分けて紹介し、ここでは全体の見取り図として簡潔にまとめています。",
-    images: ["/images/yuta-kondo-portrait.jpeg"],
+      "近藤悠太の研究一覧。各研究は個別ページで世界観を分けて紹介し、ここでは研究全体の見取り図としてまとめています。",
   },
 };
 
 export default function ResearchPage() {
   return (
     <main className="research-page">
-      <section className="shell landing-hero landing-hero-light">
-        <header className="landing-header landing-header-light">
+      <section className="shell base-hero base-hero-compact">
+        <header className="landing-header">
           <div>
             <p className="site-mark">Research Index</p>
-            <p className="site-caption site-caption-dark">
-              Individual pages for each project
-            </p>
+            <p className="site-caption">Overview of current public projects</p>
           </div>
 
-          <nav className="hero-nav hero-nav-dark" aria-label="研究ページナビゲーション">
+          <nav className="hero-nav" aria-label="研究ページナビゲーション">
             <Link href="/">Home</Link>
             <a href="#project-sites">Projects</a>
             <a href="#research-archive">Archive</a>
           </nav>
         </header>
 
-        <div className="landing-copy landing-copy-wide">
-          <p className="eyebrow eyebrow-dark">Research</p>
-          <h1 className="landing-title landing-title-dark">
-            各研究は、
-            <br />
-            個別ページで見せる。
-          </h1>
-          <p className="landing-lead landing-lead-dark">
-            ここでは全体の見取り図だけを置き、個別の研究はそれぞれ別ページで紹介しています。
-            ドローンなら空、振動解析ならスペクトル、イベント運用なら監視基盤というように、
-            テーマごとに核になる空気を変えています。
+        <div className="base-hero-copy base-hero-copy-wide">
+          <p className="eyebrow">Research</p>
+          <h1 className="base-hero-title">研究一覧。</h1>
+          <p className="base-hero-lead">
+            ここでは研究テーマの入口だけを簡潔に置いています。
+            詳細な説明や構成は、それぞれの個別ページに分けて見せる形にしています。
           </p>
         </div>
       </section>
 
-      <section id="project-sites" className="shell section">
-        <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Project Sites</p>
-          <h2>3 つの研究テーマを、それぞれ別の質感で見せる。</h2>
+      <section id="project-sites" className="shell section dark-panel">
+        <div className="section-heading section-heading-inverse">
+          <p className="eyebrow">Project Sites</p>
+          <h2>研究ごとに違う質感で見せる。</h2>
         </div>
 
         <div className="project-preview-grid">
@@ -85,7 +71,7 @@ export default function ResearchPage() {
               className={`project-preview-card ${project.themeClass}`}
               style={
                 {
-                  "--card-delay": `${index * 150}ms`,
+                  "--card-delay": `${index * 140}ms`,
                 } as CSSProperties
               }
             >
@@ -94,7 +80,6 @@ export default function ResearchPage() {
                 <h3>{project.title}</h3>
                 <p className="project-preview-subtitle">{project.subtitle}</p>
                 <p className="project-preview-summary">{project.cardSummary}</p>
-
                 <div className="tag-row">
                   {project.tags.slice(0, 5).map((tag) => (
                     <span key={tag} className="tag">
@@ -102,7 +87,6 @@ export default function ResearchPage() {
                     </span>
                   ))}
                 </div>
-
                 <div className="link-row">
                   <Link href={`/research/${project.slug}`} className="arrow-link">
                     Open Site
@@ -114,10 +98,10 @@ export default function ResearchPage() {
         </div>
       </section>
 
-      <section id="research-archive" className="shell section archive-band">
+      <section id="research-archive" className="shell section archive-panel">
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Archive</p>
-          <h2>公開記事と受賞歴から、研究全体の流れを見る。</h2>
+          <h2>公開記事と受賞歴。</h2>
         </div>
 
         <div className="archive-grid">
@@ -131,7 +115,7 @@ export default function ResearchPage() {
               {publicationTimeline.map((entry, index) => (
                 <article
                   key={entry.id}
-                  className="publication-card"
+                  className={`publication-card ${entry.awards.length > 0 ? "award-accent-card" : ""}`}
                   style={
                     {
                       "--card-delay": `${index * 110}ms`,
@@ -153,6 +137,15 @@ export default function ResearchPage() {
                       </span>
                     ))}
                   </div>
+                  {entry.awards.length > 0 && (
+                    <div className="award-strip-list">
+                      {entry.awards.map((award) => (
+                        <span key={award} className="award-strip">
+                          {award}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </article>
               ))}
             </div>
@@ -168,7 +161,7 @@ export default function ResearchPage() {
               {recognitions.map((recognition, index) => (
                 <article
                   key={`${recognition.year}-${recognition.award}`}
-                  className="recognition-card"
+                  className="recognition-card award-accent-card"
                   style={
                     {
                       "--card-delay": `${index * 120}ms`,
@@ -192,10 +185,10 @@ export default function ResearchPage() {
         </div>
       </section>
 
-      <section className="shell section platform-band">
-        <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Platforms</p>
-          <h2>GitHub と Elchika を軸に、今も公開を続けています。</h2>
+      <section className="shell section dark-panel">
+        <div className="section-heading section-heading-inverse">
+          <p className="eyebrow">Platforms</p>
+          <h2>研究の外部導線。</h2>
         </div>
 
         <div className="platform-grid-light">
@@ -203,7 +196,7 @@ export default function ResearchPage() {
             <a
               key={platform.label}
               href={platform.href}
-              className="platform-card-light"
+              className="platform-card-dark"
               style={
                 {
                   "--card-delay": `${index * 120}ms`,

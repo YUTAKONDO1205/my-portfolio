@@ -38,18 +38,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `/research/${project.slug}`,
       type: "article",
       locale: "ja_JP",
-      images: [
-        {
-          url: "/images/yuta-kondo-portrait.jpeg",
-          alt: `${project.title} page`,
-        },
-      ],
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title: `${project.title} | 近藤悠太`,
       description: project.pageSummary,
-      images: ["/images/yuta-kondo-portrait.jpeg"],
     },
   };
 }

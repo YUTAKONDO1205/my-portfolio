@@ -1,5 +1,4 @@
 import type { CSSProperties } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   focusAreas,
@@ -12,11 +11,11 @@ import {
 export default function Home() {
   return (
     <main className="portfolio-home">
-      <section className="shell landing-hero">
+      <section className="shell base-hero">
         <header className="landing-header">
           <div>
             <p className="site-mark">Yuta Kondo</p>
-            <p className="site-caption">Research Portfolio / Embedded AI / Public Work</p>
+            <p className="site-caption">Research Portfolio / Embedded AI / Public Works</p>
           </div>
 
           <nav className="hero-nav" aria-label="サイト内ナビゲーション">
@@ -26,27 +25,27 @@ export default function Home() {
           </nav>
         </header>
 
-        <div className="landing-hero-grid">
-          <div className="landing-copy">
-            <p className="eyebrow eyebrow-dark">Portfolio</p>
-            <h1 className="landing-title">
-              研究と実装を、
+        <div className="base-hero-grid">
+          <div className="base-hero-copy">
+            <p className="eyebrow">Portfolio</p>
+            <h1 className="base-hero-title">
+              近藤悠太の
               <br />
-              ひとつの流れで見せる。
+              紹介サイト。
             </h1>
-            <p className="landing-lead">
-              センシング、組み込み、エッジ AI、イベント運用までを横断しながら、
-              現場で動く異常検知の形を探っています。このサイトでは、
-              研究の入口を軽く見せつつ、各テーマは個別ページで深く読める構成にしています。
+            <p className="base-hero-lead">
+              センシング、組み込み、エッジ AI、異常検知を軸に、
+              現場で動く研究テーマを公開しています。一覧は簡潔に、
+              各研究は個別ページで世界観ごと切り替えて見せる構成にしています。
             </p>
 
             <div className="hero-actions">
-              <Link href="/research" className="button-link button-link-dark">
+              <Link href="/research" className="button-link button-link-primary">
                 研究一覧を見る
               </Link>
               <a
                 href="https://github.com/YUTAKONDO1205"
-                className="button-link button-link-light"
+                className="button-link button-link-secondary"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -55,64 +54,76 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="landing-portrait">
-            <div className="landing-portrait-frame">
-              <Image
-                src="/images/yuta-kondo-portrait.jpeg"
-                alt="近藤悠太のポートレート"
-                fill
-                priority
-                sizes="(max-width: 920px) 100vw, 40vw"
-                className="landing-portrait-image"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="shell section intro-band">
-        <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Intro</p>
-          <h2>現場で取った信号を、その場で扱える形まで落とし込む。</h2>
-        </div>
-
-        <div className="intro-grid">
-          <div className="intro-copy">
-            <p>
-              興味の中心にあるのは、現場で起きている変化をどう取るか、
-              どう軽量に判断するか、どう運用できる単位までつなげるかです。
-              画像、振動、音響、通信、保存、可視化を切り離さずに扱っています。
-            </p>
-            <p>
-              参考にした `niwaya.co.jp` のように、一覧ページでは言い切りを強くし、
-              各テーマの空気感は個別ページで切り替わるように構成しています。
-            </p>
-          </div>
-
-          <div className="intro-focus-grid">
-            {focusAreas.map((area, index) => (
-              <article
-                key={area.title}
-                className="focus-card"
+          <div className="hero-stage" aria-label="研究テーマのプレビュー">
+            <div className="hero-stage-beam hero-stage-beam-one" />
+            <div className="hero-stage-beam hero-stage-beam-two" />
+            {researchProjects.map((project, index) => (
+              <Link
+                key={project.slug}
+                href={`/research/${project.slug}`}
+                className={`hero-stage-card ${project.themeClass}`}
                 style={
                   {
-                    "--card-delay": `${index * 120}ms`,
+                    "--card-delay": `${index * 140}ms`,
                   } as CSSProperties
                 }
               >
-                <p className="card-label">{area.label}</p>
-                <h3>{area.title}</h3>
-                <p>{area.description}</p>
-              </article>
+                <span className="quick-link-label">{project.heroKicker}</span>
+                <strong>{project.title}</strong>
+                <p>{project.subtitle}</p>
+              </Link>
             ))}
+          </div>
+        </div>
+
+        <div className="hero-band">
+          <div className="hero-band-item">
+            <span className="quick-link-label">Publications</span>
+            <strong>{publicationTimeline.length}</strong>
+            <p>Elchika に継続公開</p>
+          </div>
+          <div className="hero-band-item">
+            <span className="quick-link-label">Recognitions</span>
+            <strong>{recognitions.length}</strong>
+            <p>受賞・評価の記録</p>
+          </div>
+          <div className="hero-band-item">
+            <span className="quick-link-label">Research Themes</span>
+            <strong>{researchProjects.length}</strong>
+            <p>個別ページで展開</p>
           </div>
         </div>
       </section>
 
-      <section id="projects" className="shell section">
-        <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Project Sites</p>
-          <h2>各研究は、個別ページでそれぞれ違う表情を持たせています。</h2>
+      <section className="shell section dark-panel">
+        <div className="section-heading section-heading-inverse">
+          <p className="eyebrow">Focus</p>
+          <h2>現場の信号を、実装までつなげる。</h2>
+        </div>
+
+        <div className="focus-grid">
+          {focusAreas.map((area, index) => (
+            <article
+              key={area.title}
+              className="focus-card focus-card-dark"
+              style={
+                {
+                  "--card-delay": `${index * 120}ms`,
+                } as CSSProperties
+              }
+            >
+              <p className="card-label card-label-inverse">{area.label}</p>
+              <h3>{area.title}</h3>
+              <p>{area.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="projects" className="shell section dark-panel">
+        <div className="section-heading section-heading-inverse">
+          <p className="eyebrow">Project Sites</p>
+          <h2>各研究は、テーマごとの空気感で見せる。</h2>
         </div>
 
         <div className="project-preview-grid">
@@ -131,7 +142,6 @@ export default function Home() {
                 <h3>{project.title}</h3>
                 <p className="project-preview-subtitle">{project.subtitle}</p>
                 <p className="project-preview-summary">{project.cardSummary}</p>
-
                 <div className="tag-row">
                   {project.tags.slice(0, 4).map((tag) => (
                     <span key={tag} className="tag">
@@ -139,10 +149,9 @@ export default function Home() {
                     </span>
                   ))}
                 </div>
-
                 <div className="link-row">
                   <Link href={`/research/${project.slug}`} className="arrow-link">
-                    View Project
+                    Open Site
                   </Link>
                 </div>
               </div>
@@ -151,7 +160,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="archive" className="shell section archive-band">
+      <section id="archive" className="shell section archive-panel">
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Archive</p>
           <h2>公開記事と受賞歴。</h2>
@@ -161,14 +170,14 @@ export default function Home() {
           <div className="archive-column">
             <div className="subsection-heading">
               <p className="card-label">Articles</p>
-              <h3>Elchika に残している制作記事</h3>
+              <h3>Elchika に残している記事</h3>
             </div>
 
             <div className="publication-grid">
               {publicationTimeline.map((entry, index) => (
                 <article
                   key={entry.id}
-                  className="publication-card"
+                  className={`publication-card ${entry.awards.length > 0 ? "award-accent-card" : ""}`}
                   style={
                     {
                       "--card-delay": `${index * 110}ms`,
@@ -190,6 +199,15 @@ export default function Home() {
                       </span>
                     ))}
                   </div>
+                  {entry.awards.length > 0 && (
+                    <div className="award-strip-list">
+                      {entry.awards.map((award) => (
+                        <span key={award} className="award-strip">
+                          {award}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </article>
               ))}
             </div>
@@ -198,14 +216,14 @@ export default function Home() {
           <div className="archive-column">
             <div className="subsection-heading">
               <p className="card-label">Recognition</p>
-              <h3>研究が評価された記録</h3>
+              <h3>評価の記録</h3>
             </div>
 
             <div className="recognition-grid">
               {recognitions.map((recognition, index) => (
                 <article
                   key={`${recognition.year}-${recognition.award}`}
-                  className="recognition-card"
+                  className="recognition-card award-accent-card"
                   style={
                     {
                       "--card-delay": `${index * 120}ms`,
@@ -229,10 +247,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="shell section platform-band">
-        <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Platforms</p>
-          <h2>コードと記事の両方で公開しています。</h2>
+      <section className="shell section dark-panel">
+        <div className="section-heading section-heading-inverse">
+          <p className="eyebrow">Platforms</p>
+          <h2>コードと記事の両方で公開している。</h2>
         </div>
 
         <div className="platform-grid-light">
@@ -240,7 +258,7 @@ export default function Home() {
             <a
               key={platform.label}
               href={platform.href}
-              className="platform-card-light"
+              className="platform-card-dark"
               style={
                 {
                   "--card-delay": `${index * 120}ms`,

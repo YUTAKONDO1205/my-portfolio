@@ -68,18 +68,11 @@ export const metadata: Metadata = {
     description: siteDescription,
     siteName,
     locale: "ja_JP",
-    images: [
-      {
-        url: "/images/yuta-kondo-portrait.jpeg",
-        alt: `${personName} portrait`,
-      },
-    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: siteName,
     description: siteDescription,
-    images: ["/images/yuta-kondo-portrait.jpeg"],
   },
   verification: {
     google: "CwhzEcI0iAakMI33bJudYRWuHz4CuGDhMH39CAHmMjM",
