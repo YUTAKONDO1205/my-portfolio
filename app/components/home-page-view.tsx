@@ -313,7 +313,7 @@ export function HomePageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">{siteAxis.label}</p>
-          <h2>研究の流れ。</h2>
+          <h2>研究の流れ</h2>
           <p className="section-intro">{siteAxis.detail}</p>
         </div>
 
@@ -360,7 +360,7 @@ export function HomePageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Project Sites</p>
-          <h2>現在公開している研究テーマ。</h2>
+          <h2>現在公開している研究テーマ</h2>
         </div>
 
         <motion.div className="project-preview-grid" variants={groupVariants}>
