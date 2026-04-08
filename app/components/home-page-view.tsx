@@ -405,7 +405,7 @@ export function HomePageView({
       >
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Archive</p>
-          <h2>公開記事と受賞・評価</h2>
+          <h2>記事と受賞・評価</h2>
         </div>
 
         <div className="archive-grid">
