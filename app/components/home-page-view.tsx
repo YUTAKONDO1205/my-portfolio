@@ -1,6 +1,6 @@
 "use client";
 
-import type { PropsWithChildren } from "react";
+import { useEffect, useState, type PropsWithChildren } from "react";
 import Link from "next/link";
 import {
   motion,
@@ -112,6 +112,22 @@ export function HomePageView({
 }: HomePageViewProps) {
   const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
+  const [isCompactViewport, setIsCompactViewport] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+
+    const updateViewport = () => {
+      setIsCompactViewport(mediaQuery.matches);
+    };
+
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateViewport);
+    };
+  }, []);
 
   const copyY = useTransform(scrollY, [0, 720], [0, 92]);
   const copyOpacity = useTransform(scrollY, [0, 720], [1, 0.72]);
@@ -239,7 +255,14 @@ export function HomePageView({
           <motion.div
             className="hero-stage"
             aria-label="研究テーマのプレビュー"
-            style={reduceMotion ? undefined : { y: stageY, rotate: stageRotate }}
+            style={
+              reduceMotion
+                ? undefined
+                : {
+                    y: stageY,
+                    rotate: isCompactViewport === false ? stageRotate : 0,
+                  }
+            }
             variants={groupVariants}
             initial="hidden"
             animate="show"
