@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
+import { projectSlugs } from "./portfolio-data";
 
 const siteUrl = "https://kondo-yuta-my-portfolio.vercel.app";
-const lastModified = new Date("2026-04-02T00:00:00+09:00");
+const lastModified = new Date("2026-04-08T00:00:00+09:00");
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: siteUrl,
       lastModified,
@@ -15,7 +16,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteUrl}/research`,
       lastModified,
       changeFrequency: "monthly",
-      priority: 0.8,
+      priority: 0.9,
     },
   ];
+
+  const projectRoutes: MetadataRoute.Sitemap = projectSlugs.map((slug) => ({
+    url: `${siteUrl}/research/${slug}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  return [...staticRoutes, ...projectRoutes];
 }

@@ -5,23 +5,22 @@ import {
   platformLinks,
   publicationTimeline,
   recognitions,
-  researchFlow,
   researchProjects,
 } from "../portfolio-data";
 
 export const metadata: Metadata = {
   title: "Research",
   description:
-    "DroneInspector、pdm_edge、anomaly-event-api を中心に、近藤悠太の研究テーマを背景、構成、現在地まで含めて紹介するページです。",
+    "近藤悠太の研究一覧ページ。各研究は個別ページで世界観を分けて紹介し、ここでは全体の見取り図として簡潔にまとめています。",
   alternates: {
     canonical: "/research",
   },
   openGraph: {
     title: "Research | 近藤悠太",
     description:
-      "DroneInspector、pdm_edge、anomaly-event-api を中心に、近藤悠太の研究テーマを背景、構成、現在地まで含めて紹介するページです。",
+      "近藤悠太の研究一覧ページ。各研究は個別ページで世界観を分けて紹介し、ここでは全体の見取り図として簡潔にまとめています。",
     url: "/research",
-    type: "article",
+    type: "website",
     locale: "ja_JP",
     images: [
       {
@@ -34,241 +33,98 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Research | 近藤悠太",
     description:
-      "DroneInspector、pdm_edge、anomaly-event-api を中心に、近藤悠太の研究テーマを背景、構成、現在地まで含めて紹介するページです。",
+      "近藤悠太の研究一覧ページ。各研究は個別ページで世界観を分けて紹介し、ここでは全体の見取り図として簡潔にまとめています。",
     images: ["/images/yuta-kondo-portrait.jpeg"],
   },
 };
 
-const researchArc = [
-  {
-    label: "Waveform Edge",
-    title: "設備の振動・音響を近くで判断する",
-    description:
-      "pdm_edge では固定設備を対象に、加速度と音響を軽量特徴へ変換し、予兆保全をエッジで完結させる方向を探っています。",
-  },
-  {
-    label: "Mobile Inspection",
-    title: "移動体に載せて現場で判断する",
-    description:
-      "DroneInspector では、狭小インフラ空間で画像取得と証跡保存を両立しながら、機体側判断の実装可能性を詰めています。",
-  },
-  {
-    label: "Operational Layer",
-    title: "結果をイベントとして運用につなげる",
-    description:
-      "anomaly-event-api では、検知結果を event 化し、可視化、状態管理、ローカル検証、AWS 検証までつなげています。",
-  },
-] as const;
-
 export default function ResearchPage() {
   return (
     <main className="research-page">
-      <section className="shell hero-shell research-hero">
-        <div className="subpage-topbar">
-          <Link href="/">Home</Link>
-          <span>/</span>
-          <span>Research</span>
-        </div>
-
-        <div className="hero-grid research-hero-grid">
-          <div className="hero-copy">
-            <p className="eyebrow">Research Archive</p>
-            <h1>
-              <span>Public Research,</span>
-              <span className="display-line">from Context</span>
-              <span>to Current State.</span>
-            </h1>
-            <p className="hero-lead">
-              ここでは、公開している研究テーマを「何を解こうとしているか」「どんな構成で実装しているか」
-              「いまどこまで進んでいるか」まで含めて整理しています。単なる成果の一覧ではなく、
-              研究の思考過程と実装の現在地が見えるページとして構成しています。
+      <section className="shell landing-hero landing-hero-light">
+        <header className="landing-header landing-header-light">
+          <div>
+            <p className="site-mark">Research Index</p>
+            <p className="site-caption site-caption-dark">
+              Individual pages for each project
             </p>
-
-            <div className="hero-actions">
-              <Link href="/" className="button-link button-link-primary">
-                Home
-              </Link>
-              <a
-                href="https://github.com/YUTAKONDO1205"
-                className="button-link button-link-secondary"
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub
-              </a>
-            </div>
           </div>
 
-          <aside className="hero-aside" aria-label="研究ページの要点">
-            <div className="signal-stack">
-              <article className="signal-card">
-                <p className="signal-label">Latest Themes</p>
-                <p className="signal-title">
-                  DroneInspector
-                  <br />
-                  pdm_edge
-                  <br />
-                  anomaly-event-api
-                </p>
-              </article>
-              <article className="signal-card">
-                <p className="signal-label">Public Notes</p>
-                <p className="signal-copy">
-                  2025 年から 2026 年にかけて Elchika で継続公開。研究ページでは各記事とのつながりも整理しています。
-                </p>
-              </article>
-              <article className="signal-card">
-                <p className="signal-label">Recognition</p>
-                <p className="signal-copy">
-                  IEEJ U-21 の奨励賞、SPRESENSE 活用コンテスト受賞歴を含めて、研究の評価軸も見えるようにしています。
-                </p>
-              </article>
-            </div>
-          </aside>
+          <nav className="hero-nav hero-nav-dark" aria-label="研究ページナビゲーション">
+            <Link href="/">Home</Link>
+            <a href="#project-sites">Projects</a>
+            <a href="#research-archive">Archive</a>
+          </nav>
+        </header>
+
+        <div className="landing-copy landing-copy-wide">
+          <p className="eyebrow eyebrow-dark">Research</p>
+          <h1 className="landing-title landing-title-dark">
+            各研究は、
+            <br />
+            個別ページで見せる。
+          </h1>
+          <p className="landing-lead landing-lead-dark">
+            ここでは全体の見取り図だけを置き、個別の研究はそれぞれ別ページで紹介しています。
+            ドローンなら空、振動解析ならスペクトル、イベント運用なら監視基盤というように、
+            テーマごとに核になる空気を変えています。
+          </p>
         </div>
       </section>
 
-      <section id="projects" className="shell section panel panel-dark deep-project-section">
-        <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">Deep Dive</p>
-          <h2>最新研究 3 件を、背景から現在地まで読む。</h2>
+      <section id="project-sites" className="shell section">
+        <div className="section-heading">
+          <p className="eyebrow eyebrow-dark">Project Sites</p>
+          <h2>3 つの研究テーマを、それぞれ別の質感で見せる。</h2>
         </div>
 
-        <div className="deep-project-grid">
+        <div className="project-preview-grid">
           {researchProjects.map((project, index) => (
             <article
-              key={project.id}
-              id={project.id}
-              className="deep-project-card"
+              key={project.slug}
+              className={`project-preview-card ${project.themeClass}`}
               style={
                 {
-                  "--card-delay": `${index * 160}ms`,
+                  "--card-delay": `${index * 150}ms`,
                 } as CSSProperties
               }
             >
-              <div className="project-head">
-                <p className="card-label card-label-inverse">{project.phase}</p>
-                <span className="project-year">{project.year}</span>
-              </div>
+              <div className="project-preview-inner">
+                <p className="card-label card-label-inverse">{project.heroKicker}</p>
+                <h3>{project.title}</h3>
+                <p className="project-preview-subtitle">{project.subtitle}</p>
+                <p className="project-preview-summary">{project.cardSummary}</p>
 
-              <h3>{project.title}</h3>
-              <p className="project-subtitle">{project.subtitle}</p>
-              <p className="project-summary">{project.summary}</p>
-
-              <div className="deep-project-columns">
-                <div className="detail-block">
-                  <span className="detail-label">Problem Setting</span>
-                  <p>{project.problem}</p>
+                <div className="tag-row">
+                  {project.tags.slice(0, 5).map((tag) => (
+                    <span key={tag} className="tag">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-                <div className="detail-block">
-                  <span className="detail-label">Technical Approach</span>
-                  <p>{project.approach}</p>
+
+                <div className="link-row">
+                  <Link href={`/research/${project.slug}`} className="arrow-link">
+                    Open Site
+                  </Link>
                 </div>
-                <div className="detail-block">
-                  <span className="detail-label">Current State</span>
-                  <p>{project.currentState}</p>
-                </div>
-              </div>
-
-              <div className="tag-row" aria-label={`${project.title} の技術要素`}>
-                {project.stack.map((item) => (
-                  <span key={item} className="tag">
-                    {item}
-                  </span>
-                ))}
-              </div>
-
-              <ul className="highlight-list">
-                {project.highlights.map((highlight) => (
-                  <li key={highlight}>{highlight}</li>
-                ))}
-              </ul>
-
-              <div className="link-row">
-                {project.links.map((link) => (
-                  <a key={link.href} href={link.href} target="_blank" rel="noreferrer">
-                    {link.label}
-                  </a>
-                ))}
               </div>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="shell section panel panel-light flow-section">
+      <section id="research-archive" className="shell section archive-band">
         <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Research Continuum</p>
-          <h2>個別テーマではなく、ひとつの研究線としてつながっている。</h2>
-        </div>
-
-        <div className="flow-grid">
-          {researchArc.map((step, index) => (
-            <article
-              key={step.label}
-              className="flow-card"
-              style={
-                {
-                  "--card-delay": `${index * 140}ms`,
-                } as CSSProperties
-              }
-            >
-              <p className="card-label">{step.label}</p>
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-            </article>
-          ))}
-        </div>
-
-        <div className="continuum-copy">
-          <p>
-            3 つのテーマはそれぞれ別の作品に見えますが、実際にはひとつの流れの上にあります。
-            固定設備の予兆保全で培った軽量特徴設計は、ドローン搭載時の制約理解につながり、
-            その結果として得られた異常判定をどう保存し運用へつなげるかが anomaly-event-api に接続しています。
-          </p>
-          <p>
-            つまり研究の中心にあるのは「現場で取れる信号を、軽量に判断し、運用できる単位にまで落とすこと」です。
-            研究ページでは、その連続性が読み取れるように各テーマを並べています。
-          </p>
-        </div>
-      </section>
-
-      <section className="shell section panel panel-light flow-section">
-        <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Method</p>
-          <h2>研究の進め方そのものも、公開対象にしている。</h2>
-        </div>
-
-        <div className="flow-grid">
-          {researchFlow.map((step, index) => (
-            <article
-              key={step.label}
-              className="flow-card"
-              style={
-                {
-                  "--card-delay": `${index * 140}ms`,
-                } as CSSProperties
-              }
-            >
-              <p className="card-label">{step.label}</p>
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="publications" className="shell section panel panel-light archive-section">
-        <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Articles & Awards</p>
-          <h2>記事、受賞、コメントから研究の輪郭を補強する。</h2>
+          <p className="eyebrow eyebrow-dark">Archive</p>
+          <h2>公開記事と受賞歴から、研究全体の流れを見る。</h2>
         </div>
 
         <div className="archive-grid">
           <div className="archive-column">
             <div className="subsection-heading">
-              <p className="card-label">Elchika Articles</p>
-              <h3>公開記事の流れ</h3>
+              <p className="card-label">Articles</p>
+              <h3>Elchika の公開記事</h3>
             </div>
 
             <div className="publication-grid">
@@ -278,7 +134,7 @@ export default function ResearchPage() {
                   className="publication-card"
                   style={
                     {
-                      "--card-delay": `${index * 120}ms`,
+                      "--card-delay": `${index * 110}ms`,
                     } as CSSProperties
                   }
                 >
@@ -297,15 +153,6 @@ export default function ResearchPage() {
                       </span>
                     ))}
                   </div>
-                  {entry.awards.length > 0 && (
-                    <div className="award-list">
-                      {entry.awards.map((award) => (
-                        <span key={award} className="award-pill">
-                          {award}
-                        </span>
-                      ))}
-                    </div>
-                  )}
                 </article>
               ))}
             </div>
@@ -313,7 +160,7 @@ export default function ResearchPage() {
 
           <div className="archive-column">
             <div className="subsection-heading">
-              <p className="card-label">Recognitions</p>
+              <p className="card-label">Recognition</p>
               <h3>評価の記録</h3>
             </div>
 
@@ -345,18 +192,18 @@ export default function ResearchPage() {
         </div>
       </section>
 
-      <section className="shell section panel panel-dark platforms-section">
-        <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">Open Lab</p>
-          <h2>GitHub と Elchika を軸に、研究過程をいまも公開しています。</h2>
+      <section className="shell section platform-band">
+        <div className="section-heading">
+          <p className="eyebrow eyebrow-dark">Platforms</p>
+          <h2>GitHub と Elchika を軸に、今も公開を続けています。</h2>
         </div>
 
-        <div className="platform-spotlight-grid">
+        <div className="platform-grid-light">
           {platformLinks.map((platform, index) => (
             <a
               key={platform.label}
               href={platform.href}
-              className="platform-spotlight-card"
+              className="platform-card-light"
               style={
                 {
                   "--card-delay": `${index * 120}ms`,
@@ -365,25 +212,11 @@ export default function ResearchPage() {
               target="_blank"
               rel="noreferrer"
             >
-              <span className="quick-link-label">{platform.accent}</span>
-              <strong>{platform.label}</strong>
-              <p>{platform.description}</p>
-              <p className="platform-detail">{platform.detail}</p>
-              <span className="platform-status">{platform.status}</span>
+              <span className="quick-link-label">{platform.label}</span>
+              <strong>{platform.description}</strong>
+              <p>{platform.detail}</p>
             </a>
           ))}
-        </div>
-      </section>
-
-      <section className="shell section panel panel-light cta-section">
-        <div className="cta-panel">
-          <div>
-            <p className="eyebrow eyebrow-dark">Back To Home</p>
-            <h2>トップページでは全体像を、研究ページでは各テーマの深度を見せています。</h2>
-          </div>
-          <Link href="/" className="button-link button-link-dark">
-            Home
-          </Link>
         </div>
       </section>
     </main>

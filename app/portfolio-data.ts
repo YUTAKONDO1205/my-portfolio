@@ -3,38 +3,12 @@ export type PlatformLink = {
   label: string;
   description: string;
   detail: string;
-  status: string;
-  accent: string;
 };
 
 export type FocusArea = {
   label: string;
   title: string;
   description: string;
-};
-
-export type ResearchFlowStep = {
-  label: string;
-  title: string;
-  description: string;
-};
-
-export type ResearchProject = {
-  id: string;
-  year: string;
-  phase: string;
-  title: string;
-  subtitle: string;
-  summary: string;
-  problem: string;
-  approach: string;
-  currentState: string;
-  stack: readonly string[];
-  highlights: readonly string[];
-  links: readonly {
-    href: string;
-    label: string;
-  }[];
 };
 
 export type PublicationEntry = {
@@ -57,106 +31,93 @@ export type Recognition = {
   href: string;
 };
 
+export type ResearchProject = {
+  slug: string;
+  year: string;
+  title: string;
+  subtitle: string;
+  cardSummary: string;
+  pageSummary: string;
+  heroKicker: string;
+  heroEnglish: string;
+  themeClass: "theme-drone" | "theme-pdm" | "theme-anomaly";
+  tags: readonly string[];
+  links: readonly {
+    href: string;
+    label: string;
+  }[];
+  sections: readonly {
+    title: string;
+    body: string;
+  }[];
+  highlights: readonly string[];
+};
+
 export const platformLinks: readonly PlatformLink[] = [
   {
     href: "https://github.com/YUTAKONDO1205",
     label: "GitHub",
-    description: "コード、検証、設計断面を残す公開リポジトリ",
+    description: "コードと検証ログを残す公開リポジトリ",
     detail:
-      "組み込み、機械学習、API、検証用スクリプトまでを含めて、研究の現在地をコード単位で公開しています。",
-    status: "継続公開中 / 最新テーマを集約",
-    accent: "Code Archive",
+      "研究の途中経過まで含めて公開し、組み込み、機械学習、API、実験スクリプトを横断して整理しています。",
   },
   {
     href: "https://elchika.com/user/kd_yuta/?page=0",
     label: "Elchika",
-    description: "試作の背景と評価を文章で残す技術ノート",
+    description: "背景と評価を日本語でまとめた制作ノート",
     detail:
-      "問題設定、ハード構成、評価観点、改善案までを日本語で整理し、作品単位で読み解けるようにしています。",
-    status: "最新公開日 2026.01.31",
-    accent: "Public Notes",
+      "課題設定、構成、評価、今後の展望を記事として残し、作品単位で読めるようにしています。",
   },
   {
     href: "https://www.linkedin.com/in/kondo-yuta-985430317",
     label: "LinkedIn",
-    description: "活動全体のプロフィールと対外向けの窓口",
+    description: "活動全体を俯瞰して見せる外部プロフィール",
     detail:
-      "研究・制作・プロフィールを俯瞰して見せるための外部導線として運用しています。",
-    status: "Profile / Career Window",
-    accent: "External Profile",
+      "研究、制作、プロフィールをまとめて見せる窓口として運用しています。",
   },
 ] as const;
 
 export const focusAreas: readonly FocusArea[] = [
   {
-    label: "Sensing",
-    title: "現場の信号を取り出す計測設計",
+    label: "Signal",
+    title: "現場の信号を取る",
     description:
-      "加速度、音響、画像、位置情報のような異なる信号を、現場で扱える解像度とコスト感に落として取得します。",
+      "画像、振動、音響、位置情報のような異なる信号を、現場で扱える粒度と実装コストで取得します。",
   },
   {
-    label: "Edge Intelligence",
-    title: "軽量な推論と説明可能性の両立",
+    label: "Edge",
+    title: "軽量に判断する",
     description:
-      "SPRESENSE 級の制約下でも扱える特徴量設計やモデル構成を選び、異常の理由が追える形を重視します。",
+      "SPRESENSE 級の制約を前提に、FFT、Random Forest、MobileNetV2 などを使って判断をデバイス側へ寄せます。",
   },
   {
-    label: "Public Research",
-    title: "実装と公開を往復する研究スタイル",
+    label: "Open",
+    title: "公開しながら磨く",
     description:
-      "コード、記事、作品説明を同時に積み上げることで、再現性と次の改善点が見える研究アーカイブにしています。",
-  },
-] as const;
-
-export const researchFlow: readonly ResearchFlowStep[] = [
-  {
-    label: "01 Sense",
-    title: "計測と取得",
-    description:
-      "現場の状態を多面的に捉えるために、画像、加速度、音響、位置情報を取得する入口を設計します。",
-  },
-  {
-    label: "02 Infer",
-    title: "軽量推論へ落とし込む",
-    description:
-      "FFT 特徴、Random Forest、MobileNetV2、Grad-CAM などを使い、デバイス側で意味のある判定に変換します。",
-  },
-  {
-    label: "03 Operate",
-    title: "運用できる形に残す",
-    description:
-      "イベント化、ダッシュボード化、公開記事化までつなげ、研究を単発で終わらせず継続改善可能な形にします。",
+      "コード、記事、受賞歴を切り離さず、研究の流れそのものが伝わるように公開を続けています。",
   },
 ] as const;
 
 export const researchProjects: readonly ResearchProject[] = [
   {
-    id: "drone-inspector",
+    slug: "drone-inspector",
     year: "2026",
-    phase: "Latest Research 01",
     title: "DroneInspector",
     subtitle: "インフラ点検向けエッジAIドローン",
-    summary:
-      "狭小インフラ空間を対象に、Sony Spresense ベースで画像取得、IMU 記録、microSD 保存、BLE 通知を行う点検支援システムです。",
-    problem:
-      "トンネルや水道管のような閉鎖空間では通信が不安定で、人が入るコストも高く、単に撮影して持ち帰るだけでは点検効率が上がりません。",
-    approach:
-      "組み込みファームウェアと学習済みモデル変換フローを分離し、機体側では JPEG 保存、IMU ログ、BLE 通知、TensorFlow Lite Micro の読込までを一連化しています。",
-    currentState:
-      "現時点では画像保存と証跡取得の流れが動いており、完全な機体側推論には 160x160 モデル入力へつなぐ生画像経路の追加が次段階です。",
-    stack: [
-      "Sony Spresense",
-      "HDR Camera Board",
-      "Multi-IMU",
-      "BLE1507",
+    cardSummary:
+      "狭小インフラ空間での点検を想定し、Spresense ベースで画像取得、IMU 記録、保存、通知をつなげた研究です。",
+    pageSummary:
+      "空間の制約が大きい点検現場で、機体側がどこまで判断できるかを探る研究です。画像、IMU、保存、通知、軽量推論をひとつの飛行体へ載せる前提で構成を整理しています。",
+    heroKicker: "Skyborne Inspection",
+    heroEnglish: "Read the scene before the signal is lost.",
+    themeClass: "theme-drone",
+    tags: [
+      "Spresense",
+      "Drone",
+      "BLE",
       "TensorFlow Lite Micro",
       "MobileNetV2",
-      "microSD",
-    ],
-    highlights: [
-      "JPEG 保存と IMU CSV ログを止めないフォールバック設計",
-      "camera / BLE / IMU / storage を分割した検証しやすい構成",
-      "ひび割れ分類モデルを `.tflite` から C++ 配列へ変換する流れを整理",
+      "Inspection",
     ],
     links: [
       {
@@ -168,34 +129,48 @@ export const researchProjects: readonly ResearchProject[] = [
         label: "Elchika Article",
       },
     ],
-  },
-  {
-    id: "pdm-edge",
-    year: "2026",
-    phase: "Latest Research 02",
-    title: "pdm_edge",
-    subtitle: "加速度・音響信号を活用した異常検知エッジAI",
-    summary:
-      "加速度 3 軸とマイクの 4 チャンネル波形から FFT 特徴を生成し、SPRESENSE 上で異常判定できる軽量構成へ落とし込んだ研究です。",
-    problem:
-      "予兆保全ではデータが取れても判断が属人的になりやすく、通信前提の重い解析は現場の電力制約やネットワーク制約とぶつかります。",
-    approach:
-      "1 kHz サンプリングの波形を 50 bin のスペクトルへ要約し、4 チャンネルを連結した 200 次元特徴を Random Forest で分類します。学習後はヘッダとして再出力し、SPRESENSE へ移植可能にしています。",
-    currentState:
-      "学習、評価、ヘッダ再生成、SPRESENSE 側呼び出しまでが整理されており、軽量性と再現性を優先した構成としてまとまっています。",
-    stack: [
-      "Sony Spresense",
-      "MPU6050",
-      "MAX4466",
-      "FFT",
-      "RandomForestClassifier",
-      "Python",
-      "Header Export",
+    sections: [
+      {
+        title: "Vision",
+        body:
+          "トンネルや水道管のような通信条件の悪い場所では、単に撮影して持ち帰るだけでは作業の負荷が大きく残ります。そこで、機体側で画像取得と証跡保存を完結させつつ、必要な情報だけを扱う方向に寄せています。",
+      },
+      {
+        title: "Build",
+        body:
+          "ファームウェア側では JPEG 保存、IMU 記録、microSD 保存、BLE 通知、TensorFlow Lite Micro の読み込みを一連化しています。学習済みモデルを `.tflite` から C++ 配列へ変換する流れも切り分けています。",
+      },
+      {
+        title: "Now",
+        body:
+          "現状は取得、保存、ログ化の流れが安定しており、完全な機体側推論へ向けて生画像経路とメモリ調整を詰めている段階です。",
+      },
     ],
     highlights: [
-      "4 チャンネル同時処理で設備状態の変化を多面的に取得",
-      "0 から 500 Hz を 50 等分する固定長特徴で組み込み実装を簡素化",
-      "テスト 600 件で正確度 92.0 パーセント、異常再現率 100 パーセントを記録",
+      "画像保存と IMU ログ取得を止めないフォールバック設計",
+      "camera / imu / ble / storage を分割した確認しやすい構成",
+      "受賞作品として外部からの評価も得ている点検テーマ",
+    ],
+  },
+  {
+    slug: "pdm-edge",
+    year: "2026",
+    title: "pdm_edge",
+    subtitle: "加速度・音響を用いた異常検知エッジAI",
+    cardSummary:
+      "加速度 3 軸と音響の 4 チャンネルを FFT 特徴へ落とし込み、SPRESENSE 上で扱える軽量な異常検知構成としてまとめた研究です。",
+    pageSummary:
+      "予兆保全を現場寄りに考えるために、重い解析を避けつつ異常兆候の差をどこまで拾えるかを探った研究です。波形から周波数特徴を作り、固定長の特徴として軽量実装へ寄せています。",
+    heroKicker: "Signal and Spectrum",
+    heroEnglish: "Turn vibration into a readable edge.",
+    themeClass: "theme-pdm",
+    tags: [
+      "SPRESENSE",
+      "FFT",
+      "Random Forest",
+      "MPU6050",
+      "MAX4466",
+      "Predictive Maintenance",
     ],
     links: [
       {
@@ -207,42 +182,76 @@ export const researchProjects: readonly ResearchProject[] = [
         label: "Elchika Article",
       },
     ],
-  },
-  {
-    id: "anomaly-event-api",
-    year: "2026",
-    phase: "Latest Research 03",
-    title: "anomaly-event-api",
-    subtitle: "異常検知イベントを扱う API と運用 UI",
-    summary:
-      "画像アップロード、異常検知、Grad-CAM による説明、イベント保存、ダッシュボード可視化までを一体化した運用寄りの研究実装です。",
-    problem:
-      "推論結果が出るだけでは現場運用に乗らず、保存、状態管理、再確認、閾値確認、ローカル検証とクラウド検証をつなぐ仕組みが必要になります。",
-    approach:
-      "Node.js + TypeScript の API 層に、Python + PyTorch の MobileNetV2 Transfer Learning と Grad-CAM を接続し、local / AWS の両モードで同じ UI と API 体験を提供します。",
-    currentState:
-      "検知、イベント化、ダッシュボード、provider 切り替え、AWS への展開までを見据えた責務分離ができており、研究から運用への橋渡しを担う位置づけです。",
-    stack: [
-      "Node.js",
-      "TypeScript",
-      "Python",
-      "PyTorch",
-      "MobileNetV2",
-      "Grad-CAM",
-      "AWS SAM",
-      "DynamoDB",
-      "S3",
+    sections: [
+      {
+        title: "Vision",
+        body:
+          "通信前提の大きな解析系ではなく、設備のすぐ近くで異常兆候を拾える最小構成を作ることを目的にしています。現場に置ける軽量さと再現性を優先しています。",
+      },
+      {
+        title: "Build",
+        body:
+          "1 kHz の時系列を FFT で周波数特徴へ変換し、0 から 500 Hz を固定 bin に要約して Random Forest へ渡します。学習後はヘッダ化して SPRESENSE へ持ち込めるようにしています。",
+      },
+      {
+        title: "Now",
+        body:
+          "学習、評価、ヘッダ再生成、SPRESENSE 側呼び出しまでが揃っており、異常再現率を重視した軽量構成としてまとまっています。",
+      },
     ],
     highlights: [
-      "local と AWS の両方で同じ操作感を保つ runtime mode 設計",
-      "event status を `NEW` / `CHECKING` / `RESOLVED` で扱う運用視点",
-      "heatmap、focusRegions、attentionGrid を返す説明可能な検知フロー",
+      "4 チャンネル同時処理で設備状態の変化を多面的に取得",
+      "固定長特徴で組み込み移植をしやすくした構成",
+      "LoRa と振動解析の流れにつながる基礎研究として位置づくテーマ",
+    ],
+  },
+  {
+    slug: "anomaly-event-api",
+    year: "2026",
+    title: "anomaly-event-api",
+    subtitle: "異常検知をイベント運用までつなぐ API",
+    cardSummary:
+      "画像アップロード、異常検知、説明、イベント保存、ダッシュボード可視化を一体化し、研究を運用視点まで広げた実装です。",
+    pageSummary:
+      "判定結果を返すだけで終わらず、イベントとして残し、確認し、状態更新できるところまで視野に入れた研究実装です。ローカル検証と AWS 検証の両方を同じ体験で扱えるようにしています。",
+    heroKicker: "Operational Layer",
+    heroEnglish: "From anomaly to action.",
+    themeClass: "theme-anomaly",
+    tags: [
+      "Node.js",
+      "TypeScript",
+      "PyTorch",
+      "Grad-CAM",
+      "AWS SAM",
+      "Dashboard",
     ],
     links: [
       {
         href: "https://github.com/YUTAKONDO1205/anomaly-event-api",
         label: "GitHub Repository",
       },
+    ],
+    sections: [
+      {
+        title: "Vision",
+        body:
+          "現場で本当に必要なのは、判定の有無だけではなく、その結果を保存し、見返し、状態を変えられることだと考えています。そのため異常検知をイベント運用へつなげています。",
+      },
+      {
+        title: "Build",
+        body:
+          "Node.js + TypeScript の API 層に Python 推論を接続し、Grad-CAM、focus regions、attention grid といった説明情報も返すようにしています。local と AWS のモード差もサービス層で吸収しています。",
+      },
+      {
+        title: "Now",
+        body:
+          "検知、イベント化、可視化、provider 切り替えが揃い、研究の成果を現場オペレーションへ近づける基盤として機能しています。",
+      },
+    ],
+    highlights: [
+      "local / AWS の両モードで同じ操作感を保つ構成",
+      "NEW / CHECKING / RESOLVED の運用ステータス設計",
+      "説明可能性とイベント管理をひとつの体験にまとめた点が特徴",
     ],
   },
 ] as const;
@@ -254,8 +263,8 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     dateLabel: "2026.01.31",
     title: "SPRESENSEでインフラ点検向けのエッジAIドローン",
     summary:
-      "カメラ、BLE、エッジAI、軽量ドローンを組み合わせ、狭小インフラ空間で機体側が判断する意義を掘り下げた作品です。",
-    tags: ["AI", "BLE", "SPRESENSE", "エッジAI", "ドローン"],
+      "カメラ、BLE、エッジAI、軽量ドローンを組み合わせ、機体側で判断するインフラ点検の可能性を探った作品です。",
+    tags: ["AI", "BLE", "SPRESENSE", "Edge AI", "Drone"],
     awards: ["2025年 SPRESENSE 活用コンテスト クレイン電子 BLEアドオンボード特別賞"],
     href: "https://elchika.com/article/663a49cf-c895-44d7-a989-6e45e7d92056/",
   },
@@ -263,10 +272,10 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     id: "publication-pdm-edge",
     date: "2026-01-31",
     dateLabel: "2026.01.31",
-    title: "加速度・音響信号を活用した 異常検知エッジAIモデルの構築",
+    title: "加速度・音響信号を活用した異常検知エッジAIモデルの構築",
     summary:
-      "1 kHz 計測、FFT、200 次元特徴、Random Forest を通して、マイコン実装を意識した予兆保全の最小構成をまとめています。",
-    tags: ["AI", "SPRESENSE", "エッジAI", "センサー", "音響工学"],
+      "加速度と音響を 1 kHz で取得し、FFT ベースの特徴から軽量に異常兆候を判定する構成を整理した記事です。",
+    tags: ["AI", "SPRESENSE", "FFT", "Sensor", "Audio"],
     awards: [],
     href: "https://elchika.com/article/7301ab59-0921-4ba7-9935-b9309cf8c59c/",
   },
@@ -276,7 +285,7 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     dateLabel: "2025.01.31",
     title: "SPRESENSEと振動解析による設備保全の最前線",
     summary:
-      "LoRa と MPU6050 を使った遠隔振動監視を軸に、災害検知と設備保全の両面へ展開可能なシステムを提示した作品です。",
+      "LoRa と振動解析を組み合わせ、遠隔監視と設備保全をつなぐ実装としてまとめた作品です。",
     tags: ["Arduino", "IoT", "LoRa", "MPU6050", "SPRESENSE"],
     awards: [
       "2024年 SPRESENSE 活用コンテスト LoRa活用アイデア賞",
@@ -290,8 +299,8 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     dateLabel: "2025.01.31",
     title: "SPRESENSEとELTRES通信でCO2濃度をマッピング",
     summary:
-      "ELTRES と MATLAB を組み合わせ、都市部と郊外の CO2 濃度差を遠隔取得・可視化した環境モニタリング研究です。",
-    tags: ["ELTRES", "IoT", "MATLAB", "SPRESENSE", "センサー"],
+      "ELTRES とセンシングを組み合わせ、都市部と郊外の CO2 濃度差を可視化した環境モニタリング研究です。",
+    tags: ["ELTRES", "IoT", "MATLAB", "SPRESENSE", "Sensor"],
     awards: ["2024年 SPRESENSE 活用コンテスト クレスコ ELTRESアドオンボード優秀賞"],
     href: "https://elchika.com/article/504f286c-413b-47d3-89f9-38920ca5e5c7/",
   },
@@ -304,7 +313,7 @@ export const recognitions: readonly Recognition[] = [
     project: "LoRa通信とAIを活用した振動検知による異常予知システムの構築",
     organization: "電気学会 U-21 学生研究発表会",
     note:
-      "LoRa 通信と AI を組み合わせた振動検知システムとして、研究テーマの社会実装性が評価された受賞例です。",
+      "LoRa 通信と AI を組み合わせた振動検知システムとして、社会実装への接続性が評価された受賞です。",
     href: "https://www.iee.jp/u-21-2025-award/",
   },
   {
@@ -313,7 +322,7 @@ export const recognitions: readonly Recognition[] = [
     project: "SPRESENSEでインフラ点検向けのエッジAIドローン",
     organization: "2025年 SPRESENSE 活用コンテスト",
     note:
-      "免許不要ドローン、軽量な Spresense、実践的なインフラ点検課題への接続が評価され、ひび割れの見落としまで想像を掻き立てる作品として講評されています。",
+      "免許不要ドローン、軽量な Spresense、現実のインフラ課題との接続が評価された受賞です。",
     href: "https://elchika.com/promotion/spresense2025/winner/#nav",
   },
   {
@@ -322,7 +331,7 @@ export const recognitions: readonly Recognition[] = [
     project: "SPRESENSEとELTRES通信でCO2濃度をマッピング",
     organization: "2024年 SPRESENSE 活用コンテスト",
     note:
-      "エリアごとの CO2 濃度を可視化することで社会課題への認識変化を促す点が評価されました。",
+      "エリアごとの CO2 濃度可視化によって社会課題への理解を促す点が評価された受賞です。",
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
   {
@@ -331,7 +340,13 @@ export const recognitions: readonly Recognition[] = [
     project: "SPRESENSEと振動解析による設備保全の最前線",
     organization: "2024年 SPRESENSE 活用コンテスト",
     note:
-      "遠隔監視と設備保全をつなぐ発想が評価され、LoRa 活用と IoT 応用の両面から受賞につながっています。",
+      "遠隔監視と設備保全をつなぐ発想が評価され、LoRa 応用と IoT 応用の両面から受賞しています。",
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
 ] as const;
+
+export const projectSlugs = researchProjects.map((project) => project.slug);
+
+export function getResearchProject(slug: string) {
+  return researchProjects.find((project) => project.slug === slug);
+}

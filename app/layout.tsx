@@ -5,6 +5,7 @@ import {
   Manrope,
   Noto_Serif_JP,
 } from "next/font/google";
+import { RouteIndicator } from "./components/route-indicator";
 import "./globals.css";
 
 const bodySans = Manrope({
@@ -31,9 +32,9 @@ const mono = Geist_Mono({
 
 const siteUrl = "https://kondo-yuta-my-portfolio.vercel.app";
 const personName = "近藤悠太";
-const siteName = `${personName} | Research Portfolio`;
+const siteName = `${personName} | Portfolio`;
 const siteDescription =
-  "近藤悠太の研究ポートフォリオ。DroneInspector、pdm_edge、anomaly-event-api を中心に、SPRESENSE、ELTRES、エッジAI、異常検知の研究と公開実装を紹介します。";
+  "近藤悠太の紹介サイト。DroneInspector、pdm_edge、anomaly-event-api を中心に、SPRESENSE、ELTRES、エッジAI、異常検知の研究と公開実装を紹介します。";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
   keywords: [
     "近藤悠太",
     "Yuta Kondo",
-    "Research Portfolio",
+    "Portfolio",
     "DroneInspector",
     "pdm_edge",
     "anomaly-event-api",
@@ -125,6 +126,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
+        <RouteIndicator />
         {children}
       </body>
     </html>
