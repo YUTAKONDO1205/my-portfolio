@@ -1,5 +1,7 @@
 # My Portfolio
 
+開発者: 近藤悠太 (Kondo Yuta)
+
 このリポジトリは、個人ポートフォリオサイトのソースコードです。  
 `Next.js 16` をベースに、`React 19`、`TypeScript`、`Tailwind CSS 4` を使って構築しています。
 
