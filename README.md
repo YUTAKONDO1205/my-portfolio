@@ -1,39 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My Portfolio
 
-## Getting Started
+このリポジトリは、個人ポートフォリオサイトのソースコードです。  
+`Next.js 16` をベースに、`React 19`、`TypeScript`、`Tailwind CSS 4` を使って構築しています。
 
-First, run the development server:
+## 公開サイト
+
+https://kondo-yuta-my-portfolio.vercel.app/
+
+## ローカル開発
+
+まず依存関係をインストールします。
+
+```bash
+npm install
+```
+
+次に開発サーバーを起動します。
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで `http://localhost:3000` を開くと確認できます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 利用可能なスクリプト
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev
+```
 
-## Learn More
+開発サーバーを起動します。
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+本番用ビルドを作成します。`postbuild` で `next-sitemap` も実行されます。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run start
+```
 
-## Deploy on Vercel
+本番ビルドをローカルで起動します。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run lint
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+ESLint による静的解析を実行します。
 
-## google
-Portfolio: https://kondo-yuta-my-portfolio.vercel.app/
+## 主な構成
+
+- `app/page.tsx`: トップページ
+- `app/layout.tsx`: 共通レイアウトとメタデータ
+- `app/portfolio-data.ts`: ポートフォリオ表示用データ
+- `app/research/[slug]/page.tsx`: 研究詳細ページ
+- `public/`: 静的ファイル
+
+## 技術スタック
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Motion
+- next-sitemap
+
+## デプロイ
+
+このサイトは Vercel へのデプロイを想定しています。  
+本番公開先は上記の URL です。
