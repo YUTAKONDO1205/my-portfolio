@@ -275,6 +275,10 @@ img {
   animation: sideGather 12s ease-in-out infinite;
 }
 
+.project-hero::before {
+  display: none;
+}
+
 .base-hero {
   padding: 28px clamp(20px, 4vw, 42px) 34px;
   background:
@@ -584,31 +588,6 @@ img {
   animation: sidePulse 10s ease-in-out infinite;
 }
 
-.hero-stage-beam {
-  position: absolute;
-  inset: auto auto auto auto;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255, 226, 218, 0.56), transparent);
-  filter: blur(0.4px);
-  pointer-events: none;
-}
-
-.hero-stage-beam-one {
-  top: 20%;
-  left: -10%;
-  width: 68%;
-  transform: rotate(-8deg);
-  animation: beamSweep 6s ease-in-out infinite;
-}
-
-.hero-stage-beam-two {
-  bottom: 18%;
-  right: -14%;
-  width: 60%;
-  transform: rotate(10deg);
-  animation: beamSweepReverse 8s ease-in-out infinite;
-}
-
 .hero-stage-card {
   position: relative;
   z-index: 1;
@@ -761,7 +740,6 @@ img {
   opacity: 0.34;
   mask-image: radial-gradient(circle at 64% 50%, rgba(0, 0, 0, 0.98), transparent 82%);
   pointer-events: none;
-  animation: ambientGlide 28s ease-in-out infinite;
 }
 
 .archive-panel > * {
@@ -1320,7 +1298,6 @@ img {
   opacity: 0.52;
   transform: scale(1.06);
   pointer-events: none;
-  animation: ambientGlide 18s ease-in-out infinite;
 }
 
 .project-visual-core-shell {
@@ -1536,6 +1513,12 @@ img {
   animation: alertShift 10s ease-in-out infinite alternate;
 }
 
+.theme-drone .project-hero::before,
+.theme-pdm .project-hero::before,
+.theme-anomaly .project-hero::before {
+  display: none;
+}
+
 .research-axis-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1621,23 +1604,6 @@ a:focus-visible,
 
   100% {
     transform: translateX(24%) rotate(-8deg);
-    opacity: 0.18;
-  }
-}
-
-@keyframes beamSweepReverse {
-  0% {
-    transform: translateX(12%) rotate(10deg);
-    opacity: 0.18;
-  }
-
-  50% {
-    transform: translateX(-6%) rotate(10deg);
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateX(-20%) rotate(10deg);
     opacity: 0.18;
   }
 }
@@ -2032,10 +1998,6 @@ a:focus-visible,
   .hero-stage::before,
   .hero-stage::after {
     opacity: 0.5;
-  }
-
-  .hero-stage-beam {
-    display: none;
   }
 
   .hero-stage-card strong {

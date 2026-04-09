@@ -103,11 +103,6 @@ export function ResearchDetailView({
 
   const copyY = useTransform(scrollY, [0, 640], [0, 76]);
   const copyOpacity = useTransform(scrollY, [0, 640], [1, 0.78]);
-  const photoX = useTransform(scrollY, [0, 640], [0, -36]);
-  const photoScale = useTransform(scrollY, [0, 640], [1.04, 1.12]);
-  const visualY = useTransform(scrollY, [0, 640], [0, -40]);
-  const visualRotate = useTransform(scrollY, [0, 640], [0, -2.4]);
-  const coreScale = useTransform(scrollY, [0, 640], [1, 1.06]);
 
   return (
     <main className={`project-site ${project.themeClass}`}>
@@ -115,7 +110,6 @@ export function ResearchDetailView({
         <motion.div
           className={`project-hero-photo ${project.ambientClass}`}
           aria-hidden="true"
-          style={reduceMotion ? undefined : { x: photoX, scale: photoScale }}
         />
 
         <motion.div
@@ -206,16 +200,12 @@ export function ResearchDetailView({
 
           <motion.div
             className="project-visual"
-            style={reduceMotion ? undefined : { y: visualY, rotate: visualRotate }}
             initial={{ opacity: 0, y: 40, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.88, ease: easeOutExpo, delay: 0.22 }}
           >
             <div className={`project-visual-photo ${project.ambientClass}`} aria-hidden="true" />
-            <motion.div
-              className="project-visual-core-shell"
-              style={reduceMotion ? undefined : { scale: coreScale }}
-            >
+            <motion.div className="project-visual-core-shell">
               <div className="project-visual-core">
                 <span>{project.year}</span>
                 <strong>{project.heroKicker}</strong>

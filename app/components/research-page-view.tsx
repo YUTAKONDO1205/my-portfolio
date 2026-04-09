@@ -116,8 +116,6 @@ export function ResearchPageView({
   const heroY = useTransform(scrollY, [0, 620], [0, 74]);
   const heroOpacity = useTransform(scrollY, [0, 620], [1, 0.76]);
   const chipsY = useTransform(scrollY, [0, 620], [0, -26]);
-  const ambientLeftX = useTransform(scrollY, [0, 620], [-28, 20]);
-  const ambientRightX = useTransform(scrollY, [0, 620], [38, -20]);
 
   return (
     <main className="research-page">
@@ -125,12 +123,10 @@ export function ResearchPageView({
         <motion.div
           className="hero-ambient hero-ambient-left ambient-clouds"
           aria-hidden="true"
-          style={reduceMotion ? undefined : { x: ambientLeftX }}
         />
         <motion.div
           className="hero-ambient hero-ambient-right ambient-machine"
           aria-hidden="true"
-          style={reduceMotion ? undefined : { x: ambientRightX }}
         />
 
         <motion.header

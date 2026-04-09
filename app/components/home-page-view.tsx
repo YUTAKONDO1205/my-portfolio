@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
 import Link from "next/link";
 import {
   motion,
@@ -112,32 +112,11 @@ export function HomePageView({
 }: HomePageViewProps) {
   const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
-  const [isCompactViewport, setIsCompactViewport] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 767px)");
-
-    const updateViewport = () => {
-      setIsCompactViewport(mediaQuery.matches);
-    };
-
-    updateViewport();
-    mediaQuery.addEventListener("change", updateViewport);
-
-    return () => {
-      mediaQuery.removeEventListener("change", updateViewport);
-    };
-  }, []);
 
   const copyY = useTransform(scrollY, [0, 720], [0, 92]);
   const copyOpacity = useTransform(scrollY, [0, 720], [1, 0.72]);
   const stageY = useTransform(scrollY, [0, 720], [0, -68]);
-  const stageRotate = useTransform(scrollY, [0, 720], [0, -2.6]);
   const bandY = useTransform(scrollY, [0, 720], [0, -28]);
-  const ambientLeftX = useTransform(scrollY, [0, 720], [-34, 24]);
-  const ambientLeftY = useTransform(scrollY, [0, 720], [0, -16]);
-  const ambientRightX = useTransform(scrollY, [0, 720], [44, -26]);
-  const ambientRightY = useTransform(scrollY, [0, 720], [0, 18]);
 
   return (
     <main className="portfolio-home">
@@ -145,12 +124,10 @@ export function HomePageView({
         <motion.div
           className="hero-ambient hero-ambient-left ambient-clouds"
           aria-hidden="true"
-          style={reduceMotion ? undefined : { x: ambientLeftX, y: ambientLeftY }}
         />
         <motion.div
           className="hero-ambient hero-ambient-right ambient-tunnel"
           aria-hidden="true"
-          style={reduceMotion ? undefined : { x: ambientRightX, y: ambientRightY }}
         />
 
         <motion.header
@@ -255,20 +232,11 @@ export function HomePageView({
           <motion.div
             className="hero-stage"
             aria-label="研究テーマのプレビュー"
-            style={
-              reduceMotion
-                ? undefined
-                : {
-                    y: stageY,
-                    rotate: isCompactViewport === false ? stageRotate : 0,
-                  }
-            }
+            style={reduceMotion ? undefined : { y: stageY }}
             variants={groupVariants}
             initial="hidden"
             animate="show"
           >
-            <div className="hero-stage-beam hero-stage-beam-one" />
-            <div className="hero-stage-beam hero-stage-beam-two" />
             {researchProjects.map((project) => (
               <motion.div
                 key={project.slug}
