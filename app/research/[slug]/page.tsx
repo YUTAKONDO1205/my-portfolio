@@ -6,6 +6,7 @@ import {
   projectSlugs,
   researchProjects,
 } from "../../portfolio-data";
+import { personName, siteLabel } from "../../site-metadata";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -32,15 +33,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: `/research/${project.slug}`,
     },
     openGraph: {
-      title: `${project.title} | 近藤悠太`,
+      title: `${project.title} | ${personName}`,
       description: project.pageSummary,
       url: `/research/${project.slug}`,
       type: "article",
+      siteName: siteLabel,
       locale: "ja_JP",
     },
     twitter: {
-      card: "summary",
-      title: `${project.title} | 近藤悠太`,
+      card: "summary_large_image",
+      title: `${project.title} | ${personName}`,
       description: project.pageSummary,
     },
   };

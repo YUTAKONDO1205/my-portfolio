@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { Geist_Mono, Oswald } from "next/font/google";
 import { RouteIndicator } from "./components/route-indicator";
 import { SiteMotionChrome } from "./components/site-motion";
+import {
+  personName,
+  siteDescription,
+  siteLabel,
+  siteTitle,
+  siteUrl,
+} from "./site-metadata";
 import "./globals.css";
 
 const headingFont = Oswald({
@@ -16,20 +23,14 @@ const mono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://kondo-yuta-my-portfolio.vercel.app";
-const personName = "近藤悠太";
-const siteName = `${personName} | Portfolio`;
-const siteDescription =
-  "近藤悠太の紹介サイト。現場の信号を取得し、軽量に判断し、GitHub と Elchika で公開する流れを軸に、DroneInspector、pdm_edge、anomaly-event-api を紹介します。";
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: siteName,
+    default: siteTitle,
     template: `%s | ${personName}`,
   },
   description: siteDescription,
-  applicationName: siteName,
+  applicationName: siteLabel,
   keywords: [
     "近藤悠太",
     "Yuta Kondo",
@@ -45,20 +46,29 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: personName, url: siteUrl }],
   creator: personName,
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-icon", type: "image/png", sizes: "180x180" }],
+    shortcut: ["/favicon.ico"],
+  },
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     url: "/",
-    title: siteName,
+    title: siteTitle,
     description: siteDescription,
-    siteName,
+    siteName: siteLabel,
     locale: "ja_JP",
   },
   twitter: {
-    card: "summary",
-    title: siteName,
+    card: "summary_large_image",
+    title: siteTitle,
     description: siteDescription,
   },
   verification: {
@@ -69,8 +79,8 @@ export const metadata: Metadata = {
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: siteName,
-  alternateName: personName,
+  name: siteLabel,
+  alternateName: siteTitle,
   description: siteDescription,
   url: siteUrl,
 };
