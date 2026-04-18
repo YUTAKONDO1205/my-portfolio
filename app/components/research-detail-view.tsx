@@ -9,6 +9,7 @@ import {
   useTransform,
   type Variants,
 } from "motion/react";
+import { getArtworkStyle, getProjectArtwork } from "../artwork";
 import type { ResearchProject } from "../portfolio-data";
 
 type ResearchDetailViewProps = {
@@ -65,9 +66,7 @@ const itemVariants: Variants = {
   },
 };
 
-function MotionCardShell({
-  children,
-}: PropsWithChildren) {
+function MotionCardShell({ children }: PropsWithChildren) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -103,6 +102,7 @@ export function ResearchDetailView({
 
   const copyY = useTransform(scrollY, [0, 640], [0, 76]);
   const copyOpacity = useTransform(scrollY, [0, 640], [1, 0.78]);
+  const projectArtworkStyle = getArtworkStyle(getProjectArtwork(project));
 
   return (
     <main className={`project-site ${project.themeClass}`}>
@@ -128,7 +128,9 @@ export function ResearchDetailView({
         <div className="project-hero-grid">
           <motion.div
             className="project-hero-copy"
-            style={reduceMotion ? undefined : { y: copyY, opacity: copyOpacity }}
+            style={
+              reduceMotion ? undefined : { y: copyY, opacity: copyOpacity }
+            }
           >
             <motion.p
               className="eyebrow"
@@ -181,7 +183,10 @@ export function ResearchDetailView({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.66, ease: easeOutExpo, delay: 0.52 }}
             >
-              <Link href="/research" className="button-link button-link-primary">
+              <Link
+                href="/research"
+                className="button-link button-link-primary"
+              >
                 研究一覧へ戻る
               </Link>
               {project.links.map((link) => (
@@ -204,7 +209,17 @@ export function ResearchDetailView({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.88, ease: easeOutExpo, delay: 0.22 }}
           >
-            <div className={`project-visual-photo ${project.ambientClass}`} aria-hidden="true" />
+            <div
+              className={`project-visual-photo ${project.ambientClass}`}
+              aria-hidden="true"
+            />
+            {projectArtworkStyle && (
+              <div
+                className="artwork-layer project-visual-artwork"
+                style={projectArtworkStyle}
+                aria-hidden="true"
+              />
+            )}
             <motion.div className="project-visual-core-shell">
               <div className="project-visual-core">
                 <span>{project.year}</span>
@@ -227,7 +242,11 @@ export function ResearchDetailView({
       >
         <motion.div className="tag-row" variants={groupVariants}>
           {project.tags.map((tag) => (
-            <motion.span key={tag} className="tag project-tag" variants={itemVariants}>
+            <motion.span
+              key={tag}
+              className="tag project-tag"
+              variants={itemVariants}
+            >
               {tag}
             </motion.span>
           ))}
@@ -300,40 +319,53 @@ export function ResearchDetailView({
         </div>
 
         <motion.div className="project-mini-grid" variants={groupVariants}>
-          {otherProjects.map((candidate) => (
-            <motion.div
-              key={candidate.slug}
-              className="motion-card-shell"
-              variants={itemVariants}
-              whileHover={
-                reduceMotion
-                  ? undefined
-                  : {
-                      y: -10,
-                      scale: 1.018,
-                    }
-              }
-              transition={{
-                type: "spring",
-                stiffness: 240,
-                damping: 21,
-                mass: 0.82,
-              }}
-            >
-              <Link
-                href={`/research/${candidate.slug}`}
-                className={`project-mini-card ${candidate.themeClass}`}
+          {otherProjects.map((candidate) => {
+            const artworkStyle = getArtworkStyle(getProjectArtwork(candidate));
+
+            return (
+              <motion.div
+                key={candidate.slug}
+                className="motion-card-shell"
+                variants={itemVariants}
+                whileHover={
+                  reduceMotion
+                    ? undefined
+                    : {
+                        y: -10,
+                        scale: 1.018,
+                      }
+                }
+                transition={{
+                  type: "spring",
+                  stiffness: 240,
+                  damping: 21,
+                  mass: 0.82,
+                }}
               >
-                <div
-                  className={`project-mini-photo ${candidate.ambientClass}`}
-                  aria-hidden="true"
-                />
-                <span className="quick-link-label">{candidate.heroKicker}</span>
-                <strong>{candidate.title}</strong>
-                <p>{candidate.cardSummary}</p>
-              </Link>
-            </motion.div>
-          ))}
+                <Link
+                  href={`/research/${candidate.slug}`}
+                  className={`project-mini-card ${candidate.themeClass}`}
+                >
+                  <div
+                    className={`project-mini-photo ${candidate.ambientClass}`}
+                    aria-hidden="true"
+                  />
+                  {artworkStyle && (
+                    <div
+                      className="artwork-layer project-mini-artwork"
+                      style={artworkStyle}
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span className="quick-link-label">
+                    {candidate.heroKicker}
+                  </span>
+                  <strong>{candidate.title}</strong>
+                  <p>{candidate.cardSummary}</p>
+                </Link>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </motion.section>
     </main>

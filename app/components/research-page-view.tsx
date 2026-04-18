@@ -9,6 +9,11 @@ import {
   useTransform,
   type Variants,
 } from "motion/react";
+import {
+  getArtworkStyle,
+  getProjectArtwork,
+  researchHeroArtwork,
+} from "../artwork";
 import type {
   PlatformLink,
   PublicationEntry,
@@ -74,9 +79,7 @@ const itemVariants: Variants = {
   },
 };
 
-function MotionCardShell({
-  children,
-}: PropsWithChildren) {
+function MotionCardShell({ children }: PropsWithChildren) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -122,6 +125,11 @@ export function ResearchPageView({
       <motion.section className="shell base-hero base-hero-compact">
         <motion.div
           className="hero-ambient hero-ambient-left ambient-clouds"
+          aria-hidden="true"
+        />
+        <div
+          className="artwork-layer research-feature-artwork"
+          style={getArtworkStyle(researchHeroArtwork)}
           aria-hidden="true"
         />
         <motion.div
@@ -235,34 +243,56 @@ export function ResearchPageView({
         </div>
 
         <motion.div className="project-preview-grid" variants={groupVariants}>
-          {researchProjects.map((project) => (
-            <MotionCardShell key={project.slug}>
-              <article className={`project-preview-card ${project.themeClass}`}>
-                <div
-                  className={`project-preview-photo ${project.ambientClass}`}
-                  aria-hidden="true"
-                />
-                <div className="project-preview-inner">
-                  <p className="card-label card-label-inverse">{project.heroKicker}</p>
-                  <h3>{project.title}</h3>
-                  <p className="project-preview-subtitle">{project.subtitle}</p>
-                  <p className="project-preview-summary">{project.cardSummary}</p>
-                  <div className="tag-row">
-                    {project.tags.slice(0, 5).map((tag) => (
-                      <span key={tag} className="tag">
-                        {tag}
-                      </span>
-                    ))}
+          {researchProjects.map((project) => {
+            const artworkStyle = getArtworkStyle(getProjectArtwork(project));
+
+            return (
+              <MotionCardShell key={project.slug}>
+                <article
+                  className={`project-preview-card ${project.themeClass}`}
+                >
+                  <div
+                    className={`project-preview-photo ${project.ambientClass}`}
+                    aria-hidden="true"
+                  />
+                  {artworkStyle && (
+                    <div
+                      className="artwork-layer project-preview-artwork"
+                      style={artworkStyle}
+                      aria-hidden="true"
+                    />
+                  )}
+                  <div className="project-preview-inner">
+                    <p className="card-label card-label-inverse">
+                      {project.heroKicker}
+                    </p>
+                    <h3>{project.title}</h3>
+                    <p className="project-preview-subtitle">
+                      {project.subtitle}
+                    </p>
+                    <p className="project-preview-summary">
+                      {project.cardSummary}
+                    </p>
+                    <div className="tag-row">
+                      {project.tags.slice(0, 5).map((tag) => (
+                        <span key={tag} className="tag">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="link-row">
+                      <Link
+                        href={`/research/${project.slug}`}
+                        className="arrow-link"
+                      >
+                        詳しく見る
+                      </Link>
+                    </div>
                   </div>
-                  <div className="link-row">
-                    <Link href={`/research/${project.slug}`} className="arrow-link">
-                      詳しく見る
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            </MotionCardShell>
-          ))}
+                </article>
+              </MotionCardShell>
+            );
+          })}
         </motion.div>
       </motion.section>
 
@@ -333,18 +363,26 @@ export function ResearchPageView({
 
             <div className="recognition-grid">
               {recognitions.map((recognition) => (
-                <MotionCardShell key={`${recognition.year}-${recognition.award}`}>
+                <MotionCardShell
+                  key={`${recognition.year}-${recognition.award}`}
+                >
                   <article className="recognition-card award-accent-card">
                     <div className="publication-meta">
                       <span>{recognition.year}</span>
-                      <a href={recognition.href} target="_blank" rel="noreferrer">
+                      <a
+                        href={recognition.href}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         Source
                       </a>
                     </div>
                     <h3>{recognition.award}</h3>
                     <p className="recognition-project">{recognition.project}</p>
                     <p>{recognition.note}</p>
-                    <span className="recognition-org">{recognition.organization}</span>
+                    <span className="recognition-org">
+                      {recognition.organization}
+                    </span>
                   </article>
                 </MotionCardShell>
               ))}
