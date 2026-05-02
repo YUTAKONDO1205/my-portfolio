@@ -307,6 +307,35 @@ export function HomePageView({
             <p>個別ページで展開</p>
           </motion.div>
         </motion.div>
+
+        <div className="marquee" aria-hidden="true">
+          <div className="marquee-track">
+            <span>Sense</span>
+            <span className="marquee-dot" />
+            <em>現場で拾う</em>
+            <span className="marquee-dot" />
+            <span>Decide</span>
+            <span className="marquee-dot" />
+            <em>軽量に判断</em>
+            <span className="marquee-dot" />
+            <span>Share</span>
+            <span className="marquee-dot" />
+            <em>公開して次へ</em>
+            <span className="marquee-dot" />
+            <span>Sense</span>
+            <span className="marquee-dot" />
+            <em>現場で拾う</em>
+            <span className="marquee-dot" />
+            <span>Decide</span>
+            <span className="marquee-dot" />
+            <em>軽量に判断</em>
+            <span className="marquee-dot" />
+            <span>Share</span>
+            <span className="marquee-dot" />
+            <em>公開して次へ</em>
+            <span className="marquee-dot" />
+          </div>
+        </div>
       </motion.section>
 
       <motion.section
