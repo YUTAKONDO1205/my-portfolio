@@ -14,6 +14,7 @@ import {
   getProjectArtwork,
   homeHeroArtwork,
 } from "../artwork";
+import { FrameSequenceHero } from "./frame-sequence-hero";
 import type {
   Philosophy,
   PlatformLink,
@@ -128,8 +129,10 @@ export function HomePageView({
   const bandY = useTransform(scrollY, [0, 720], [0, -28]);
 
   return (
-    <main className="portfolio-home">
-      <motion.section className="shell base-hero">
+    <>
+      <FrameSequenceHero />
+      <main className="portfolio-home">
+        <motion.section className="shell base-hero">
         <motion.div
           className="hero-ambient hero-ambient-left ambient-clouds"
           aria-hidden="true"
@@ -678,6 +681,7 @@ export function HomePageView({
           ))}
         </motion.div>
       </motion.section>
-    </main>
+      </main>
+    </>
   );
 }
