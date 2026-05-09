@@ -1991,10 +1991,150 @@ img {
   --project-accent: rgba(255, 91, 118, 0.12);
 }
 
+.theme-eltres {
+  --theme-start: #1a3344;
+  --theme-mid: #0f2230;
+  --theme-end: #08131c;
+  --project-background: #08131c;
+  --project-background-alt: #11283a;
+  --project-accent: rgba(122, 195, 215, 0.12);
+}
+
 .theme-drone .project-hero::before,
 .theme-pdm .project-hero::before,
-.theme-anomaly .project-hero::before {
+.theme-anomaly .project-hero::before,
+.theme-eltres .project-hero::before {
   display: none;
+}
+
+/* ============== Selected Works ============== */
+
+.selected-works-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.selected-work-card {
+  --theme-start: #1d2733;
+  --theme-mid: #131820;
+  --theme-end: #0a0d12;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-content: end;
+  gap: 12px;
+  min-height: 280px;
+  padding: 26px 24px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  color: #f5f7ff;
+  box-shadow: var(--shadow-strong);
+  will-change: transform;
+  backface-visibility: hidden;
+  transition: border-color 320ms ease;
+}
+
+.selected-work-card::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    radial-gradient(
+      90% 80% at 0% 0%,
+      color-mix(in srgb, var(--theme-start) 70%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      90% 80% at 100% 100%,
+      color-mix(in srgb, var(--theme-end) 80%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(160deg, var(--theme-start), var(--theme-mid) 52%, var(--theme-end));
+}
+
+.selected-work-card::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 30%
+  );
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.selected-work-card > * {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.selected-work-card:hover,
+.selected-work-card:focus-visible {
+  border-color: var(--line-strong);
+}
+
+.selected-work-card strong {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.selected-work-card .selected-work-subtitle {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 400;
+  color: rgba(245, 247, 255, 0.78);
+  font-size: 0.96rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+.selected-work-card p {
+  margin: 0;
+  color: rgba(243, 242, 238, 0.78);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.selected-work-card .tag {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+/* ============== Philosophy ============== */
+
+.philosophy-panel {
+  display: grid;
+  gap: 18px;
+  max-width: 56rem;
+}
+
+.philosophy-panel p {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.6vw, 1.08rem);
+  line-height: 1.92;
+}
+
+.philosophy-panel .philosophy-english {
+  color: var(--accent);
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 0.96rem;
+  letter-spacing: 0.04em;
 }
 
 /* ============== Research Axis Strip ============== */
@@ -2160,7 +2300,8 @@ a:focus-visible,
   .focus-grid,
   .platform-grid-light,
   .project-mini-grid,
-  .research-axis-strip {
+  .research-axis-strip,
+  .selected-works-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -2325,7 +2466,8 @@ a:focus-visible,
   .project-preview-grid,
   .project-mini-grid,
   .hero-band,
-  .research-axis-strip {
+  .research-axis-strip,
+  .selected-works-grid {
     grid-template-columns: 1fr;
   }
 

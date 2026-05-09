@@ -186,7 +186,7 @@ export function ResearchPageView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.72, ease: easeOutExpo, delay: 0.28 }}
           >
-            3つの研究を一覧で見渡せるページです。役割を短くつかみ、
+            公開している研究を一覧で見渡せるページです。役割を短くつかみ、
             詳しい説明や実装はそれぞれの個別ページで見られます。
           </motion.p>
 

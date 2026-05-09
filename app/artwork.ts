@@ -24,6 +24,11 @@ const projectArtworkBySlug: Record<string, ArtworkSpec> = {
     position: "56% 42%",
     mobilePosition: "60% 46%",
   },
+  "eltres-co2-mapping": {
+    src: "/images/ambient/GitHub汎用ソーシャルプレビュー.png",
+    position: "52% 46%",
+    mobilePosition: "58% 50%",
+  },
 };
 
 export const homeHeroArtwork: ArtworkSpec = {
