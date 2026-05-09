@@ -15,10 +15,12 @@ import {
   homeHeroArtwork,
 } from "../artwork";
 import type {
+  Philosophy,
   PlatformLink,
   PublicationEntry,
   Recognition,
   ResearchProject,
+  SelectedWork,
   SiteAxis,
 } from "../portfolio-data";
 
@@ -27,7 +29,9 @@ type HomePageViewProps = {
   publicationTimeline: readonly PublicationEntry[];
   recognitions: readonly Recognition[];
   researchProjects: readonly ResearchProject[];
+  selectedWorks: readonly SelectedWork[];
   siteAxis: SiteAxis;
+  philosophy: Philosophy;
 };
 
 const easeOutExpo = [0.22, 1, 0.36, 1] as const;
@@ -111,7 +115,9 @@ export function HomePageView({
   publicationTimeline,
   recognitions,
   researchProjects,
+  selectedWorks,
   siteAxis,
+  philosophy,
 }: HomePageViewProps) {
   const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
@@ -152,7 +158,9 @@ export function HomePageView({
           <nav className="hero-nav" aria-label="サイト内ナビゲーション">
             <Link href="/research">Research</Link>
             <a href="#projects">Projects</a>
+            <a href="#works">Works</a>
             <a href="#archive">Archive</a>
+            <a href="#philosophy">Philosophy</a>
           </nav>
         </motion.header>
 
@@ -455,6 +463,62 @@ export function HomePageView({
       </motion.section>
 
       <motion.section
+        id="works"
+        className="shell section dark-panel"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={viewport}
+      >
+        <div className="section-heading section-heading-inverse">
+          <p className="eyebrow">Selected Works</p>
+          <h2>研究の外で作っているもの</h2>
+          <p className="section-intro">
+            エッジ AI 研究と並行して、セキュリティ、LLM マルチエージェント、業務システムまで横断的に手を動かしています。
+          </p>
+        </div>
+
+        <motion.div className="selected-works-grid" variants={groupVariants}>
+          {selectedWorks.map((work) => (
+            <motion.a
+              key={work.slug}
+              href={work.href}
+              className={`selected-work-card ${work.themeClass}`}
+              variants={itemVariants}
+              whileHover={
+                reduceMotion
+                  ? undefined
+                  : {
+                      y: -10,
+                      scale: 1.018,
+                    }
+              }
+              transition={{
+                type: "spring",
+                stiffness: 240,
+                damping: 20,
+                mass: 0.82,
+              }}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="quick-link-label">{work.category}</span>
+              <strong>{work.title}</strong>
+              <p className="selected-work-subtitle">{work.subtitle}</p>
+              <p>{work.summary}</p>
+              <div className="tag-row">
+                {work.tags.slice(0, 4).map((tag) => (
+                  <span key={tag} className="tag">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </motion.a>
+          ))}
+        </motion.div>
+      </motion.section>
+
+      <motion.section
         id="archive"
         className="shell section archive-panel"
         variants={sectionVariants}
@@ -546,6 +610,25 @@ export function HomePageView({
               ))}
             </div>
           </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        id="philosophy"
+        className="shell section dark-panel"
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={viewport}
+      >
+        <div className="section-heading section-heading-inverse">
+          <p className="eyebrow">{philosophy.label}</p>
+          <h2>{philosophy.title}</h2>
+        </div>
+
+        <div className="philosophy-panel">
+          <p>{philosophy.body}</p>
+          <p className="philosophy-english">{philosophy.english}</p>
         </div>
       </motion.section>
 

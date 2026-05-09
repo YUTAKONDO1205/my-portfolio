@@ -25,6 +25,13 @@ export type SiteAxis = {
   steps: readonly SiteAxisStep[];
 };
 
+export type Philosophy = {
+  label: string;
+  title: string;
+  body: string;
+  english: string;
+};
+
 export type PublicationEntry = {
   id: string;
   date: string;
@@ -54,8 +61,12 @@ export type ResearchProject = {
   pageSummary: string;
   heroKicker: string;
   heroEnglish: string;
-  themeClass: "theme-drone" | "theme-pdm" | "theme-anomaly";
-  ambientClass: "ambient-clouds" | "ambient-machine" | "ambient-server";
+  themeClass: "theme-drone" | "theme-pdm" | "theme-anomaly" | "theme-eltres";
+  ambientClass:
+    | "ambient-clouds"
+    | "ambient-machine"
+    | "ambient-server"
+    | "ambient-tunnel";
   tags: readonly string[];
   links: readonly {
     href: string;
@@ -66,6 +77,17 @@ export type ResearchProject = {
     body: string;
   }[];
   highlights: readonly string[];
+};
+
+export type SelectedWork = {
+  slug: string;
+  category: string;
+  title: string;
+  subtitle: string;
+  summary: string;
+  tags: readonly string[];
+  themeClass: "theme-drone" | "theme-pdm" | "theme-anomaly" | "theme-eltres";
+  href: string;
 };
 
 export const platformLinks: readonly PlatformLink[] = [
@@ -117,9 +139,9 @@ export const siteAxis: SiteAxis = {
   label: "Research Flow",
   title: "現場の信号を、判断と公開へつないでいく",
   summary:
-    "このサイトの軸は、センサで拾った信号をエッジで読み、公開しながら次の研究へつなげる流れです。",
+    "このサイトの軸は、センサで拾った信号をエッジで読み、必要な情報だけを送り、公開しながら次の研究へつなげる流れです。",
   detail:
-    "現場で信号を取り、軽量に判断し、GitHub と Elchika で公開するまでの流れを、このサイト全体の軸にしています。",
+    "現場で信号を取り、軽量に判断し、通信制約を前提にデータを設計し、GitHub と Elchika で公開するまでの流れを、このサイト全体の軸にしています。",
   steps: [
     {
       en: "Sense",
@@ -140,6 +162,14 @@ export const siteAxis: SiteAxis = {
         "GitHub、Elchika、受賞歴まで含めて研究の流れを公開し、次のテーマに接続していく。",
     },
   ],
+} as const;
+
+export const philosophy: Philosophy = {
+  label: "Philosophy",
+  title: "「どう動くか」だけでなく「どう使われるか」まで設計する",
+  body: "良いエンジニアリングは、ただ動くものを作ることではなく、現場で実際に使えるシステムを設計することだと考えています。だからこそ、センサ取得、エッジ推論、通信、API、可視化までを横断し、必要な情報だけを送る省通信設計と、運用へつなげるイベント設計をひとつの体験として組み立てています。",
+  english:
+    "Good engineering is not only about making something work — it is about designing systems that can actually be used in the real world.",
 } as const;
 
 export const researchProjects: readonly ResearchProject[] = [
@@ -178,7 +208,7 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "着眼点",
         body:
-          "トンネルや水道管のような通信条件の悪い場所では、単に撮影して持ち帰るだけでは作業の負荷が大きく残ります。そこで、機体側で画像取得と証跡保存を完結させつつ、必要な情報だけを扱う方向に寄せています。",
+          "トンネルや水道管のような通信条件の悪い場所では、単に撮影して持ち帰るだけでは作業の負荷が大きく残ります。そこで、機体側で画像取得と証跡保存を完結させつつ、損傷検出時のみ「画像 + 位置 + 確信度」を扱う省通信設計に寄せています。",
       },
       {
         title: "構成",
@@ -194,6 +224,7 @@ export const researchProjects: readonly ResearchProject[] = [
     highlights: [
       "画像保存と IMU ログ取得を止めないフォールバック設計",
       "camera / imu / ble / storage を分割した確認しやすい構成",
+      "必要な情報だけを送る省通信前提のアーキテクチャ",
       "受賞作品として外部からの評価も得ている点検テーマ",
     ],
   },
@@ -282,7 +313,7 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "着眼点",
         body:
-          "現場で本当に必要なのは、判定の有無だけではなく、その結果を保存し、見返し、状態を変えられることだと考えています。そのため異常検知をイベント運用へつなげています。",
+          "現場で本当に必要なのは、判定の有無だけではなく、その結果を保存し、見返し、状態を変えられることだと考えています。そのため異常検知をイベント運用へつなげ、リアルタイムに価値へ変換する仕組みとして設計しています。",
       },
       {
         title: "構成",
@@ -300,6 +331,117 @@ export const researchProjects: readonly ResearchProject[] = [
       "NEW / CHECKING / RESOLVED の運用ステータス設計",
       "説明可能性とイベント管理をひとつの体験にまとめた点が特徴",
     ],
+  },
+  {
+    slug: "eltres-co2-mapping",
+    year: "2025",
+    title: "Eltres_CO2_Mapping",
+    subtitle: "ELTRES通信によるCO2濃度マッピング",
+    cardSummary:
+      "Spresense と ELTRES を組み合わせ、CO2 濃度と位置情報を交互に送信して都市と郊外の濃度差を可視化した研究です。",
+    pageSummary:
+      "通信、解析、表示を一連でつなぐ環境モニタリング研究です。CO2 濃度と位置情報を ELTRES で送り、CLIP Viewer Lite API から MATLAB で取得し、Web ダッシュボードまでまとめて構築しています。",
+    heroKicker: "Atmosphere Mapping",
+    heroEnglish: "Make invisible signals visible.",
+    themeClass: "theme-eltres",
+    ambientClass: "ambient-tunnel",
+    tags: [
+      "ELTRES",
+      "SPRESENSE",
+      "MATLAB",
+      "IoT",
+      "Sensor",
+      "Mapping",
+    ],
+    links: [
+      {
+        href: "https://github.com/YUTAKONDO1205/Eltres_CO2_Mapping",
+        label: "GitHub Repository",
+      },
+      {
+        href: "https://elchika.com/article/504f286c-413b-47d3-89f9-38920ca5e5c7/",
+        label: "Elchika Article",
+      },
+    ],
+    sections: [
+      {
+        title: "着眼点",
+        body:
+          "目に見えない CO2 濃度を、エリア単位の差として持ち帰れる形にすることを目的にしています。現場で取った値を、その場で確認できる体験までつなげることを意識しています。",
+      },
+      {
+        title: "構成",
+        body:
+          "Spresense でセンサ値と位置情報を交互に取得し、ELTRES アドオンで送信します。クラウド側では CLIP Viewer Lite API から MATLAB で取得し、Web ダッシュボードで可視化しています。",
+      },
+      {
+        title: "現在地",
+        body:
+          "通信、解析、表示までが一連でつながり、センサデータを「見える価値」に変える環境モニタリングの基礎構成として位置づいています。",
+      },
+    ],
+    highlights: [
+      "送信データを最小化したまま空間分布を取得できる構成",
+      "MATLAB と Web ダッシュボードまで含めた一連の可視化パイプライン",
+      "クレスコ ELTRESアドオンボード優秀賞の受賞テーマ",
+    ],
+  },
+] as const;
+
+export const selectedWorks: readonly SelectedWork[] = [
+  {
+    slug: "vibeguard",
+    category: "Security Tooling",
+    title: "VibeGuard",
+    subtitle: "AI 生成コード向けセキュリティ診断基盤",
+    summary:
+      "開発中（VS Code）・閲覧中（Chrome）・マージ前（GitHub Actions / CLI）の 3 段階で同一の解析コアを使い、AI が書いたコードの典型的な地雷を検出する統合診断基盤です。GitHub Marketplace にも公開しています。",
+    tags: [
+      "TypeScript",
+      "SARIF",
+      "GitHub Actions",
+      "VS Code",
+      "Chrome",
+      "AI Code Review",
+    ],
+    themeClass: "theme-anomaly",
+    href: "https://github.com/YUTAKONDO1205/VibeGuard",
+  },
+  {
+    slug: "travel-app-patch",
+    category: "LLM Multi-Agent",
+    title: "Maison Passage",
+    subtitle: "片道航空券 2 枚で組み立てる海外旅行プランナー",
+    summary:
+      "海外旅行を「2 枚の片道航空券」として検索するプレミアム旅行プランナーです。Codex の Planner / Generator / Evaluator マルチエージェントハーネスをローカルで運用し、スプリント単位で機能を進化させています。",
+    tags: [
+      "Next.js",
+      "TypeScript",
+      "Codex",
+      "Multi-Agent",
+      "Skyscanner",
+      "Travel",
+    ],
+    themeClass: "theme-drone",
+    href: "https://github.com/YUTAKONDO1205/travel_app_patch",
+  },
+  {
+    slug: "mountain-supply-system",
+    category: "Business System",
+    title: "Mountain Supply System",
+    subtitle: "山小屋補給品の在庫・受注・売上管理",
+    summary:
+      "Java / Spring Boot / SQL / テストを盛り込んだ業務アプリ風ミニシステムです。商品マスタ、入出庫履歴、注文ヘッダと明細、ユーザー認証を分離した正規化設計と、JOIN・GROUP BY を中心とした集計 SQL を組み合わせています。",
+    tags: [
+      "Java 21",
+      "Spring Boot",
+      "Spring Security",
+      "H2",
+      "JUnit 5",
+      "REST API",
+    ],
+    themeClass: "theme-pdm",
+    href: "https://github.com/YUTAKONDO1205/Mountain-Supply-System",
   },
 ] as const;
 
