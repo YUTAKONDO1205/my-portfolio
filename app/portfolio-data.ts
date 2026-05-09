@@ -79,6 +79,12 @@ export type ResearchProject = {
   highlights: readonly string[];
 };
 
+export type SelectedWorkDistribution = {
+  label: string;
+  href?: string;
+  status?: "live" | "pending";
+};
+
 export type SelectedWork = {
   slug: string;
   category: string;
@@ -88,6 +94,12 @@ export type SelectedWork = {
   tags: readonly string[];
   themeClass: "theme-drone" | "theme-pdm" | "theme-anomaly" | "theme-eltres";
   href: string;
+  /** Optional: 3–6 short bullets shown on the card */
+  highlights?: readonly string[];
+  /** Optional: distribution channels (Marketplace / Web Store / etc.) with per-link status */
+  distribution?: readonly SelectedWorkDistribution[];
+  /** Optional: feature flag — when true, card may render larger / span more columns */
+  feature?: boolean;
 };
 
 export const platformLinks: readonly PlatformLink[] = [
@@ -395,17 +407,49 @@ export const selectedWorks: readonly SelectedWork[] = [
     title: "VibeGuard",
     subtitle: "AI 生成コード向けセキュリティ診断基盤",
     summary:
-      "開発中（VS Code）・閲覧中（Chrome）・マージ前（GitHub Actions / CLI）の 3 段階で同一の解析コアを使い、AI が書いたコードの典型的な地雷を検出する統合診断基盤です。GitHub Marketplace にも公開しています。",
+      "開発中（VS Code）／ 閲覧中（Chrome）／ マージ前（GitHub Actions・CLI）の 3 段階で同一の解析コアを使い、AI が書いたコードの典型的な地雷 — 注入・秘密情報・認証スキップ・スタブ実装・モックの本番混入 — を統一基準で検出する統合診断基盤。コードを外部送信しない 100% ローカル動作、出力は SARIF で GitHub Code Scanning に直結します。",
     tags: [
-      "TypeScript",
+      "TypeScript Monorepo",
       "SARIF",
-      "GitHub Actions",
-      "VS Code",
-      "Chrome",
+      "esbuild",
+      "GitHub Action",
+      "VS Code Extension",
+      "Chrome MV3",
       "AI Code Review",
+      "100% Local",
     ],
     themeClass: "theme-anomaly",
     href: "https://github.com/YUTAKONDO1205/VibeGuard",
+    feature: true,
+    highlights: [
+      "解析コア共通化 — analyzer-core を VS Code / Chrome / Action / CLI が共有し、エディタ・ブラウザ・CI で判定基準が完全一致",
+      "28 ルール × 5 カテゴリ — 注入 (INJ-7) / 認証 (AUTH-4) / 秘密情報 (SEC-4) / 暗号 (CRYPTO-3) / 品質 (QUAL-10)",
+      "AI 痕跡ヒューリスティクス 6 種 — スタブ実装・プレースホルダメール・モックデータ・debug=true・「for now」コメント・空 validator",
+      "100% ローカル — テレメトリ・ネットワーク送信ゼロ。コードは端末から出ない（PRIVACY.md で明示）",
+      "PR diff スキャン — `git diff <range> --unified=0` で追加行のみ走査し、独立した sticky コメントで報告",
+      "SARIF 出力 → GitHub Code Scanning タブに自動アップロード（self-scan / samples / pr-diff-scan の 3 ジョブ構成）",
+    ],
+    distribution: [
+      {
+        label: "GitHub Marketplace (Action)",
+        href: "https://github.com/marketplace/actions/vibe-guard-aicoding",
+        status: "live",
+      },
+      {
+        label: "VS Code Marketplace",
+        href: "https://marketplace.visualstudio.com/items?itemName=yutakondo.vibeguard-aicoding",
+        status: "live",
+      },
+      {
+        label: "Chrome Web Store",
+        status: "live",
+      },
+      {
+        label: "Open VSX Registry",
+        href: "https://open-vsx.org/extension/yutakondo/vibeguard-aicoding",
+        status: "pending",
+      },
+    ],
   },
   {
     slug: "travel-app-patch",

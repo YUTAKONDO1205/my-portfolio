@@ -474,50 +474,168 @@ export function HomePageView({
         viewport={viewport}
       >
         <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">Selected Works</p>
-          <h2>研究の外で作っているもの</h2>
+          <p className="eyebrow">Practice</p>
+          <h2>実装と公開</h2>
           <p className="section-intro">
-            エッジ AI 研究と並行して、セキュリティ、LLM マルチエージェント、業務システムまで横断的に手を動かしています。
+            研究の傍らで動かしているプロダクト群。
+            セキュリティ、LLM マルチエージェント、業務システムまで、領域を横断して実装から公開までを通して手を動かしています。
           </p>
         </div>
 
         <motion.div className="selected-works-grid" variants={groupVariants}>
-          {selectedWorks.map((work) => (
-            <motion.a
-              key={work.slug}
-              href={work.href}
-              className={`selected-work-card ${work.themeClass}`}
-              variants={itemVariants}
-              whileHover={
-                reduceMotion
-                  ? undefined
-                  : {
-                      y: -10,
-                      scale: 1.018,
-                    }
-              }
-              transition={{
-                type: "spring",
-                stiffness: 240,
-                damping: 20,
-                mass: 0.82,
-              }}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span className="quick-link-label">{work.category}</span>
-              <strong>{work.title}</strong>
-              <p className="selected-work-subtitle">{work.subtitle}</p>
-              <p>{work.summary}</p>
-              <div className="tag-row">
-                {work.tags.slice(0, 4).map((tag) => (
-                  <span key={tag} className="tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </motion.a>
-          ))}
+          {selectedWorks.map((work) => {
+            const hasRich =
+              (work.highlights && work.highlights.length > 0) ||
+              (work.distribution && work.distribution.length > 0);
+
+            // Rich variant: nested anchors aren't valid HTML, so render as a div
+            // with the title as the primary link and distribution chips inside.
+            if (hasRich) {
+              return (
+                <motion.article
+                  key={work.slug}
+                  className={`selected-work-card selected-work-card-rich ${
+                    work.feature ? "selected-work-card-feature" : ""
+                  } ${work.themeClass}`}
+                  variants={itemVariants}
+                  whileHover={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          y: -8,
+                          scale: 1.012,
+                        }
+                  }
+                  transition={{
+                    type: "spring",
+                    stiffness: 220,
+                    damping: 22,
+                    mass: 0.88,
+                  }}
+                >
+                  <span className="quick-link-label">{work.category}</span>
+                  <a
+                    href={work.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="selected-work-title-link"
+                  >
+                    <strong>{work.title}</strong>
+                    <span className="selected-work-arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  </a>
+                  <p className="selected-work-subtitle">{work.subtitle}</p>
+                  <p className="selected-work-summary">{work.summary}</p>
+
+                  {work.highlights && work.highlights.length > 0 && (
+                    <ul className="selected-work-highlights">
+                      {work.highlights.map((line, i) => (
+                        <li key={i}>
+                          <span
+                            className="selected-work-bullet"
+                            aria-hidden="true"
+                          />
+                          <span>{line}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {work.distribution && work.distribution.length > 0 && (
+                    <div className="selected-work-dist">
+                      <span className="selected-work-dist-label">
+                        Distribution
+                      </span>
+                      <div className="selected-work-dist-chips">
+                        {work.distribution.map((d) => {
+                          const chipBody = (
+                            <>
+                              <span
+                                className={`selected-work-dist-status selected-work-dist-status-${
+                                  d.status ?? "live"
+                                }`}
+                                aria-hidden="true"
+                              />
+                              <span>{d.label}</span>
+                              {d.status === "pending" && (
+                                <span className="selected-work-dist-tag">
+                                  申請中
+                                </span>
+                              )}
+                            </>
+                          );
+                          return d.href ? (
+                            <a
+                              key={d.label}
+                              href={d.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="selected-work-dist-chip is-link"
+                            >
+                              {chipBody}
+                            </a>
+                          ) : (
+                            <span
+                              key={d.label}
+                              className="selected-work-dist-chip"
+                            >
+                              {chipBody}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="tag-row">
+                    {work.tags.slice(0, 6).map((tag) => (
+                      <span key={tag} className="tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </motion.article>
+              );
+            }
+
+            return (
+              <motion.a
+                key={work.slug}
+                href={work.href}
+                className={`selected-work-card ${work.themeClass}`}
+                variants={itemVariants}
+                whileHover={
+                  reduceMotion
+                    ? undefined
+                    : {
+                        y: -10,
+                        scale: 1.018,
+                      }
+                }
+                transition={{
+                  type: "spring",
+                  stiffness: 240,
+                  damping: 20,
+                  mass: 0.82,
+                }}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span className="quick-link-label">{work.category}</span>
+                <strong>{work.title}</strong>
+                <p className="selected-work-subtitle">{work.subtitle}</p>
+                <p>{work.summary}</p>
+                <div className="tag-row">
+                  {work.tags.slice(0, 4).map((tag) => (
+                    <span key={tag} className="tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </motion.a>
+            );
+          })}
         </motion.div>
       </motion.section>
 

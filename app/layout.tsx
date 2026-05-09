@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Oswald } from "next/font/google";
+import {
+  Inter,
+  JetBrains_Mono,
+  Noto_Sans_JP,
+  Space_Grotesk,
+} from "next/font/google";
+import { GlobalFrameCanvas } from "./components/global-frame-canvas";
 import { RouteIndicator } from "./components/route-indicator";
 import { SiteMotionChrome } from "./components/site-motion";
 import {
@@ -11,16 +17,36 @@ import {
 } from "./site-metadata";
 import "./globals.css";
 
-const headingFont = Oswald({
-  variable: "--font-oswald",
+// Display / heading — geometric, classic-meets-future feel
+const displayFont = Space_Grotesk({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-const mono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Body / UI — neutral, highly legible, harmonizes with Space Grotesk
+const bodyFont = Inter({
+  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+// Japanese — modern sans with multiple weights, pairs with Latin fonts above
+const jpFont = Noto_Sans_JP({
+  variable: "--font-jp",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+// Mono — technical labels, eyebrows, mono numerics
+const monoFont = JetBrains_Mono({
+  variable: "--font-mono-source",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -105,7 +131,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${headingFont.variable} ${mono.variable} h-full antialiased`}
+      className={`${displayFont.variable} ${bodyFont.variable} ${jpFont.variable} ${monoFont.variable} h-full antialiased`}
     >
       <body className="site-body">
         <script
@@ -116,6 +142,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
+        <GlobalFrameCanvas />
         <SiteMotionChrome />
         <RouteIndicator />
         {children}
