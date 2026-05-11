@@ -405,9 +405,9 @@ export const selectedWorks: readonly SelectedWork[] = [
     slug: "vibeguard",
     category: "Security Tooling",
     title: "VibeGuard",
-    subtitle: "AI が書いたコードの「通ってしまうバグ」を 3 地点で止める",
+    subtitle: "AI 生成コードの「通ってしまうバグ」を 3 地点で止める",
     summary:
-      "書くとき（VS Code / Open VSX）・読むとき（Chrome）・マージ前（GitHub Actions / CLI）の 3 地点で同一の analyzer-core を共有し、AI 生成コード特有の地雷 — 注入・秘密情報・認証スキップ・スタブ実装・モックの本番混入 — を統一基準で検出する診断基盤。30 ルール、100% ローカル解析、テレメトリなし。出力は SARIF で GitHub Code Scanning に直結します。",
+      "書くとき（VS Code / Open VSX）・読むとき（Chrome）・マージ前（GitHub Actions / CLI）の 3 地点に同じ analyzer-core を配り、注入・秘密情報・認証スキップ・スタブ実装の混入を同一基準で止める診断基盤です。コードは端末から出ません。",
     tags: [
       "TypeScript Monorepo",
       "SARIF",
@@ -422,13 +422,13 @@ export const selectedWorks: readonly SelectedWork[] = [
     href: "https://github.com/YUTAKONDO1205/VibeGuard",
     feature: true,
     highlights: [
-      "解析コア共通化 — analyzer-core を VS Code / Open VSX / Chrome / Action / CLI が共有し、エディタ・ブラウザ・CI で判定基準が完全一致",
-      "30 ルール — 注入系 (SQL / コマンド / NoSQL / template / SSRF / open redirect / unsafe eval)、認証・秘密情報 (ハードコードトークン、弱い JWT 秘密鍵、認証チェック漏れ、TLS 検証無効化)、暗号 (MD5/SHA-1、ECB、弱い乱数) を網羅",
-      "AI 痕跡ヒューリスティクス — スタブ実装・placeholder メール・モックデータの本番混入・debug=true・「for now」コメント残置・常に true を返す空バリデータ",
-      "100% ローカル — テレメトリ・ネットワーク送信ゼロ。コードは端末から出ない（PRIVACY.md で明示）",
-      "PR diff スキャン — `git diff <range> --unified=0` で追加行のみ走査し、独立した sticky コメントで報告",
-      "SARIF 出力 → GitHub Code Scanning タブに自動アップロード（self-scan / samples / pr-diff-scan の 3 ジョブ構成）",
-      "回帰ガード — 自リポジトリの CI に自分自身を組み込み、samples/safe で 0 件・samples/vulnerable で ≥15 件を維持",
+      "解析コア共通化 — 同じ analyzer-core を 4 つの配布チャネルに載せ、判定を 3 地点で揃える",
+      "30 ルール — 注入・認証・秘密情報・暗号の 4 系統と、AI 生成コード特有の痕跡を網羅",
+      "AI 痕跡 6 種 — スタブ実装 / placeholder メール / モックデータ / debug=true / 「for now」/ 空バリデータ",
+      "100% ローカル — テレメトリ・外部送信なし。コードは端末から出ない",
+      "PR diff スキャン — 追加行だけを走査し、独立した sticky コメントで報告",
+      "SARIF 出力 — GitHub Code Scanning タブに自動連携",
+      "回帰ガード — samples/safe で 0 件、samples/vulnerable で ≥15 件を CI で維持",
     ],
     distribution: [
       {

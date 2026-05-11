@@ -136,8 +136,6 @@ export function FrameSequenceHero() {
         </h1>
         <p className="cinematic-lead">
           現場の信号を、判断と公開につないでいく。
-          <br />
-          <span>スクロールして、ループの全体像を見る。</span>
         </p>
         <div className="cinematic-meta">
           <span>
