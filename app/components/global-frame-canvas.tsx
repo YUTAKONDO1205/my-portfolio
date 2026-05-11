@@ -6,9 +6,6 @@ const FRAME_COUNT = 192;
 const FRAME_PATH = (i: number) =>
   `/frames/frame_${String(i).padStart(4, "0")}.jpg`;
 
-// Frames advance over the first ~3.5 viewports of scroll, then hold on the last frame
-const SCROLL_RANGE_VH = 3.5;
-
 export function GlobalFrameCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const framesRef = useRef<HTMLImageElement[]>([]);
@@ -85,10 +82,16 @@ export function GlobalFrameCanvas() {
     };
 
     const update = () => {
-      const scrollRange = Math.max(1, window.innerHeight * SCROLL_RANGE_VH);
+      // Map scroll progress to frames across the entire document height so the
+      // cinematic background keeps advancing all the way to the page footer,
+      // not just within the hero viewport.
+      const scrollable = Math.max(
+        1,
+        document.documentElement.scrollHeight - window.innerHeight,
+      );
       const progress = Math.min(
         1,
-        Math.max(0, window.scrollY / scrollRange),
+        Math.max(0, window.scrollY / scrollable),
       );
       const frameIndex = Math.min(
         FRAME_COUNT - 1,

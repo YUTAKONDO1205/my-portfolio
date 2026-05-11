@@ -1157,7 +1157,11 @@ img {
       rgba(255, 255, 255, 0.025),
       rgba(255, 255, 255, 0) 32%
     ),
-    linear-gradient(180deg, #0c0c10, #08080a);
+    linear-gradient(
+      180deg,
+      rgba(12, 12, 16, 0.74),
+      rgba(8, 8, 10, 0.82)
+    );
 }
 
 .archive-panel {
@@ -1167,7 +1171,11 @@ img {
       rgba(255, 91, 118, 0.05),
       rgba(255, 255, 255, 0) 30%
     ),
-    linear-gradient(180deg, #0c0c10, #08080a);
+    linear-gradient(
+      180deg,
+      rgba(12, 12, 16, 0.76),
+      rgba(8, 8, 10, 0.84)
+    );
 }
 
 .archive-panel::after {
