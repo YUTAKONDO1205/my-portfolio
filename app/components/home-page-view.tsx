@@ -1,9 +1,10 @@
 "use client";
 
-import { type PropsWithChildren } from "react";
+import { useEffect, useRef, useState, type PropsWithChildren } from "react";
 import Link from "next/link";
 import {
   motion,
+  useInView,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -83,6 +84,140 @@ const itemVariants: Variants = {
     },
   },
 };
+
+const featureCardVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 36,
+    scale: 0.96,
+    filter: "blur(12px)",
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.7,
+      ease: easeOutExpo,
+      delayChildren: 0.22,
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const featureChildVariants: Variants = {
+  hidden: { opacity: 0, x: -14, filter: "blur(6px)" },
+  show: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.5, ease: easeOutExpo },
+  },
+};
+
+const featureChipVariants: Variants = {
+  hidden: { opacity: 0, y: 10, scale: 0.92 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.42, ease: easeOutExpo },
+  },
+};
+
+const charVariants: Variants = {
+  hidden: { opacity: 0, y: 18, filter: "blur(10px)" },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.58,
+      delay: i * 0.028,
+      ease: easeOutExpo,
+    },
+  }),
+};
+
+function SplitHeading({
+  text,
+  className,
+}: {
+  text: string;
+  className?: string;
+}) {
+  const reduceMotion = useReducedMotion();
+
+  if (reduceMotion) {
+    return <h2 className={className}>{text}</h2>;
+  }
+
+  const chars = Array.from(text);
+
+  return (
+    <motion.h2
+      className={className}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.4 }}
+      aria-label={text}
+    >
+      {chars.map((char, index) => {
+        if (char === " " || char === "　") {
+          return (
+            <span
+              key={`${index}-space`}
+              className="heading-char-space"
+              aria-hidden="true"
+            />
+          );
+        }
+        return (
+          <motion.span
+            key={`${index}-${char}`}
+            className="heading-char"
+            custom={index}
+            variants={charVariants}
+            aria-hidden="true"
+          >
+            {char}
+          </motion.span>
+        );
+      })}
+    </motion.h2>
+  );
+}
+
+function AnimatedCount({ value }: { value: number }) {
+  const reduceMotion = useReducedMotion();
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.6 });
+  const [display, setDisplay] = useState(reduceMotion ? value : 0);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setDisplay(value);
+      return;
+    }
+    if (!inView) return;
+    let raf = 0;
+    const duration = 900;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay(Math.round(eased * value));
+      if (progress < 1) {
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, reduceMotion, value]);
+
+  return <strong ref={ref}>{display}</strong>;
+}
 
 function MotionCardShell({ children }: PropsWithChildren) {
   const reduceMotion = useReducedMotion();
@@ -304,17 +439,17 @@ export function HomePageView({
         >
           <motion.div variants={itemVariants} className="hero-band-item">
             <span className="quick-link-label">Publications</span>
-            <strong>{publicationTimeline.length}</strong>
+            <AnimatedCount value={publicationTimeline.length} />
             <p>Elchika に継続公開</p>
           </motion.div>
           <motion.div variants={itemVariants} className="hero-band-item">
             <span className="quick-link-label">Recognitions</span>
-            <strong>{recognitions.length}</strong>
+            <AnimatedCount value={recognitions.length} />
             <p>受賞・評価の記録</p>
           </motion.div>
           <motion.div variants={itemVariants} className="hero-band-item">
             <span className="quick-link-label">Research Themes</span>
-            <strong>{researchProjects.length}</strong>
+            <AnimatedCount value={researchProjects.length} />
             <p>個別ページで展開</p>
           </motion.div>
         </motion.div>
@@ -358,7 +493,7 @@ export function HomePageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">{siteAxis.label}</p>
-          <h2>研究の軸</h2>
+          <SplitHeading text="研究の軸" />
           <p className="section-intro">{siteAxis.summary}</p>
         </div>
 
@@ -405,7 +540,7 @@ export function HomePageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Project Sites</p>
-          <h2>研究テーマ</h2>
+          <SplitHeading text="研究テーマ" />
           <p className="section-intro">
             気になる研究から個別ページに入り、背景、構成、現在地まで追えます。
           </p>
@@ -475,7 +610,7 @@ export function HomePageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Practice</p>
-          <h2>実装と公開</h2>
+          <SplitHeading text="実装と公開" />
           <p className="section-intro">
             研究の傍らで動かしているプロダクト群。
             セキュリティ、LLM マルチエージェント、業務システムまで、領域を横断して実装から公開までを通して手を動かしています。
@@ -497,7 +632,7 @@ export function HomePageView({
                   className={`selected-work-card selected-work-card-rich ${
                     work.feature ? "selected-work-card-feature" : ""
                   } ${work.themeClass}`}
-                  variants={itemVariants}
+                  variants={work.feature ? featureCardVariants : itemVariants}
                   whileHover={
                     reduceMotion
                       ? undefined
@@ -531,13 +666,18 @@ export function HomePageView({
                   {work.highlights && work.highlights.length > 0 && (
                     <ul className="selected-work-highlights">
                       {work.highlights.map((line, i) => (
-                        <li key={i}>
+                        <motion.li
+                          key={i}
+                          variants={
+                            work.feature ? featureChildVariants : undefined
+                          }
+                        >
                           <span
                             className="selected-work-bullet"
                             aria-hidden="true"
                           />
                           <span>{line}</span>
-                        </li>
+                        </motion.li>
                       ))}
                     </ul>
                   )}
@@ -566,22 +706,38 @@ export function HomePageView({
                             </>
                           );
                           return d.href ? (
-                            <a
+                            <motion.a
                               key={d.label}
                               href={d.href}
                               target="_blank"
                               rel="noreferrer"
                               className="selected-work-dist-chip is-link"
+                              variants={
+                                work.feature ? featureChipVariants : undefined
+                              }
+                              whileHover={
+                                reduceMotion
+                                  ? undefined
+                                  : { y: -3, scale: 1.04 }
+                              }
+                              transition={{
+                                type: "spring",
+                                stiffness: 320,
+                                damping: 18,
+                              }}
                             >
                               {chipBody}
-                            </a>
+                            </motion.a>
                           ) : (
-                            <span
+                            <motion.span
                               key={d.label}
                               className="selected-work-dist-chip"
+                              variants={
+                                work.feature ? featureChipVariants : undefined
+                              }
                             >
                               {chipBody}
-                            </span>
+                            </motion.span>
                           );
                         })}
                       </div>
@@ -639,6 +795,37 @@ export function HomePageView({
         </motion.div>
       </motion.section>
 
+      <div className="shell section interlude-marquee" aria-hidden="true">
+        <div className="marquee">
+          <div className="marquee-track">
+            <span>Build</span>
+            <span className="marquee-dot" />
+            <em>研究を実装へ</em>
+            <span className="marquee-dot" />
+            <span>Ship</span>
+            <span className="marquee-dot" />
+            <em>マーケットへ公開</em>
+            <span className="marquee-dot" />
+            <span>Iterate</span>
+            <span className="marquee-dot" />
+            <em>使われながら磨く</em>
+            <span className="marquee-dot" />
+            <span>Build</span>
+            <span className="marquee-dot" />
+            <em>研究を実装へ</em>
+            <span className="marquee-dot" />
+            <span>Ship</span>
+            <span className="marquee-dot" />
+            <em>マーケットへ公開</em>
+            <span className="marquee-dot" />
+            <span>Iterate</span>
+            <span className="marquee-dot" />
+            <em>使われながら磨く</em>
+            <span className="marquee-dot" />
+          </div>
+        </div>
+      </div>
+
       <motion.section
         id="archive"
         className="shell section archive-panel"
@@ -649,7 +836,7 @@ export function HomePageView({
       >
         <div className="section-heading">
           <p className="eyebrow eyebrow-dark">Archive</p>
-          <h2>記事と受賞</h2>
+          <SplitHeading text="記事と受賞" />
           <p className="section-intro">
             公開記事と受賞歴をまとめて見られるようにしています。
           </p>
@@ -744,7 +931,7 @@ export function HomePageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">{philosophy.label}</p>
-          <h2>{philosophy.title}</h2>
+          <SplitHeading text={philosophy.title} />
         </div>
 
         <div className="philosophy-panel">
@@ -762,7 +949,7 @@ export function HomePageView({
       >
         <div className="section-heading section-heading-inverse">
           <p className="eyebrow">Platforms</p>
-          <h2>公開先</h2>
+          <SplitHeading text="公開先" />
           <p className="section-intro">
             実装、記事、プロフィールの入口をここに集約しています。
           </p>

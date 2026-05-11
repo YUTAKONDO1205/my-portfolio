@@ -317,6 +317,87 @@ img {
   }
 }
 
+/* Continuous ambient drift behind dark / archive panels */
+.dark-panel::after,
+.archive-panel::after {
+  content: "";
+  position: absolute;
+  inset: -22% -16%;
+  z-index: -1;
+  background:
+    radial-gradient(
+      45% 45% at 18% 22%,
+      rgba(255, 91, 118, 0.12),
+      transparent 70%
+    ),
+    radial-gradient(
+      42% 42% at 82% 78%,
+      rgba(122, 215, 255, 0.09),
+      transparent 70%
+    );
+  filter: blur(34px);
+  opacity: 0.85;
+  pointer-events: none;
+  animation: sectionAuraDrift 26s ease-in-out infinite;
+}
+
+.archive-panel::after {
+  background:
+    radial-gradient(
+      48% 48% at 14% 78%,
+      rgba(255, 91, 118, 0.10),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 40% at 86% 18%,
+      rgba(122, 215, 255, 0.07),
+      transparent 70%
+    );
+  animation-duration: 32s;
+  animation-direction: alternate;
+}
+
+@keyframes sectionAuraDrift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0.78;
+  }
+  50% {
+    transform: translate(2.4%, -1.6%) scale(1.08) rotate(2deg);
+    opacity: 0.96;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dark-panel::after,
+  .archive-panel::after {
+    animation: none;
+  }
+}
+
+/* Per-character heading reveal — used by SplitHeading */
+.heading-char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+.heading-char-space {
+  display: inline-block;
+  width: 0.32em;
+}
+
+/* Inter-section marquee strip between Practice and Archive */
+.interlude-marquee {
+  margin-top: 36px;
+}
+
+.interlude-marquee .marquee {
+  margin-top: 0;
+  border-top-color: var(--line-strong);
+  border-bottom-color: var(--line-strong);
+}
+
 /* ============== Panels & Cards ============== */
 
 .base-hero,
