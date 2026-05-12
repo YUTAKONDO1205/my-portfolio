@@ -85,7 +85,10 @@ export function SiteMotionChrome() {
       />
 
       {!reduceMotion && (
-        <motion.div className="site-pointer-aura" style={{ background: pointerAura }} />
+        <>
+          <motion.div className="site-pointer-aura" style={{ background: pointerAura }} />
+          <div className="site-beam" aria-hidden="true" />
+        </>
       )}
 
       <AnimatePresence mode="wait">

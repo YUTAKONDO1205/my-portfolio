@@ -1,6 +1,58 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+function Typewriter({
+  text,
+  speed = 75,
+  initialDelay = 480,
+}: {
+  text: string;
+  speed?: number;
+  initialDelay?: number;
+}) {
+  const chars = Array.from(text);
+  const [count, setCount] = useState(0);
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (reduce) {
+      setCount(chars.length);
+      setDone(true);
+      return;
+    }
+    let raf = 0;
+    let timeout = 0;
+    timeout = window.setTimeout(() => {
+      let i = 0;
+      const advance = () => {
+        i += 1;
+        setCount(i);
+        if (i >= chars.length) {
+          setDone(true);
+          return;
+        }
+        timeout = window.setTimeout(advance, speed);
+      };
+      advance();
+    }, initialDelay);
+    return () => {
+      window.clearTimeout(timeout);
+      cancelAnimationFrame(raf);
+    };
+  }, [text, speed, initialDelay, chars.length]);
+
+  return (
+    <span className="typewriter" aria-label={text}>
+      <span aria-hidden="true">{chars.slice(0, count).join("")}</span>
+      {!done && <span className="typewriter-caret" aria-hidden="true" />}
+    </span>
+  );
+}
 
 /**
  * Cinematic hero overlay — sits over the global frame canvas as the first 100vh.
@@ -121,7 +173,10 @@ export function FrameSequenceHero() {
       <div ref={textRef} className="cinematic-hero-content">
         <p className="cinematic-eyebrow">
           <span className="cinematic-eyebrow-dot" />
-          YUTA KONDO &nbsp;/&nbsp; EDGE INTELLIGENCE PORTFOLIO
+          <span className="glitch-text" data-text="YUTA KONDO">
+            YUTA KONDO
+          </span>
+          <span>&nbsp;/&nbsp; EDGE INTELLIGENCE PORTFOLIO</span>
         </p>
         <h1 ref={titleRef} className="cinematic-title">
           <span className="cinematic-word">
@@ -131,11 +186,14 @@ export function FrameSequenceHero() {
             Decide<span className="cinematic-title-sep">.</span>
           </span>{" "}
           <span className="cinematic-word">
-            Share<span className="cinematic-title-sep">.</span>
+            <span className="glitch-text" data-text="Share">
+              Share
+            </span>
+            <span className="cinematic-title-sep">.</span>
           </span>
         </h1>
         <p className="cinematic-lead">
-          現場の信号を、判断と公開につないでいく。
+          <Typewriter text="現場の信号を、判断と公開につないでいく。" />
         </p>
         <div className="cinematic-meta">
           <span>

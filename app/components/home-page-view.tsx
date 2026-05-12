@@ -655,7 +655,15 @@ export function HomePageView({
                     rel="noreferrer"
                     className="selected-work-title-link"
                   >
-                    <strong>{work.title}</strong>
+                    <strong>
+                      {work.feature ? (
+                        <span className="glitch-text" data-text={work.title}>
+                          {work.title}
+                        </span>
+                      ) : (
+                        work.title
+                      )}
+                    </strong>
                     <span className="selected-work-arrow" aria-hidden="true">
                       ↗
                     </span>
