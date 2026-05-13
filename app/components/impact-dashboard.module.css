@@ -1,0 +1,372 @@
+/*
+ * Impact Dashboard — color palette
+ * --------------------------------------------------------------------
+ *  theme-drone    #5da4ff   Image + IMU
+ *  theme-pdm      #f97316   Vibration + Audio
+ *  theme-anomaly  #a855f7   Image + Ops
+ *  theme-eltres   #14b8a6   CO2 + GPS
+ *  award-gold     #d4af37   reserved for recognition encoding ONLY
+ * --------------------------------------------------------------------
+ *  surface base   rgba(255,255,255,0.03)
+ *  surface stroke rgba(255,255,255,0.08)
+ *  text primary   rgba(255,255,255,0.92)
+ *  text muted     rgba(255,255,255,0.56)
+ *  text faint     rgba(255,255,255,0.32)
+ */
+
+.section {
+  --c-drone: #5da4ff;
+  --c-pdm: #f97316;
+  --c-anomaly: #a855f7;
+  --c-eltres: #14b8a6;
+  --c-gold: #d4af37;
+  --surface: rgba(255, 255, 255, 0.03);
+  --stroke: rgba(255, 255, 255, 0.08);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.56);
+  --faint: rgba(255, 255, 255, 0.32);
+
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(48px, 6vw, 96px) clamp(20px, 4vw, 48px);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.title {
+  font-size: clamp(28px, 3.4vw, 44px);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  margin: 0 0 14px;
+  line-height: 1.2;
+}
+
+.lead {
+  font-size: clamp(13px, 1.2vw, 15px);
+  color: var(--muted);
+  margin: 0 0 36px;
+  line-height: 1.7;
+  max-width: 720px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+}
+
+.tile {
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tileHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tileTitle {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin: 0;
+  color: var(--text);
+}
+
+.tileSubtitle {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+/* ---------- Viz A: Output Cadence Timeline ---------- */
+.vizA {
+  grid-column: span 7;
+  min-height: 280px;
+}
+
+.timelineWrap {
+  position: relative;
+  width: 100%;
+}
+
+.timelineSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.yearLabel {
+  fill: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.yearRule {
+  stroke: var(--stroke);
+  stroke-width: 1;
+}
+
+.dot {
+  transition: transform 220ms ease;
+}
+
+.dotDrone { fill: var(--c-drone); }
+.dotPdm { fill: var(--c-pdm); }
+.dotAnomaly { fill: var(--c-anomaly); }
+.dotEltres { fill: var(--c-eltres); }
+.dotNeutral { fill: rgba(255, 255, 255, 0.45); }
+
+.awardRing {
+  fill: none;
+  stroke: var(--c-gold);
+  stroke-width: 1.5;
+}
+
+.chevron {
+  fill: var(--c-gold);
+}
+
+.annotation {
+  fill: var(--c-gold);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  font-weight: 400;
+}
+
+.annotationPointer {
+  stroke: var(--c-gold);
+  stroke-width: 0.75;
+  fill: none;
+  opacity: 0.7;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin-top: 12px;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.legendSwatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.legendSwatch.drone { background: var(--c-drone); }
+.legendSwatch.pdm { background: var(--c-pdm); }
+.legendSwatch.anomaly { background: var(--c-anomaly); }
+.legendSwatch.eltres { background: var(--c-eltres); }
+
+.legendRing {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--c-gold);
+}
+
+.vizCaption {
+  font-size: 11px;
+  color: var(--faint);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Viz B: Modality Coverage ---------- */
+.vizB {
+  grid-column: span 5;
+}
+
+.lollipopList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.lollipopRow {
+  display: grid;
+  grid-template-columns: 100px 1fr 32px;
+  align-items: center;
+  gap: 12px;
+}
+
+.lollipopLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lollipopLabelJa {
+  font-size: 13px;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.lollipopLabelEn {
+  font-size: 10px;
+  color: var(--faint);
+  letter-spacing: 0.05em;
+}
+
+.lollipopTrack {
+  position: relative;
+  height: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.lollipopBar {
+  height: 3px;
+  border-radius: 999px;
+  transform-origin: left center;
+}
+
+.lollipopDot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.lollipopBar.drone, .lollipopDot.drone { background: var(--c-drone); }
+.lollipopBar.pdm, .lollipopDot.pdm { background: var(--c-pdm); }
+.lollipopBar.anomaly, .lollipopDot.anomaly { background: var(--c-anomaly); }
+.lollipopBar.eltres, .lollipopDot.eltres { background: var(--c-eltres); }
+
+.lollipopCount {
+  font-size: 14px;
+  color: var(--text);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Viz C: Distribution Reach ---------- */
+.vizC {
+  grid-column: span 5;
+  position: relative;
+}
+
+.channelGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.channelTile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  font-size: 11px;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.statusDot.live { background: var(--c-anomaly); box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12); }
+.statusDot.pending { background: var(--faint); }
+
+.banWrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+  padding-left: 14px;
+  border-left: 1px solid var(--stroke);
+  position: relative;
+}
+
+.banWrap::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 14%;
+  bottom: 14%;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 2px;
+}
+
+.ban {
+  font-size: clamp(72px, 9vw, 108px);
+  font-weight: 200;
+  line-height: 0.9;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.banCaption {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+}
+
+.banCaptionStrong {
+  color: var(--text);
+  display: block;
+  margin-bottom: 2px;
+  font-size: 12px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .vizA, .vizB, .vizC {
+    grid-column: span 12;
+  }
+
+  .lollipopRow {
+    grid-template-columns: 90px 1fr 28px;
+    gap: 10px;
+  }
+
+  .ban {
+    font-size: 76px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    transition: none;
+  }
+}

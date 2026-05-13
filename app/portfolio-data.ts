@@ -585,3 +585,180 @@ export const projectSlugs = researchProjects.map((project) => project.slug);
 export function getResearchProject(slug: string) {
   return researchProjects.find((project) => project.slug === slug);
 }
+
+// ============================================================================
+// Hero rewrite (v2) — content & conversion overhaul
+// ============================================================================
+
+export type HeroCopyV2 = {
+  eyebrow: string;
+  headlineJa: string;
+  headlineEn: string;
+  subJa: string;
+  subEn: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta: { label: string; href: string };
+  latestUpdate: { dateLabel: string; title: string; href: string };
+};
+
+export const heroCopyV2: HeroCopyV2 = {
+  eyebrow: "Embedded × Edge AI",
+  headlineJa: "SPRESENSE で動く、エッジAI を作る。",
+  headlineEn: "Embedded AI on SPRESENSE — sensor to marketplace.",
+  subJa:
+    "振動・音響・画像をデバイス上で判断する組み込み AI エンジニア。研究 4 本・受賞 5 件・出荷中プロダクト 1 本（4 マーケットプレイス公開）。",
+  subEn: "Edge AI from lab to marketplace — 5 awards, 4 live distributions.",
+  primaryCta: {
+    label: "VibeGuard を試す",
+    href: "https://github.com/marketplace/actions/vibe-guard-aicoding",
+  },
+  secondaryCta: { label: "研究を読む", href: "/research" },
+  latestUpdate: {
+    dateLabel: "2026.01.31",
+    title: "SPRESENSE インフラ点検向けエッジAIドローン",
+    href: "https://elchika.com/article/663a49cf-c895-44d7-a989-6e45e7d92056/",
+  },
+} as const;
+
+// ============================================================================
+// Awards strip — social proof at-a-glance
+// ============================================================================
+
+export type AwardBadge = {
+  year: string;
+  organization: string;
+  award: string;
+  href: string;
+};
+
+export const awardBadges: readonly AwardBadge[] = [
+  {
+    year: "2025",
+    organization: "IEEJ U-21",
+    award: "奨励賞",
+    href: "https://www.iee.jp/u-21-2025-award/",
+  },
+  {
+    year: "2025",
+    organization: "SPRESENSE Contest",
+    award: "クレイン電子 BLEアドオンボード特別賞",
+    href: "https://elchika.com/promotion/spresense2025/winner/#nav",
+  },
+  {
+    year: "2024",
+    organization: "SPRESENSE Contest",
+    award: "クレスコ ELTRES優秀賞",
+    href: "https://elchika.com/promotion/spresense2024/winner/#nav",
+  },
+  {
+    year: "2024",
+    organization: "SPRESENSE Contest",
+    award: "LoRa活用アイデア賞",
+    href: "https://elchika.com/promotion/spresense2024/winner/#nav",
+  },
+  {
+    year: "2024",
+    organization: "SPRESENSE Contest",
+    award: "JBAT Qanat Universe賞",
+    href: "https://elchika.com/promotion/spresense2024/winner/#nav",
+  },
+] as const;
+
+// ============================================================================
+// Positioning radar — competitor-teardown derived
+// ============================================================================
+
+export type PositioningAxis = {
+  key: "signal" | "edge" | "ship" | "research" | "ops";
+  labelEn: string;
+  labelJa: string;
+  score: number; // 0-10
+  evidence: string;
+};
+
+export type PositioningSilhouette = {
+  id: "yuta" | "typical-embedded" | "typical-ai";
+  label: string;
+  scores: Record<PositioningAxis["key"], number>;
+  tone: "primary" | "ghost-embedded" | "ghost-ai";
+};
+
+export type Positioning = {
+  label: string;
+  title: string;
+  thesisJa: string;
+  thesisEn: string;
+  axes: readonly PositioningAxis[];
+  silhouettes: readonly PositioningSilhouette[];
+};
+
+export const positioning: Positioning = {
+  label: "Positioning",
+  title: "研究と実装と公開を、ひとりで閉じる",
+  thesisJa:
+    "研究の公開ループも、出荷した製品も、両方ある。組み込みエンジニアの多くは前者で止まり、AI エンジニアの多くは後者を持たない。",
+  thesisEn:
+    "Most embedded engineers stop at the device. Most AI engineers stop at the notebook. I ship both ends.",
+  axes: [
+    {
+      key: "signal",
+      labelEn: "Signal Breadth",
+      labelJa: "信号の幅",
+      score: 9,
+      evidence:
+        "画像・振動・音響・GPS+CO2・AI生成コード — 5 modalities",
+    },
+    {
+      key: "edge",
+      labelEn: "Edge Constraint",
+      labelJa: "エッジ制約下の実装",
+      score: 9,
+      evidence:
+        "SPRESENSE FFT + Random Forest + TFLite Micro + .tflite→C++ header",
+    },
+    {
+      key: "ship",
+      labelEn: "Ship to Market",
+      labelJa: "市場への到達",
+      score: 8,
+      evidence:
+        "VibeGuard live: GitHub Marketplace, VS Code, Chrome Web Store, Open VSX",
+    },
+    {
+      key: "research",
+      labelEn: "Public Research",
+      labelJa: "公開研究の継続性",
+      score: 9,
+      evidence:
+        "4 Elchika 記事 + 受賞 5 件 (IEEJ U-21, SPRESENSE 2024×3, 2025)",
+    },
+    {
+      key: "ops",
+      labelEn: "Operationalization",
+      labelJa: "運用接続",
+      score: 7,
+      evidence:
+        "anomaly-event-api: NEW/CHECKING/RESOLVED + Grad-CAM + local↔AWS",
+    },
+  ],
+  silhouettes: [
+    {
+      id: "yuta",
+      label: "Yuta Kondo",
+      tone: "primary",
+      scores: { signal: 9, edge: 9, ship: 8, research: 9, ops: 7 },
+    },
+    {
+      id: "typical-embedded",
+      label: "Typical Embedded Eng.",
+      tone: "ghost-embedded",
+      scores: { signal: 5, edge: 8, ship: 3, research: 4, ops: 4 },
+    },
+    {
+      id: "typical-ai",
+      label: "Typical AI Eng.",
+      tone: "ghost-ai",
+      scores: { signal: 6, edge: 4, ship: 5, research: 6, ops: 8 },
+    },
+  ],
+} as const;

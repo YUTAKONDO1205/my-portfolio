@@ -1,0 +1,356 @@
+/* ============================================================
+ * Positioning Section — competitor-teardown radar
+ * Dark panel + indigo→violet→pink gradient primary
+ * (complementary to theme-anomaly's rgba(255, 91, 118, 0.12))
+ * ============================================================ */
+
+.section {
+  position: relative;
+  padding: 120px 32px;
+  background:
+    radial-gradient(
+      90% 60% at 20% 0%,
+      rgba(124, 58, 237, 0.1) 0%,
+      rgba(124, 58, 237, 0) 60%
+    ),
+    radial-gradient(
+      80% 60% at 100% 100%,
+      rgba(236, 72, 153, 0.07) 0%,
+      rgba(236, 72, 153, 0) 60%
+    ),
+    linear-gradient(180deg, #0a090d 0%, #0c0b10 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  max-width: 720px;
+  margin-bottom: 56px;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(196, 181, 253, 0.9);
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.title {
+  margin: 0 0 22px;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  color: #fff;
+}
+
+.thesisJa {
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.02em;
+}
+
+.thesisEn {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: rgba(196, 181, 253, 0.7);
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 48px;
+  align-items: start;
+}
+
+/* ---------- Radar panel ---------- */
+
+.radarPanel {
+  position: relative;
+  padding: 32px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.radarSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.gridRing {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-width: 1;
+}
+
+.gridSpoke {
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 1;
+}
+
+.gridLabel {
+  fill: rgba(255, 255, 255, 0.25);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+.axisLabelJa {
+  fill: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: fill 240ms ease;
+}
+
+.axisLabelEn {
+  fill: rgba(255, 255, 255, 0.4);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: fill 240ms ease;
+}
+
+.axisLabelGroup.highlighted .axisLabelJa {
+  fill: #ec4899;
+}
+
+.axisLabelGroup.highlighted .axisLabelEn {
+  fill: rgba(236, 72, 153, 0.85);
+}
+
+/* Yuta — primary silhouette */
+.silhouettePrimaryFill {
+  fill: url(#positioning-primary-gradient);
+  opacity: 0.35;
+}
+
+.silhouettePrimaryStroke {
+  fill: none;
+  stroke: url(#positioning-primary-stroke);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.vertexDot {
+  fill: #fff;
+  stroke: #ec4899;
+  stroke-width: 1.5;
+}
+
+.vertexScore {
+  fill: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  pointer-events: none;
+}
+
+/* Ghosts */
+.silhouetteGhostEmbedded {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.65);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  stroke-linejoin: round;
+  opacity: 0.55;
+}
+
+.silhouetteGhostAi {
+  fill: none;
+  stroke: rgba(94, 234, 212, 0.65);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  stroke-linejoin: round;
+  opacity: 0.55;
+}
+
+/* ---------- Legend ---------- */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 22px;
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.legendSwatch {
+  display: inline-block;
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.legendSwatchPrimary {
+  background: linear-gradient(90deg, #7c3aed 0%, #ec4899 100%);
+  box-shadow: 0 0 6px rgba(236, 72, 153, 0.5);
+}
+
+.legendSwatchEmbedded {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.85) 0 5px,
+    transparent 5px 9px
+  );
+}
+
+.legendSwatchAi {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(94, 234, 212, 0.85) 0 5px,
+    transparent 5px 9px
+  );
+}
+
+/* ---------- Evidence column ---------- */
+
+.evidenceList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 4px;
+}
+
+.evidenceItem {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: default;
+  transition:
+    border-color 240ms ease,
+    background 240ms ease,
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.evidenceItem:hover,
+.evidenceItem:focus-within {
+  border-color: rgba(236, 72, 153, 0.35);
+  background: rgba(236, 72, 153, 0.04);
+  transform: translateX(2px);
+}
+
+.evidenceScore {
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  background: linear-gradient(180deg, #c4b5fd 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  align-self: center;
+  text-align: center;
+}
+
+.evidenceScore::after {
+  content: " / 10";
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.05em;
+}
+
+.evidenceMain {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.evidenceLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: 0.02em;
+}
+
+.evidenceLabelEn {
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(196, 181, 253, 0.55);
+  margin-left: 6px;
+  font-weight: 400;
+}
+
+.evidenceText {
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 960px) {
+  .body {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .radarPanel {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 80px 20px;
+  }
+
+  .header {
+    margin-bottom: 36px;
+  }
+
+  .radarPanel {
+    padding: 16px;
+  }
+
+  .legend {
+    gap: 12px 18px;
+  }
+
+  .evidenceItem {
+    padding: 12px 14px;
+    grid-template-columns: 40px 1fr;
+    gap: 10px;
+  }
+
+  .evidenceScore {
+    font-size: 20px;
+  }
+}

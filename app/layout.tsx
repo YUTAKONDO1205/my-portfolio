@@ -5,7 +5,7 @@ import {
   Noto_Sans_JP,
   Space_Grotesk,
 } from "next/font/google";
-import { GlobalFrameCanvas } from "./components/global-frame-canvas";
+import { LenisProvider } from "./components/lenis-provider";
 import { RouteIndicator } from "./components/route-indicator";
 import { SiteMotionChrome } from "./components/site-motion";
 import {
@@ -142,10 +142,9 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
-        <GlobalFrameCanvas />
         <SiteMotionChrome />
         <RouteIndicator />
-        {children}
+        <LenisProvider>{children}</LenisProvider>
       </body>
     </html>
   );

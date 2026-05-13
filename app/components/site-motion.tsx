@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useEffectEvent } from "react";
+import { useEffect, useEffectEvent, useRef } from "react";
 import { usePathname } from "next/navigation";
 import {
   AnimatePresence,
@@ -15,9 +15,63 @@ import {
 
 const easeOutQuart = [0.22, 1, 0.36, 1] as const;
 
+function spawnBeam(container: HTMLElement) {
+  const beam = document.createElement("span");
+  beam.className = "site-beam-tracer";
+
+  const isRed = Math.random() < 0.45;
+  const lengthVmax = 32 + Math.random() * 28; // 32 to 60vmax
+  const thickness = 4 + Math.random() * 3; // 4 to 7px
+  const duration = 5 + Math.random() * 3.5; // 5 to 8.5s — slow projectile feel
+  const angle = Math.random() * 360;
+
+  // Pass-through point: a random position in the central 60% of the viewport.
+  // The beam's CENTER passes through this point at the midpoint of its flight,
+  // having travelled from 200% behind it to 200% past it (along its rotated
+  // X axis). The travel distance comfortably crosses the viewport regardless
+  // of angle.
+  const originX = 20 + Math.random() * 60;
+  const originY = 20 + Math.random() * 60;
+
+  const headColor = isRed ? "255, 220, 230" : "200, 240, 255";
+  const tailColor = isRed ? "255, 130, 150" : "122, 215, 255";
+  const glowColor = isRed ? "255, 91, 118" : "122, 215, 255";
+
+  beam.style.cssText = `
+    position: absolute;
+    left: ${originX}%;
+    top: ${originY}%;
+    width: ${lengthVmax}vmax;
+    height: ${thickness}px;
+    transform-origin: 50% 50%;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(${tailColor}, 0.18) 60%,
+      rgba(${headColor}, 0.55) 92%,
+      rgba(255, 255, 255, 0.7) 100%
+    );
+    filter: blur(3.6px);
+    box-shadow:
+      0 0 32px rgba(${glowColor}, 0.4),
+      0 0 96px rgba(${glowColor}, 0.18);
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+    animation: beamFireRandom ${duration}s linear forwards;
+    --beam-angle: ${angle}deg;
+  `;
+
+  container.appendChild(beam);
+  // animationend doesn't reliably fire when the keyframe transform reads a
+  // custom property, so we remove the beam manually after its duration.
+  window.setTimeout(() => beam.remove(), duration * 1000 + 100);
+}
+
 export function SiteMotionChrome() {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
+  const beamContainerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll();
   const progressScale = useSpring(scrollYProgress, {
     stiffness: 180,
@@ -77,6 +131,32 @@ export function SiteMotionChrome() {
     };
   }, [reduceMotion]);
 
+  // Random beam spawner — fires tracers at random intervals with random
+  // direction, color, length, speed. Each beam removes itself on animationend.
+  useEffect(() => {
+    if (reduceMotion) return;
+    const container = beamContainerRef.current;
+    if (!container) return;
+
+    let timeoutId: number;
+
+    const scheduleNext = () => {
+      // Halved spawn rate — roughly one beam every 2.8-6.7 seconds on average
+      const wait = 2800 + Math.random() * 3800;
+      timeoutId = window.setTimeout(() => {
+        spawnBeam(container);
+        scheduleNext();
+      }, wait);
+    };
+
+    scheduleNext();
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      while (container.firstChild) container.removeChild(container.firstChild);
+    };
+  }, [reduceMotion]);
+
   return (
     <>
       <motion.div
@@ -87,7 +167,11 @@ export function SiteMotionChrome() {
       {!reduceMotion && (
         <>
           <motion.div className="site-pointer-aura" style={{ background: pointerAura }} />
-          <div className="site-beam" aria-hidden="true" />
+          <div
+            ref={beamContainerRef}
+            className="site-beams"
+            aria-hidden="true"
+          />
         </>
       )}
 

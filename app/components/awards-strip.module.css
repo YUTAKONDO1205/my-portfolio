@@ -1,0 +1,250 @@
+/* ============================================================
+ * Awards Strip — social proof for hero overhaul
+ * Premium dark-panel + gold accent treatment
+ * ============================================================ */
+
+.section {
+  position: relative;
+  padding: 72px 32px;
+  background:
+    radial-gradient(
+      120% 80% at 50% -10%,
+      rgba(212, 175, 55, 0.06) 0%,
+      rgba(0, 0, 0, 0) 60%
+    ),
+    linear-gradient(180deg, #0c0b10 0%, #0a090d 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.header {
+  max-width: 1200px;
+  margin: 0 auto 32px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.85);
+  font-weight: 500;
+}
+
+.count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.08em;
+}
+
+.row {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 6px 2px 22px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.3) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.row::-webkit-scrollbar {
+  height: 6px;
+}
+.row::-webkit-scrollbar-track {
+  background: transparent;
+}
+.row::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.25);
+  border-radius: 3px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 240px;
+  flex: 0 0 240px;
+  padding: 20px 22px 22px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  text-decoration: none;
+  color: inherit;
+  scroll-snap-align: start;
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 320ms ease,
+    box-shadow 320ms ease,
+    background 320ms ease;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* gold top edge */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(212, 175, 55, 0) 0%,
+    rgba(212, 175, 55, 0.55) 30%,
+    rgba(238, 207, 99, 0.9) 50%,
+    rgba(212, 175, 55, 0.55) 70%,
+    rgba(212, 175, 55, 0) 100%
+  );
+  opacity: 0.7;
+  transition: opacity 320ms ease;
+}
+
+/* gold glow on hover */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 14px;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      120% 60% at 50% -10%,
+      rgba(212, 175, 55, 0.18) 0%,
+      rgba(212, 175, 55, 0) 70%
+    );
+  opacity: 0;
+  transition: opacity 320ms ease;
+  z-index: -1;
+}
+
+.card:hover,
+.card:focus-visible {
+  transform: translateY(-4px);
+  border-color: rgba(212, 175, 55, 0.35);
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow:
+    0 18px 40px -20px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(212, 175, 55, 0.15),
+    0 0 28px -6px rgba(212, 175, 55, 0.35);
+  outline: none;
+}
+
+.card:hover::before,
+.card:focus-visible::before {
+  opacity: 1;
+}
+
+.card:hover::after,
+.card:focus-visible::after {
+  opacity: 1;
+}
+
+.year {
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  color: #f3e9c8;
+  font-feature-settings: "tnum" 1;
+  background: linear-gradient(180deg, #f3e9c8 0%, #d4af37 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.organization {
+  display: block;
+  margin-top: 12px;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.award {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.arrow {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: rgba(212, 175, 55, 0.9);
+  font-size: 11px;
+  line-height: 1;
+  transition:
+    transform 320ms ease,
+    background 320ms ease;
+  opacity: 0.65;
+}
+
+.card:hover .arrow {
+  transform: translate(2px, -2px);
+  opacity: 1;
+  background: rgba(212, 175, 55, 0.18);
+}
+
+/* Mobile: wraps to grid */
+@media (max-width: 768px) {
+  .section {
+    padding: 56px 20px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    overflow-x: visible;
+    padding: 0;
+  }
+
+  .card {
+    min-width: 0;
+    flex: initial;
+    padding: 16px 16px 18px;
+  }
+
+  .year {
+    font-size: 28px;
+  }
+
+  .award {
+    font-size: 13px;
+  }
+
+  .organization {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 420px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
