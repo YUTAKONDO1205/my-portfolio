@@ -277,7 +277,7 @@ export function HomePageView({
           viewport={viewport}
         >
           <div className="section-heading section-heading-inverse">
-            <p className="eyebrow">Project Sites</p>
+            <p className="eyebrow">プロジェクト</p>
             <SplitHeading text="研究テーマ" />
             <p className="section-intro">
               気になる研究から個別ページに入り、背景、構成、現在地まで追えます。
@@ -347,7 +347,7 @@ export function HomePageView({
           viewport={viewport}
         >
           <div className="section-heading section-heading-inverse">
-            <p className="eyebrow">Practice</p>
+            <p className="eyebrow">制作</p>
             <SplitHeading text="実装と公開" />
             <p className="section-intro">
               研究の傍らで動かしているプロダクト群。
@@ -557,7 +557,7 @@ export function HomePageView({
           viewport={viewport}
         >
           <div className="section-heading">
-            <p className="eyebrow eyebrow-dark">Archive</p>
+            <p className="eyebrow eyebrow-dark">アーカイブ</p>
             <SplitHeading text="記事と受賞" />
             <p className="section-intro">
               公開記事と受賞歴をまとめて見られるようにしています。
@@ -567,7 +567,7 @@ export function HomePageView({
           <div className="archive-grid">
             <motion.div className="archive-column" variants={groupVariants}>
               <div className="subsection-heading">
-                <p className="card-label">Articles</p>
+                <p className="card-label">記事</p>
                 <h3>Elchika に残している記事</h3>
               </div>
 
@@ -580,7 +580,7 @@ export function HomePageView({
                       <div className="publication-meta">
                         <span>{entry.dateLabel}</span>
                         <a href={entry.href} target="_blank" rel="noreferrer">
-                          Read
+                          記事を読む
                         </a>
                       </div>
                       <h3>{entry.title}</h3>
@@ -609,7 +609,7 @@ export function HomePageView({
 
             <motion.div className="archive-column" variants={groupVariants}>
               <div className="subsection-heading">
-                <p className="card-label">Recognition</p>
+                <p className="card-label">受賞</p>
                 <h3>受賞の記録</h3>
               </div>
 
@@ -626,7 +626,7 @@ export function HomePageView({
                           target="_blank"
                           rel="noreferrer"
                         >
-                          Source
+                          詳細を見る
                         </a>
                       </div>
                       <h3>{recognition.award}</h3>
@@ -697,7 +697,7 @@ export function HomePageView({
           viewport={viewport}
         >
           <div className="section-heading section-heading-inverse">
-            <p className="eyebrow">Platforms</p>
+            <p className="eyebrow">活動の入口</p>
             <SplitHeading text="話を聞きたい方へ" />
             <p className="section-intro">
               実装、記事、プロフィールの入口をここに集約しています。

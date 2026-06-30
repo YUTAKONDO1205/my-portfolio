@@ -314,7 +314,7 @@ export function FrameSequenceHero() {
               <motion.div className="hero-tile" style={{ opacity: tile1Opacity }}>
                 <span className="hero-tile-icon" aria-hidden="true">◆</span>
                 <span className="hero-tile-label">Edge AI</span>
-                <span className="hero-tile-value">受賞 5 件</span>
+                <span className="hero-tile-value">受賞 6 件</span>
               </motion.div>
               <motion.div className="hero-tile" style={{ opacity: tile2Opacity }}>
                 <span className="hero-tile-icon" aria-hidden="true">◇</span>

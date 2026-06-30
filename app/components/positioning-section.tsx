@@ -379,21 +379,21 @@ export function PositioningSection({ positioning }: PositioningSectionProps) {
                   aria-hidden="true"
                   className={`${styles.legendSwatch} ${styles.legendSwatchPrimary}`}
                 />
-                {yutaSilhouette?.label ?? "Yuta Kondo"}
+                {yutaSilhouette?.label ?? "近藤悠太"}
               </span>
               <span className={styles.legendItem} role="listitem">
                 <span
                   aria-hidden="true"
                   className={`${styles.legendSwatch} ${styles.legendSwatchEmbedded}`}
                 />
-                {embeddedSilhouette?.label ?? "Typical Embedded Eng."}
+                {embeddedSilhouette?.label ?? "一般的な組み込みエンジニア"}
               </span>
               <span className={styles.legendItem} role="listitem">
                 <span
                   aria-hidden="true"
                   className={`${styles.legendSwatch} ${styles.legendSwatchAi}`}
                 />
-                {aiSilhouette?.label ?? "Typical AI Eng."}
+                {aiSilhouette?.label ?? "一般的な AI エンジニア"}
               </span>
             </div>
           </motion.div>

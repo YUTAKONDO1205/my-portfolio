@@ -127,7 +127,7 @@ export function ImpactDashboard({
       aria-label="Impact metrics"
     >
       <motion.span className={styles.eyebrow} variants={fadeUp}>
-        Impact
+        インパクト
       </motion.span>
       <motion.h2 className={styles.title} variants={fadeUp}>
         軌跡を、データで
@@ -144,9 +144,9 @@ export function ImpactDashboard({
           variants={fadeUp}
         >
           <header className={styles.tileHeader}>
-            <h3 className={styles.tileTitle}>Output Cadence</h3>
+            <h3 className={styles.tileTitle}>制作のペース</h3>
             <p className={styles.tileSubtitle}>
-              annual output, {yearBuckets.length} consecutive years
+              年ごとの公開、{yearBuckets.length} 年連続
             </p>
           </header>
 
@@ -237,7 +237,7 @@ export function ImpactDashboard({
                           y={labelY}
                           textAnchor="end"
                         >
-                          {`${annotatedBucket.awards.length} awards landed in ${annotatedBucket.year}`}
+                          {`${annotatedBucket.year}年に受賞 ${annotatedBucket.awards.length} 件`}
                         </text>
                       </>
                     );
@@ -265,11 +265,11 @@ export function ImpactDashboard({
               </span>
               <span className={styles.legendItem}>
                 <span className={styles.legendRing} />
-                受賞 publication
+                受賞作品
               </span>
             </div>
             <p className={styles.vizCaption}>
-              {totalPublications} publications · {totalAwards} recognitions
+              記事 {totalPublications} 本 · 受賞 {totalAwards} 件
             </p>
           </div>
         </motion.article>
@@ -281,7 +281,7 @@ export function ImpactDashboard({
         >
           <header className={styles.tileHeader}>
             <h3 className={styles.tileTitle}>4 / 4 モダリティ稼働中</h3>
-            <p className={styles.tileSubtitle}>signal modality coverage</p>
+            <p className={styles.tileSubtitle}>信号モダリティのカバー範囲</p>
           </header>
 
           <div className={styles.lollipopList}>
@@ -337,7 +337,7 @@ export function ImpactDashboard({
               {channels.length} マーケットプレイス · 1 codebase
             </h3>
             <p className={styles.tileSubtitle}>
-              {featuredWork?.title ?? "Distribution"} reach
+              {featuredWork?.title ?? "配布"} の到達範囲
             </p>
           </header>
 

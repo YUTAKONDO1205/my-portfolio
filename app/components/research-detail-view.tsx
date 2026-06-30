@@ -118,9 +118,9 @@ export function ResearchDetailView({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: easeOutExpo }}
         >
-          <Link href="/">Home</Link>
+          <Link href="/">ホーム</Link>
           <span>/</span>
-          <Link href="/research">Research</Link>
+          <Link href="/research">研究</Link>
           <span>/</span>
           <span>{project.title}</span>
         </motion.div>
@@ -273,7 +273,7 @@ export function ResearchDetailView({
         viewport={viewport}
       >
         <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Highlights</p>
+          <p className="eyebrow eyebrow-dark">ハイライト</p>
           <h2>ポイント</h2>
         </div>
 
@@ -314,7 +314,7 @@ export function ResearchDetailView({
         viewport={viewport}
       >
         <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Other Projects</p>
+          <p className="eyebrow eyebrow-dark">ほかのプロジェクト</p>
           <h2>ほかの研究</h2>
         </div>
 

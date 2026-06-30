@@ -43,10 +43,10 @@ export function AwardsStrip({ awards }: AwardsStripProps) {
     <section className={styles.section} aria-labelledby="awards-strip-heading">
       <div className={styles.header}>
         <span id="awards-strip-heading" className={styles.eyebrow}>
-          Recognition · 受賞
+          Recognition · 実績
         </span>
         <span className={styles.count}>
-          {awards.length} awards · 2024–2025
+          実績 {awards.length} 件 · 2024–2026
         </span>
       </div>
 

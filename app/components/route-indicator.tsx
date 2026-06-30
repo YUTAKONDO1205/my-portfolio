@@ -8,15 +8,15 @@ import { researchProjects } from "../portfolio-data";
 function getRouteLabel(pathname: string) {
   if (pathname === "/") {
     return {
-      section: "Home",
-      detail: "Portfolio Overview",
+      section: "ホーム",
+      detail: "ポートフォリオ概要",
     };
   }
 
   if (pathname === "/research") {
     return {
-      section: "Research",
-      detail: "Project Index",
+      section: "研究",
+      detail: "研究インデックス",
     };
   }
 
@@ -26,13 +26,13 @@ function getRouteLabel(pathname: string) {
 
   if (matchedProject) {
     return {
-      section: "Research Detail",
+      section: "研究詳細",
       detail: matchedProject.title,
     };
   }
 
   return {
-    section: "Portfolio",
+    section: "ポートフォリオ",
     detail: pathname,
   };
 }

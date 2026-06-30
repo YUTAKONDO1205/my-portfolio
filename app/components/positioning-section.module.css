@@ -85,8 +85,16 @@
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .radarPanel {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(14, 14, 20, 0.96);
+  }
 }
 
 .radarSvg {

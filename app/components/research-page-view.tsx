@@ -144,14 +144,14 @@ export function ResearchPageView({
           transition={{ duration: 0.7, ease: easeOutExpo }}
         >
           <div>
-            <p className="site-mark">Research Index</p>
+            <p className="site-mark">研究インデックス</p>
             <p className="site-caption">Sense / Decide / Share</p>
           </div>
 
           <nav className="hero-nav" aria-label="研究ページナビゲーション">
-            <Link href="/">Home</Link>
-            <a href="#project-sites">Projects</a>
-            <a href="#research-archive">Archive</a>
+            <Link href="/">ホーム</Link>
+            <a href="#project-sites">研究テーマ</a>
+            <a href="#research-archive">アーカイブ</a>
           </nav>
         </motion.header>
 
@@ -165,7 +165,7 @@ export function ResearchPageView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.54, ease: easeOutExpo, delay: 0.08 }}
           >
-            Research
+            研究
           </motion.p>
           <motion.h1
             className="base-hero-title"
@@ -235,7 +235,7 @@ export function ResearchPageView({
         viewport={viewport}
       >
         <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">Project Sites</p>
+          <p className="eyebrow">プロジェクト</p>
           <h2>研究から見る</h2>
           <p className="section-intro">
             それぞれの研究は個別サイトで、背景から構成まで詳しく紹介しています。
@@ -305,7 +305,7 @@ export function ResearchPageView({
         viewport={viewport}
       >
         <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Archive</p>
+          <p className="eyebrow eyebrow-dark">アーカイブ</p>
           <h2>記事と受賞</h2>
           <p className="section-intro">
             公開記事と外部評価を、研究全体の流れとしてまとめています。
@@ -315,7 +315,7 @@ export function ResearchPageView({
         <div className="archive-grid">
           <motion.div className="archive-column" variants={groupVariants}>
             <div className="subsection-heading">
-              <p className="card-label">Articles</p>
+              <p className="card-label">記事</p>
               <h3>Elchika の公開記事</h3>
             </div>
 
@@ -328,7 +328,7 @@ export function ResearchPageView({
                     <div className="publication-meta">
                       <span>{entry.dateLabel}</span>
                       <a href={entry.href} target="_blank" rel="noreferrer">
-                        Read
+                        記事を読む
                       </a>
                     </div>
                     <h3>{entry.title}</h3>
@@ -357,7 +357,7 @@ export function ResearchPageView({
 
           <motion.div className="archive-column" variants={groupVariants}>
             <div className="subsection-heading">
-              <p className="card-label">Recognition</p>
+              <p className="card-label">受賞</p>
               <h3>受賞の記録</h3>
             </div>
 
@@ -374,7 +374,7 @@ export function ResearchPageView({
                         target="_blank"
                         rel="noreferrer"
                       >
-                        Source
+                        詳細を見る
                       </a>
                     </div>
                     <h3>{recognition.award}</h3>
@@ -399,7 +399,7 @@ export function ResearchPageView({
         viewport={viewport}
       >
         <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">Platforms</p>
+          <p className="eyebrow">活動の入口</p>
           <h2>公開先</h2>
           <p className="section-intro">
             実装、記事、活動の窓口をここにまとめています。

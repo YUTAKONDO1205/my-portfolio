@@ -209,11 +209,11 @@ export const researchProjects: readonly ResearchProject[] = [
     links: [
       {
         href: "https://github.com/YUTAKONDO1205/DroneInspector",
-        label: "GitHub Repository",
+        label: "GitHub リポジトリ",
       },
       {
         href: "https://elchika.com/article/663a49cf-c895-44d7-a989-6e45e7d92056/",
-        label: "Elchika Article",
+        label: "Elchika 記事",
       },
     ],
     sections: [
@@ -264,11 +264,11 @@ export const researchProjects: readonly ResearchProject[] = [
     links: [
       {
         href: "https://github.com/YUTAKONDO1205/pdm_edge",
-        label: "GitHub Repository",
+        label: "GitHub リポジトリ",
       },
       {
         href: "https://elchika.com/article/7301ab59-0921-4ba7-9935-b9309cf8c59c/",
-        label: "Elchika Article",
+        label: "Elchika 記事",
       },
     ],
     sections: [
@@ -318,7 +318,7 @@ export const researchProjects: readonly ResearchProject[] = [
     links: [
       {
         href: "https://github.com/YUTAKONDO1205/anomaly-event-api",
-        label: "GitHub Repository",
+        label: "GitHub リポジトリ",
       },
     ],
     sections: [
@@ -368,11 +368,11 @@ export const researchProjects: readonly ResearchProject[] = [
     links: [
       {
         href: "https://github.com/YUTAKONDO1205/Eltres_CO2_Mapping",
-        label: "GitHub Repository",
+        label: "GitHub リポジトリ",
       },
       {
         href: "https://elchika.com/article/504f286c-413b-47d3-89f9-38920ca5e5c7/",
-        label: "Elchika Article",
+        label: "Elchika 記事",
       },
     ],
     sections: [
@@ -423,7 +423,7 @@ export const selectedWorks: readonly SelectedWork[] = [
     feature: true,
     highlights: [
       "解析コア共通化 — 同じ analyzer-core を 4 つの配布チャネルに載せ、判定を 3 地点で揃える",
-      "30 ルール — 注入・認証・秘密情報・暗号の 4 系統と、AI 生成コード特有の痕跡を網羅",
+      "47 ルール / 8 言語 — 注入・認証・秘密情報・暗号などの系統を、js/ts/python/go/java/ruby/php/csharp で網羅",
       "AI 痕跡 6 種 — スタブ実装 / placeholder メール / モックデータ / debug=true / 「for now」/ 空バリデータ",
       "100% ローカル — テレメトリ・外部送信なし。コードは端末から出ない",
       "PR diff スキャン — 追加行だけを走査し、独立した sticky コメントで報告",
@@ -449,6 +449,39 @@ export const selectedWorks: readonly SelectedWork[] = [
       {
         label: "Open VSX Registry",
         href: "https://open-vsx.org/extension/yutakondo/vibeguard-aicoding",
+        status: "live",
+      },
+    ],
+  },
+  {
+    slug: "edgeops-command-agent",
+    category: "LLM Multi-Agent",
+    title: "EdgeOps Command Agent",
+    subtitle: "点検データを「意思決定」まで変換する保全マルチエージェント",
+    summary:
+      "異常検知で終わらせず、センサ・画像・点検メモ・マニュアル・故障履歴を 8 エージェントで束ね、リスク判定・原因推定・作業指示・報告書まで一気通貫で変換する Azure ベースの保全 AI です。人間の承認（承認 / 修正依頼 / 却下）を前提とした Human-in-the-loop と監査ログを備えます。",
+    tags: [
+      "Azure OpenAI",
+      "Semantic Kernel",
+      "Multi-Agent",
+      "RAG",
+      "FastAPI",
+      "Next.js",
+      "Human-in-the-loop",
+    ],
+    themeClass: "theme-anomaly",
+    href: "https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent",
+    feature: true,
+    highlights: [
+      "8 エージェント構成 — Intake → Signal → Vision → Manual RAG → Root Cause → Action → What-if → Governance",
+      "Azure OpenAI / Semantic Kernel / Azure AI Search による RAG とビジョン解析",
+      "Spresense などのエッジ機器から Event Hubs 経由で取り込むエッジ連携",
+      "承認・監査ワークフロー — Cosmos DB へ実行履歴を残し Teams へ通知",
+    ],
+    distribution: [
+      {
+        label: "Microsoft Agent Hackathon 特別賞",
+        href: "https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent",
         status: "live",
       },
     ],
@@ -488,6 +521,25 @@ export const selectedWorks: readonly SelectedWork[] = [
     ],
     themeClass: "theme-pdm",
     href: "https://github.com/YUTAKONDO1205/Mountain-Supply-System",
+  },
+  {
+    slug: "zumen-llm-docker",
+    category: "LLM Workflow",
+    title: "Zumen LLM Docker Lab",
+    subtitle: "図面業務を LLM で半自動化する実験基盤",
+    summary:
+      "図面画像からの説明生成、判定理由の文章化、プロンプトのバージョン管理、顧客別用語集、評価データセットの自動採点、監査ログまでを 1 つの FastAPI + htmx アプリにまとめた、図面 LLM ワークフローの実験基盤です。Docker / Dev Container で再現でき、LLM プロバイダは mock ↔ OpenAI 互換で切り替えられます。",
+    tags: [
+      "FastAPI",
+      "htmx",
+      "SQLite",
+      "Docker",
+      "LLM",
+      "OCR",
+      "Prompt Versioning",
+    ],
+    themeClass: "theme-eltres",
+    href: "https://github.com/YUTAKONDO1205/zumen_llm_docker",
   },
 ] as const;
 
@@ -542,6 +594,33 @@ export const publicationTimeline: readonly PublicationEntry[] = [
 ] as const;
 
 export const recognitions: readonly Recognition[] = [
+  {
+    year: "2026",
+    award: "Microsoft Agent Hackathon 特別賞",
+    project: "EdgeOps Command Agent",
+    organization: "Microsoft Agent Hackathon powered by Tokyo Electron Device",
+    note:
+      "点検データをリスク判定・原因推定・作業指示・報告まで変換する 8 エージェント保全 AI として、Human-in-the-loop と監査設計が評価された受賞です。",
+    href: "https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent",
+  },
+  {
+    year: "2026",
+    award: "SecHack365 '26 トレーニー採択",
+    project: "セキュリティ開発者育成プログラム",
+    organization: "NICT（情報通信研究機構）",
+    note:
+      "1 年間にわたり開発・研究を継続するセキュリティイノベーター育成プログラムのトレーニーとして採択されました。",
+    href: "https://sechack365.nict.go.jp/",
+  },
+  {
+    year: "2025",
+    award: "電気学会 C部門大会 学生ポスター発表",
+    project: "振動・音響センサを用いた異常兆候検知システムの開発と AI 識別モデル構築",
+    organization: "電気学会 電子・情報・システム部門大会（金沢工業大学）",
+    note:
+      "振動・音響センサによる異常兆候検知と AI 識別モデル構築を、学生ポスターセッション（PS8-8）で発表しました。",
+    href: "https://www.iee.jp/blog/c-taikai-2025/",
+  },
   {
     year: "2025",
     award: "IEEJ U-21 2025 奨励賞",
@@ -606,17 +685,17 @@ export const heroCopyV2: HeroCopyV2 = {
   headlineJa: "SPRESENSE で動く、エッジAI を作る。",
   headlineEn: "Embedded AI on SPRESENSE — sensor to marketplace.",
   subJa:
-    "振動・音響・画像をデバイス上で判断する組み込み AI エンジニア。研究 4 本・受賞 5 件・出荷中プロダクト 1 本（4 マーケットプレイス公開）。",
-  subEn: "Edge AI from lab to marketplace — 5 awards, 4 live distributions.",
+    "振動・音響・画像をデバイス上で判断する組み込み AI エンジニア。研究 4 本・受賞 6 件・SecHack365 '26 採択。VibeGuard を 4 マーケットプレイスへ出荷し、Microsoft Agent Hackathon 特別賞も受賞。",
+  subEn: "Edge AI from lab to marketplace — 6 awards, 4 live distributions.",
   primaryCta: {
     label: "VibeGuard を試す",
     href: "https://github.com/marketplace/actions/vibe-guard-aicoding",
   },
   secondaryCta: { label: "研究を読む", href: "/research" },
   latestUpdate: {
-    dateLabel: "2026.01.31",
-    title: "SPRESENSE インフラ点検向けエッジAIドローン",
-    href: "https://elchika.com/article/663a49cf-c895-44d7-a989-6e45e7d92056/",
+    dateLabel: "2026.06",
+    title: "Microsoft Agent Hackathon 特別賞 — EdgeOps Command Agent",
+    href: "https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent",
   },
 } as const;
 
@@ -632,6 +711,24 @@ export type AwardBadge = {
 };
 
 export const awardBadges: readonly AwardBadge[] = [
+  {
+    year: "2026",
+    organization: "Microsoft Agent Hackathon",
+    award: "特別賞",
+    href: "https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent",
+  },
+  {
+    year: "2026",
+    organization: "SecHack365",
+    award: "'26 トレーニー採択",
+    href: "https://sechack365.nict.go.jp/",
+  },
+  {
+    year: "2025",
+    organization: "IEEJ C部門大会",
+    award: "学生ポスター発表",
+    href: "https://www.iee.jp/blog/c-taikai-2025/",
+  },
   {
     year: "2025",
     organization: "IEEJ U-21",
@@ -730,33 +827,33 @@ export const positioning: Positioning = {
       labelJa: "公開研究の継続性",
       score: 9,
       evidence:
-        "4 Elchika 記事 + 受賞 5 件 (IEEJ U-21, SPRESENSE 2024×3, 2025)",
+        "4 Elchika 記事 + 受賞 6 件 + 電気学会 C部門発表 + SecHack365 '26 採択",
     },
     {
       key: "ops",
       labelEn: "Operationalization",
       labelJa: "運用接続",
-      score: 7,
+      score: 8,
       evidence:
-        "anomaly-event-api: NEW/CHECKING/RESOLVED + Grad-CAM + local↔AWS",
+        "EdgeOps 8-agent + 承認/監査ワークフロー、anomaly-event-api の NEW/CHECKING/RESOLVED",
     },
   ],
   silhouettes: [
     {
       id: "yuta",
-      label: "Yuta Kondo",
+      label: "近藤悠太",
       tone: "primary",
-      scores: { signal: 9, edge: 9, ship: 8, research: 9, ops: 7 },
+      scores: { signal: 9, edge: 9, ship: 8, research: 9, ops: 8 },
     },
     {
       id: "typical-embedded",
-      label: "Typical Embedded Eng.",
+      label: "一般的な組み込みエンジニア",
       tone: "ghost-embedded",
       scores: { signal: 5, edge: 8, ship: 3, research: 4, ops: 4 },
     },
     {
       id: "typical-ai",
-      label: "Typical AI Eng.",
+      label: "一般的な AI エンジニア",
       tone: "ghost-ai",
       scores: { signal: 6, edge: 4, ship: 5, research: 6, ops: 8 },
     },
