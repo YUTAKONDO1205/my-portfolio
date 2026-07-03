@@ -4867,3 +4867,15 @@ h1, h2, h3 {
     background-color: rgba(12, 12, 18, 0.96);
   }
 }
+
+/* Scrap-build baseline: keep the portfolio quieter and let page modules own the composition. */
+body {
+  letter-spacing: 0;
+}
+
+.site-body::after,
+.site-pointer-aura,
+.site-beams,
+.site-route-signal {
+  display: none !important;
+}

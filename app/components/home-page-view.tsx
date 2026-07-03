@@ -1,18 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState, type PropsWithChildren } from "react";
 import Link from "next/link";
-import {
-  motion,
-  useInView,
-  useReducedMotion,
-  type Variants,
-} from "motion/react";
+import { motion, useReducedMotion, type Variants } from "motion/react";
 import { getArtworkStyle, getProjectArtwork } from "../artwork";
 import { FrameSequenceHero } from "./frame-sequence-hero";
-import { AwardsStrip } from "./awards-strip";
-import { PositioningSection } from "./positioning-section";
-import { ImpactDashboard } from "./impact-dashboard";
 import type {
   AwardBadge,
   Philosophy,
@@ -24,6 +15,7 @@ import type {
   SelectedWork,
   SiteAxis,
 } from "../portfolio-data";
+import styles from "./home-page-view.module.css";
 
 type HomePageViewProps = {
   awardBadges: readonly AwardBadge[];
@@ -37,218 +29,63 @@ type HomePageViewProps = {
   philosophy: Philosophy;
 };
 
-const easeOutExpo = [0.22, 1, 0.36, 1] as const;
-const viewport = { once: true, amount: 0.22 } as const;
+const easeOut = [0.22, 1, 0.36, 1] as const;
 
 const sectionVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 54,
-    filter: "blur(16px)",
-  },
+  hidden: { opacity: 0, y: 28 },
   show: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.78,
-      ease: easeOutExpo,
-    },
+    transition: { duration: 0.64, ease: easeOut },
   },
 };
 
 const groupVariants: Variants = {
   hidden: {},
   show: {
-    transition: {
-      delayChildren: 0.08,
-      staggerChildren: 0.08,
-    },
+    transition: { staggerChildren: 0.06, delayChildren: 0.08 },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 36,
-    scale: 0.96,
-    filter: "blur(12px)",
-  },
+  hidden: { opacity: 0, y: 18 },
   show: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.68,
-      ease: easeOutExpo,
-    },
+    transition: { duration: 0.52, ease: easeOut },
   },
 };
 
-const featureCardVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 36,
-    scale: 0.96,
-    filter: "blur(12px)",
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.7,
-      ease: easeOutExpo,
-      delayChildren: 0.22,
-      staggerChildren: 0.06,
-    },
-  },
-};
-
-const featureChildVariants: Variants = {
-  hidden: { opacity: 0, x: -14, filter: "blur(6px)" },
-  show: {
-    opacity: 1,
-    x: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.5, ease: easeOutExpo },
-  },
-};
-
-const featureChipVariants: Variants = {
-  hidden: { opacity: 0, y: 10, scale: 0.92 },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.42, ease: easeOutExpo },
-  },
-};
-
-const charVariants: Variants = {
-  hidden: { opacity: 0, y: 18, filter: "blur(10px)" },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.58,
-      delay: i * 0.028,
-      ease: easeOutExpo,
-    },
-  }),
-};
-
-function SplitHeading({
-  text,
-  className,
-}: {
-  text: string;
-  className?: string;
-}) {
-  const reduceMotion = useReducedMotion();
-
-  if (reduceMotion) {
-    return <h2 className={className}>{text}</h2>;
+function themeClassName(themeClass: ResearchProject["themeClass"]) {
+  switch (themeClass) {
+    case "theme-drone":
+      return styles.themeDrone;
+    case "theme-pdm":
+      return styles.themePdm;
+    case "theme-anomaly":
+      return styles.themeAnomaly;
+    case "theme-eltres":
+      return styles.themeEltres;
   }
+}
 
-  const chars = Array.from(text);
-
+function SectionHeader({
+  eyebrow,
+  title,
+  body,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+}) {
   return (
-    <motion.h2
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.4 }}
-      aria-label={text}
-    >
-      {chars.map((char, index) => {
-        if (char === " " || char === "　") {
-          return (
-            <span
-              key={`${index}-space`}
-              className="heading-char-space"
-              aria-hidden="true"
-            />
-          );
-        }
-        return (
-          <motion.span
-            key={`${index}-${char}`}
-            className="heading-char"
-            custom={index}
-            variants={charVariants}
-            aria-hidden="true"
-          >
-            {char}
-          </motion.span>
-        );
-      })}
-    </motion.h2>
+    <div className={styles.sectionHeader}>
+      <p>{eyebrow}</p>
+      <h2>{title}</h2>
+      <span>{body}</span>
+    </div>
   );
 }
-
-function AnimatedCount({ value }: { value: number }) {
-  const reduceMotion = useReducedMotion();
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const [display, setDisplay] = useState(reduceMotion ? value : 0);
-
-  useEffect(() => {
-    if (reduceMotion) {
-      setDisplay(value);
-      return;
-    }
-    if (!inView) return;
-    let raf = 0;
-    const duration = 900;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const progress = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(Math.round(eased * value));
-      if (progress < 1) {
-        raf = requestAnimationFrame(tick);
-      }
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, reduceMotion, value]);
-
-  return <strong ref={ref}>{display}</strong>;
-}
-
-function MotionCardShell({ children }: PropsWithChildren) {
-  const reduceMotion = useReducedMotion();
-
-  return (
-    <motion.div
-      className="motion-card-shell"
-      variants={itemVariants}
-      whileHover={
-        reduceMotion
-          ? undefined
-          : {
-              y: -10,
-              scale: 1.018,
-            }
-      }
-      transition={{
-        type: "spring",
-        stiffness: 240,
-        damping: 20,
-        mass: 0.8,
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-// Suppress unused-import lint while keeping AnimatedCount available for future use
-void AnimatedCount;
 
 export function HomePageView({
   awardBadges,
@@ -259,482 +96,305 @@ export function HomePageView({
   researchProjects,
   selectedWorks,
   siteAxis,
+  philosophy,
 }: HomePageViewProps) {
   const reduceMotion = useReducedMotion();
+  const liveChannels = selectedWorks.flatMap((work) => work.distribution ?? []);
+  const featuredWorks = selectedWorks.filter((work) => work.feature);
+
+  const hoverLift = reduceMotion
+    ? undefined
+    : {
+        y: -4,
+      };
 
   return (
     <>
+      <div id="top" />
       <FrameSequenceHero />
-      <main className="portfolio-home">
-        <AwardsStrip awards={awardBadges} />
 
+      <main className={styles.home}>
         <motion.section
-          id="projects"
-          className="shell section dark-panel"
+          className={`${styles.shell} ${styles.proofSection}`}
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
-          viewport={viewport}
+          viewport={{ once: true, amount: 0.24 }}
         >
-          <div className="section-heading section-heading-inverse">
-            <p className="eyebrow">プロジェクト</p>
-            <SplitHeading text="研究テーマ" />
-            <p className="section-intro">
-              気になる研究から個別ページに入り、背景、構成、現在地まで追えます。
-            </p>
+          <div className={styles.proofLead}>
+            <p>Field-ready portfolio</p>
+            <h2>研究、実装、公開までをひとつの流れとして見せる。</h2>
           </div>
-
-          <motion.div className="project-preview-grid" variants={groupVariants}>
-            {researchProjects.map((project) => {
-              const artworkStyle = getArtworkStyle(getProjectArtwork(project));
-
-              return (
-                <MotionCardShell key={project.slug}>
-                  <article
-                    className={`project-preview-card ${project.themeClass}`}
-                  >
-                    <div
-                      className={`project-preview-photo ${project.ambientClass}`}
-                      aria-hidden="true"
-                    />
-                    {artworkStyle && (
-                      <div
-                        className="artwork-layer project-preview-artwork"
-                        style={artworkStyle}
-                        aria-hidden="true"
-                      />
-                    )}
-                    <div className="project-preview-inner">
-                      <p className="card-label card-label-inverse">
-                        {project.year}
-                      </p>
-                      <h3>{project.title}</h3>
-                      <p className="project-preview-subtitle">
-                        {project.subtitle}
-                      </p>
-                      <p className="project-preview-summary">
-                        {project.cardSummary}
-                      </p>
-                      <div className="tag-row">
-                        {project.tags.slice(0, 4).map((tag) => (
-                          <span key={tag} className="tag">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      <div className="link-row">
-                        <Link
-                          href={`/research/${project.slug}`}
-                          className="arrow-link"
-                        >
-                          詳しく見る
-                        </Link>
-                      </div>
-                    </div>
-                  </article>
-                </MotionCardShell>
-              );
-            })}
-          </motion.div>
+          <div className={styles.proofGrid}>
+            <div>
+              <strong>{recognitions.length}</strong>
+              <span>受賞・採択・発表</span>
+            </div>
+            <div>
+              <strong>{researchProjects.length}</strong>
+              <span>公開研究テーマ</span>
+            </div>
+            <div>
+              <strong>{liveChannels.length}</strong>
+              <span>プロダクト配布面</span>
+            </div>
+            <div>
+              <strong>{publicationTimeline.length}</strong>
+              <span>技術記事</span>
+            </div>
+          </div>
         </motion.section>
 
         <motion.section
           id="works"
-          className="shell section dark-panel"
+          className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
-          viewport={viewport}
+          viewport={{ once: true, amount: 0.16 }}
         >
-          <div className="section-heading section-heading-inverse">
-            <p className="eyebrow">制作</p>
-            <SplitHeading text="実装と公開" />
-            <p className="section-intro">
-              研究の傍らで動かしているプロダクト群。
-              セキュリティ、LLM マルチエージェント、業務システムまで、領域を横断して実装から公開までを通して手を動かしています。
-            </p>
-          </div>
+          <SectionHeader
+            eyebrow="Shipped Work"
+            title="動くものとして届いている制作物"
+            body="公開リポジトリだけでなく、Marketplace、拡張機能、運用ワークフローまで届く形にした制作を前面に出しています。"
+          />
 
-          <motion.div className="selected-works-grid" variants={groupVariants}>
-            {selectedWorks.map((work) => {
-              const hasRich =
-                (work.highlights && work.highlights.length > 0) ||
-                (work.distribution && work.distribution.length > 0);
-
-              if (hasRich) {
-                return (
-                  <motion.article
-                    key={work.slug}
-                    className={`selected-work-card selected-work-card-rich ${
-                      work.feature ? "selected-work-card-feature" : ""
-                    } ${work.themeClass}`}
-                    variants={work.feature ? featureCardVariants : itemVariants}
-                    whileHover={
-                      reduceMotion
-                        ? undefined
-                        : {
-                            y: -8,
-                            scale: 1.012,
-                          }
-                    }
-                    transition={{
-                      type: "spring",
-                      stiffness: 220,
-                      damping: 22,
-                      mass: 0.88,
-                    }}
-                  >
-                    <span className="quick-link-label">{work.category}</span>
-                    <a
-                      href={work.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="selected-work-title-link"
-                    >
-                      <strong>
-                        {work.feature ? (
-                          <span className="glitch-text" data-text={work.title}>
-                            {work.title}
-                          </span>
-                        ) : (
-                          work.title
-                        )}
-                      </strong>
-                      <span className="selected-work-arrow" aria-hidden="true">
-                        ↗
-                      </span>
-                    </a>
-                    <p className="selected-work-subtitle">{work.subtitle}</p>
-                    <p className="selected-work-summary">{work.summary}</p>
-
-                    {work.highlights && work.highlights.length > 0 && (
-                      <ul className="selected-work-highlights">
-                        {work.highlights.map((line, i) => (
-                          <motion.li
-                            key={i}
-                            variants={
-                              work.feature ? featureChildVariants : undefined
-                            }
-                          >
-                            <span
-                              className="selected-work-bullet"
-                              aria-hidden="true"
-                            />
-                            <span>{line}</span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                    )}
-
-                    {work.distribution && work.distribution.length > 0 && (
-                      <div className="selected-work-dist">
-                        <span className="selected-work-dist-label">
-                          Distribution
-                        </span>
-                        <div className="selected-work-dist-chips">
-                          {work.distribution.map((d) => {
-                            const chipBody = (
-                              <>
-                                <span
-                                  className={`selected-work-dist-status selected-work-dist-status-${
-                                    d.status ?? "live"
-                                  }`}
-                                  aria-hidden="true"
-                                />
-                                <span>{d.label}</span>
-                                {d.status === "pending" && (
-                                  <span className="selected-work-dist-tag">
-                                    申請中
-                                  </span>
-                                )}
-                              </>
-                            );
-                            return d.href ? (
-                              <motion.a
-                                key={d.label}
-                                href={d.href}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="selected-work-dist-chip is-link"
-                                variants={
-                                  work.feature ? featureChipVariants : undefined
-                                }
-                                whileHover={
-                                  reduceMotion
-                                    ? undefined
-                                    : { y: -3, scale: 1.04 }
-                                }
-                                transition={{
-                                  type: "spring",
-                                  stiffness: 320,
-                                  damping: 18,
-                                }}
-                              >
-                                {chipBody}
-                              </motion.a>
-                            ) : (
-                              <motion.span
-                                key={d.label}
-                                className="selected-work-dist-chip"
-                                variants={
-                                  work.feature ? featureChipVariants : undefined
-                                }
-                              >
-                                {chipBody}
-                              </motion.span>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="tag-row">
-                      {work.tags.slice(0, 6).map((tag) => (
-                        <span key={tag} className="tag">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </motion.article>
-                );
-              }
-
-              return (
-                <motion.a
-                  key={work.slug}
-                  href={work.href}
-                  className={`selected-work-card ${work.themeClass}`}
-                  variants={itemVariants}
-                  whileHover={
-                    reduceMotion
-                      ? undefined
-                      : {
-                          y: -10,
-                          scale: 1.018,
-                        }
-                  }
-                  transition={{
-                    type: "spring",
-                    stiffness: 240,
-                    damping: 20,
-                    mass: 0.82,
-                  }}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <span className="quick-link-label">{work.category}</span>
-                  <strong>{work.title}</strong>
-                  <p className="selected-work-subtitle">{work.subtitle}</p>
+          <motion.div
+            className={styles.workGrid}
+            variants={groupVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.12 }}
+          >
+            {selectedWorks.map((work) => (
+              <motion.article
+                key={work.slug}
+                className={`${styles.workCard} ${
+                  work.feature ? styles.workCardFeature : ""
+                } ${themeClassName(work.themeClass)}`}
+                variants={itemVariants}
+                whileHover={hoverLift}
+              >
+                <a href={work.href} target="_blank" rel="noreferrer">
+                  <span className={styles.cardMeta}>{work.category}</span>
+                  <h3>{work.title}</h3>
+                  <p className={styles.cardSubtitle}>{work.subtitle}</p>
                   <p>{work.summary}</p>
-                  <div className="tag-row">
-                    {work.tags.slice(0, 4).map((tag) => (
-                      <span key={tag} className="tag">
-                        {tag}
-                      </span>
+                </a>
+
+                {work.highlights && (
+                  <ul className={styles.highlights}>
+                    {work.highlights.slice(0, work.feature ? 4 : 2).map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                )}
+
+                {work.distribution && (
+                  <div className={styles.channelRow}>
+                    {work.distribution.map((channel) => (
+                      <a
+                        key={channel.label}
+                        href={channel.href}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {channel.label}
+                      </a>
                     ))}
                   </div>
-                </motion.a>
-              );
-            })}
-          </motion.div>
-        </motion.section>
+                )}
 
-        <PositioningSection positioning={positioning} />
-
-        <ImpactDashboard
-          publications={publicationTimeline}
-          recognitions={recognitions}
-          research={researchProjects}
-          works={selectedWorks}
-        />
-
-        <motion.section
-          id="archive"
-          className="shell section archive-panel"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={viewport}
-        >
-          <div className="section-heading">
-            <p className="eyebrow eyebrow-dark">アーカイブ</p>
-            <SplitHeading text="記事と受賞" />
-            <p className="section-intro">
-              公開記事と受賞歴をまとめて見られるようにしています。
-            </p>
-          </div>
-
-          <div className="archive-grid">
-            <motion.div className="archive-column" variants={groupVariants}>
-              <div className="subsection-heading">
-                <p className="card-label">記事</p>
-                <h3>Elchika に残している記事</h3>
-              </div>
-
-              <div className="publication-grid">
-                {publicationTimeline.map((entry) => (
-                  <MotionCardShell key={entry.id}>
-                    <article
-                      className={`publication-card ${entry.awards.length > 0 ? "award-accent-card" : ""}`}
-                    >
-                      <div className="publication-meta">
-                        <span>{entry.dateLabel}</span>
-                        <a href={entry.href} target="_blank" rel="noreferrer">
-                          記事を読む
-                        </a>
-                      </div>
-                      <h3>{entry.title}</h3>
-                      <p>{entry.summary}</p>
-                      <div className="tag-row">
-                        {entry.tags.map((tag) => (
-                          <span key={tag} className="tag tag-light">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      {entry.awards.length > 0 && (
-                        <div className="award-strip-list">
-                          {entry.awards.map((award) => (
-                            <span key={award} className="award-strip">
-                              {award}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </article>
-                  </MotionCardShell>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div className="archive-column" variants={groupVariants}>
-              <div className="subsection-heading">
-                <p className="card-label">受賞</p>
-                <h3>受賞の記録</h3>
-              </div>
-
-              <div className="recognition-grid">
-                {recognitions.map((recognition) => (
-                  <MotionCardShell
-                    key={`${recognition.year}-${recognition.award}`}
-                  >
-                    <article className="recognition-card award-accent-card">
-                      <div className="publication-meta">
-                        <span>{recognition.year}</span>
-                        <a
-                          href={recognition.href}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          詳細を見る
-                        </a>
-                      </div>
-                      <h3>{recognition.award}</h3>
-                      <p className="recognition-project">{recognition.project}</p>
-                      <p>{recognition.note}</p>
-                      <span className="recognition-org">
-                        {recognition.organization}
-                      </span>
-                    </article>
-                  </MotionCardShell>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </motion.section>
-
-        <motion.section
-          className="shell section dark-panel"
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={viewport}
-        >
-          <div className="section-heading section-heading-inverse">
-            <p className="eyebrow">{siteAxis.label}</p>
-            <SplitHeading text="研究の軸" />
-            <p className="section-intro">{siteAxis.summary}</p>
-          </div>
-
-          <motion.div className="axis-flow" variants={groupVariants}>
-            {siteAxis.steps.map((step, index) => (
-              <motion.article
-                key={step.en}
-                className="axis-step"
-                variants={itemVariants}
-                whileHover={
-                  reduceMotion
-                    ? undefined
-                    : {
-                        y: -8,
-                        scale: 1.012,
-                      }
-                }
-                transition={{
-                  type: "spring",
-                  stiffness: 240,
-                  damping: 20,
-                  mass: 0.88,
-                  delay: index * 0.04,
-                }}
-              >
-                <span className="axis-step-index">0{index + 1}</span>
-                <div className="axis-step-heading">
-                  <strong>{step.en}</strong>
-                  <span>{step.ja}</span>
+                <div className={styles.tagRow}>
+                  {work.tags.slice(0, 5).map((tag) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
                 </div>
-                <p className="axis-step-copy">{step.description}</p>
               </motion.article>
             ))}
           </motion.div>
         </motion.section>
 
         <motion.section
-          className="shell section dark-panel"
+          id="research"
+          className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
-          viewport={viewport}
+          viewport={{ once: true, amount: 0.16 }}
         >
-          <div className="section-heading section-heading-inverse">
-            <p className="eyebrow">活動の入口</p>
-            <SplitHeading text="話を聞きたい方へ" />
-            <p className="section-intro">
-              実装、記事、プロフィールの入口をここに集約しています。
-            </p>
-          </div>
+          <SectionHeader
+            eyebrow="Research"
+            title={siteAxis.title}
+            body={siteAxis.summary}
+          />
 
-          <motion.div className="platform-grid-light" variants={groupVariants}>
-            {platformLinks.map((platform) => (
-              <motion.a
-                key={platform.label}
-                href={platform.href}
-                className="platform-card-dark"
-                variants={itemVariants}
-                whileHover={
-                  reduceMotion
-                    ? undefined
-                    : {
-                        y: -10,
-                        scale: 1.015,
-                      }
-                }
-                transition={{
-                  type: "spring",
-                  stiffness: 240,
-                  damping: 20,
-                  mass: 0.8,
-                }}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="quick-link-label">{platform.label}</span>
-                <strong>{platform.description}</strong>
-                <p>{platform.detail}</p>
-              </motion.a>
+          <motion.div
+            className={styles.researchGrid}
+            variants={groupVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.12 }}
+          >
+            {researchProjects.map((project) => {
+              const artworkStyle = getArtworkStyle(getProjectArtwork(project));
+
+              return (
+                <motion.article
+                  key={project.slug}
+                  className={`${styles.researchCard} ${themeClassName(
+                    project.themeClass,
+                  )}`}
+                  variants={itemVariants}
+                  whileHover={hoverLift}
+                >
+                  <Link href={`/research/${project.slug}`}>
+                    <div className={styles.researchImageWrap} aria-hidden="true">
+                      <div
+                        className={styles.researchImage}
+                        style={artworkStyle}
+                      />
+                    </div>
+                    <span className={styles.cardMeta}>{project.year}</span>
+                    <h3>{project.title}</h3>
+                    <p className={styles.cardSubtitle}>{project.subtitle}</p>
+                    <p>{project.cardSummary}</p>
+                  </Link>
+                  <div className={styles.tagRow}>
+                    {project.tags.slice(0, 4).map((tag) => (
+                      <span key={tag}>{tag}</span>
+                    ))}
+                  </div>
+                </motion.article>
+              );
+            })}
+          </motion.div>
+        </motion.section>
+
+        <motion.section
+          className={`${styles.shell} ${styles.positioningSection}`}
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.18 }}
+        >
+          <div className={styles.positioningCopy}>
+            <p>{positioning.label}</p>
+            <h2>{positioning.title}</h2>
+            <span>{positioning.thesisJa}</span>
+            <em>{positioning.thesisEn}</em>
+          </div>
+          <motion.div
+            className={styles.axisList}
+            variants={groupVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.18 }}
+          >
+            {positioning.axes.map((axis) => (
+              <motion.article key={axis.key} variants={itemVariants}>
+                <div className={styles.axisTopline}>
+                  <strong>{axis.labelJa}</strong>
+                  <span>{axis.score}/10</span>
+                </div>
+                <div
+                  className={styles.axisTrack}
+                  aria-label={`${axis.labelJa} ${axis.score} out of 10`}
+                >
+                  <span style={{ width: `${axis.score * 10}%` }} />
+                </div>
+                <p>{axis.evidence}</p>
+              </motion.article>
             ))}
           </motion.div>
         </motion.section>
+
+        <motion.section
+          className={`${styles.shell} ${styles.section}`}
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.16 }}
+        >
+          <SectionHeader
+            eyebrow="Recognition Archive"
+            title="外部評価と公開ログ"
+            body="研究記事、コンテスト、学会発表、セキュリティ育成プログラムまで、公開された実績を年表として追えるようにしています。"
+          />
+
+          <div className={styles.archiveGrid}>
+            <div className={styles.archiveColumn}>
+              <h3>Articles</h3>
+              {publicationTimeline.map((entry) => (
+                <a
+                  key={entry.id}
+                  className={styles.archiveItem}
+                  href={entry.href}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span>{entry.dateLabel}</span>
+                  <strong>{entry.title}</strong>
+                  <p>{entry.summary}</p>
+                </a>
+              ))}
+            </div>
+
+            <div className={styles.archiveColumn}>
+              <h3>Awards</h3>
+              {awardBadges.slice(0, 6).map((award) => (
+                <a
+                  key={`${award.year}-${award.organization}-${award.award}`}
+                  className={styles.archiveItem}
+                  href={award.href}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span>{award.year}</span>
+                  <strong>{award.award}</strong>
+                  <p>{award.organization}</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          id="contact"
+          className={`${styles.shell} ${styles.contactSection}`}
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.18 }}
+        >
+          <div className={styles.contactCopy}>
+            <p>{philosophy.label}</p>
+            <h2>{philosophy.title}</h2>
+            <span>{philosophy.body}</span>
+          </div>
+
+          <div className={styles.platformGrid}>
+            {platformLinks.map((platform) => (
+              <a
+                key={platform.label}
+                href={platform.href}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>{platform.label}</span>
+                <strong>{platform.description}</strong>
+                <p>{platform.detail}</p>
+              </a>
+            ))}
+          </div>
+        </motion.section>
+
+        {featuredWorks.length > 0 && (
+          <section className={`${styles.shell} ${styles.footerNote}`}>
+            <span>Featured shipping focus</span>
+            <strong>{featuredWorks.map((work) => work.title).join(" / ")}</strong>
+          </section>
+        )}
       </main>
     </>
   );
