@@ -45,3 +45,11 @@ next-env.d.ts
 
 .next-dev.err
 .next-dev.log
+
+# debug artifacts & screenshots (keep out of the repo)
+.playwright-mcp/
+# root-level screenshots / captures — real assets live under public/
+/*.jpeg
+/*.jpg
+/*.png
+/*.mp4
