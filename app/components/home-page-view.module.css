@@ -1,11 +1,14 @@
+/* ==========================================================================
+   Home — "Signal on Porcelain".
+   Light porcelain stage; Shipped Work cards and the Contact finale stay
+   night surfaces for the cool/chic contrast rhythm.
+   ========================================================================== */
+
 .home {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding: 0 0 72px;
-  color: #f7f3eb;
-  background:
-    linear-gradient(180deg, #0b0c0d 0%, #101113 46%, #090a0b 100%),
-    #0b0c0d;
+  color: var(--foreground);
 }
 
 .shell {
@@ -17,32 +20,34 @@
   padding-top: 96px;
 }
 
+/* ---------- proof strip ---------- */
+
 .proofSection {
   display: grid;
   grid-template-columns: minmax(0, 0.86fr) minmax(420px, 1fr);
   gap: 36px;
   align-items: end;
-  padding-top: 46px;
+  padding-top: 84px;
 }
 
 .proofLead p,
 .sectionHeader p,
-.positioningCopy p,
 .contactCopy p {
   margin: 0 0 12px;
-  color: #8fd7cb;
+  color: var(--accent-cool);
   font-size: 0.86rem;
   font-weight: 700;
+  letter-spacing: 0.08em;
 }
 
 .proofLead h2,
 .sectionHeader h2,
-.positioningCopy h2,
 .contactCopy h2 {
   margin: 0;
   font-family: var(--font-heading);
   font-size: 2.3rem;
   line-height: 1.14;
+  color: inherit;
 }
 
 .proofGrid {
@@ -56,21 +61,27 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid rgba(247, 243, 235, 0.12);
-  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
   padding: 16px;
-  background: rgba(247, 243, 235, 0.035);
+  background: var(--card);
+  box-shadow: var(--shadow-soft);
 }
 
 .proofGrid strong {
-  color: #f0c15d;
   font-family: var(--font-heading);
   font-size: 2.2rem;
   line-height: 1;
+  background: linear-gradient(180deg, #d9a83f, #a87b1e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.proofGrid span {
-  color: rgba(247, 243, 235, 0.66);
+/* direct child only — the AnimatedCount span inside <strong> must inherit
+   the brass numeral styling, not this caption rule */
+.proofGrid div > span {
+  color: var(--muted);
   font-size: 0.86rem;
   line-height: 1.5;
 }
@@ -80,15 +91,44 @@
   margin-bottom: 30px;
 }
 
-.sectionHeader span,
-.positioningCopy span,
-.contactCopy span {
+.sectionHeader > span,
+.contactCopy > span {
   display: block;
   margin-top: 18px;
-  color: rgba(247, 243, 235, 0.72);
+  color: var(--muted);
   font-size: 1rem;
   line-height: 1.9;
 }
+
+/* ---------- shared card chrome ---------- */
+
+.researchCard,
+.archiveItem {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: var(--shadow-soft);
+  transition:
+    border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.researchCard:hover,
+.researchCard:focus-within,
+.archiveItem:hover,
+.archiveItem:focus-visible {
+  border-color: color-mix(in srgb, var(--theme-ink, var(--accent-cool)) 45%, transparent);
+  box-shadow: var(--shadow-strong);
+  outline: none;
+}
+
+.archiveItem:focus-visible {
+  outline: 2px solid var(--accent-cool);
+  outline-offset: 3px;
+}
+
+/* ---------- work cards (night surfaces on porcelain) ---------- */
 
 .workGrid {
   display: grid;
@@ -96,24 +136,8 @@
   gap: 14px;
 }
 
-.workCard,
-.researchCard,
-.axisList article,
-.archiveItem,
-.platformGrid a {
-  position: relative;
-  border: 1px solid rgba(247, 243, 235, 0.12);
-  border-radius: 8px;
-  background:
-    linear-gradient(180deg, rgba(247, 243, 235, 0.06), rgba(247, 243, 235, 0.025)),
-    #111315;
-  transition:
-    border-color 180ms ease,
-    background 180ms ease,
-    transform 180ms ease;
-}
-
 .workCard {
+  position: relative;
   grid-column: span 4;
   min-height: 360px;
   display: flex;
@@ -121,6 +145,20 @@
   gap: 18px;
   padding: 22px;
   overflow: hidden;
+  color: var(--night-text);
+  border: 1px solid rgba(20, 25, 38, 0.5);
+  border-radius: 14px;
+  background:
+    radial-gradient(
+      120% 90% at 85% -10%,
+      color-mix(in srgb, var(--theme-color, #8fd7cb) 14%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(180deg, #131a2a 0%, var(--night) 100%);
+  box-shadow: var(--shadow-strong);
+  transition:
+    border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .workCardFeature {
@@ -129,40 +167,37 @@
 }
 
 .workCard::before,
-.researchCard::before,
-.axisList article::before {
+.researchCard::before {
   content: "";
   position: absolute;
   inset: 0 0 auto;
   height: 3px;
+  border-radius: 14px 14px 0 0;
   background: var(--theme-color, #8fd7cb);
 }
 
+.researchCard::before {
+  background: var(--theme-ink, var(--accent-cool));
+  border-radius: 12px 12px 0 0;
+}
+
 .workCard:hover,
-.workCard:focus-within,
-.researchCard:hover,
-.researchCard:focus-within,
-.archiveItem:hover,
-.archiveItem:focus-visible,
-.platformGrid a:hover,
-.platformGrid a:focus-visible {
-  border-color: color-mix(in srgb, var(--theme-color, #8fd7cb) 56%, #f7f3eb);
-  background:
-    linear-gradient(180deg, rgba(247, 243, 235, 0.08), rgba(247, 243, 235, 0.03)),
-    #131719;
-  outline: none;
+.workCard:focus-within {
+  border-color: color-mix(in srgb, var(--theme-color, #8fd7cb) 55%, transparent);
+  box-shadow:
+    var(--shadow-strong),
+    0 0 44px color-mix(in srgb, var(--theme-color, #8fd7cb) 18%, transparent);
 }
 
 .workCard a,
 .researchCard a,
-.archiveItem,
-.platformGrid a {
+.archiveItem {
   color: inherit;
   text-decoration: none;
 }
 
-.workCard a:first-child,
-.researchCard a {
+.workCard > a:first-child,
+.researchCard > a {
   display: grid;
   gap: 12px;
 }
@@ -171,12 +206,16 @@
   color: var(--theme-color, #8fd7cb);
   font-size: 0.82rem;
   font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.researchCard .cardMeta {
+  color: var(--theme-ink, var(--accent-cool));
 }
 
 .workCard h3,
 .researchCard h3,
 .archiveColumn h3,
-.axisTopline strong,
 .platformGrid strong {
   margin: 0;
   font-family: var(--font-heading);
@@ -188,19 +227,37 @@
   font-size: 1.8rem;
 }
 
-.workCard p,
-.researchCard p,
-.archiveItem p,
-.axisList p,
-.platformGrid p {
+/* keep the glitch burst luminous inside night cards */
+.workCard :global(.glitch-text)::before {
+  color: #ff8d9d;
+}
+
+.workCard :global(.glitch-text)::after {
+  color: #7fd4ff;
+}
+
+.workCard p {
   margin: 0;
-  color: rgba(247, 243, 235, 0.68);
+  color: var(--night-muted);
   font-size: 0.93rem;
   line-height: 1.78;
 }
 
-.cardSubtitle {
-  color: rgba(247, 243, 235, 0.88) !important;
+.researchCard p,
+.archiveItem p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.78;
+}
+
+.workCard .cardSubtitle {
+  color: var(--night-text) !important;
+  font-weight: 700;
+}
+
+.researchCard .cardSubtitle {
+  color: var(--foreground) !important;
   font-weight: 700;
 }
 
@@ -216,7 +273,7 @@
   display: grid;
   grid-template-columns: 14px 1fr;
   gap: 10px;
-  color: rgba(247, 243, 235, 0.72);
+  color: var(--night-muted);
   font-size: 0.87rem;
   line-height: 1.65;
 }
@@ -228,6 +285,8 @@
   margin-top: 0.82em;
   background: var(--theme-color, #8fd7cb);
 }
+
+/* ---------- chips ---------- */
 
 .channelRow,
 .tagRow {
@@ -241,25 +300,56 @@
 }
 
 .channelRow a,
-.tagRow span {
+.workCard .tagRow span {
   min-height: 30px;
   display: inline-flex;
   align-items: center;
-  border: 1px solid rgba(247, 243, 235, 0.1);
-  border-radius: 8px;
-  padding: 0 10px;
-  background: rgba(8, 9, 10, 0.36);
-  color: rgba(247, 243, 235, 0.76);
+  gap: 7px;
+  border: 1px solid var(--night-line);
+  border-radius: 999px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--night-muted);
   font-size: 0.78rem;
   text-decoration: none;
+  transition:
+    border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.channelRow a i {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--signal-cyan);
+  box-shadow: 0 0 10px rgba(127, 212, 255, 0.75);
+}
+
+.channelRow a[data-status="pending"] i {
+  background: var(--signal-gold);
+  box-shadow: 0 0 10px rgba(255, 210, 122, 0.7);
 }
 
 .channelRow a:hover,
 .channelRow a:focus-visible {
   border-color: var(--theme-color, #8fd7cb);
-  color: #fff;
+  color: #ffffff;
   outline: none;
 }
+
+.researchCard .tagRow span {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0 11px;
+  background: rgba(20, 25, 38, 0.04);
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+/* ---------- research cards ---------- */
 
 .researchGrid {
   display: grid;
@@ -279,8 +369,8 @@
   position: relative;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  border-radius: 6px;
-  background: #15191b;
+  border-radius: 8px;
+  background: var(--background-soft);
 }
 
 .researchImage {
@@ -290,66 +380,15 @@
   background-size: cover;
   background-position: var(--artwork-position, center);
   transform: scale(1.01);
-  transition: transform 220ms ease;
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .researchCard:hover .researchImage,
 .researchCard:focus-within .researchImage {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
-.positioningSection,
-.contactSection {
-  display: grid;
-  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1fr);
-  gap: 36px;
-  align-items: start;
-  padding-top: 104px;
-}
-
-.positioningCopy em {
-  display: block;
-  margin-top: 14px;
-  color: rgba(240, 193, 93, 0.78);
-  font-style: normal;
-  line-height: 1.7;
-}
-
-.axisList {
-  display: grid;
-  gap: 10px;
-}
-
-.axisList article {
-  padding: 18px;
-}
-
-.axisTopline {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.axisTopline span {
-  color: #f0c15d;
-  font-weight: 700;
-}
-
-.axisTrack {
-  height: 8px;
-  margin: 14px 0 12px;
-  overflow: hidden;
-  border-radius: 8px;
-  background: rgba(247, 243, 235, 0.09);
-}
-
-.axisTrack span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #8fd7cb, #f0c15d);
-}
+/* ---------- archive ---------- */
 
 .archiveGrid {
   display: grid;
@@ -360,6 +399,7 @@
 .archiveColumn {
   display: grid;
   gap: 10px;
+  align-content: start;
 }
 
 .archiveColumn h3 {
@@ -373,7 +413,8 @@
 }
 
 .archiveItem span {
-  color: #8fd7cb;
+  color: var(--accent);
+  color: color-mix(in srgb, var(--accent) 72%, var(--foreground));
   font-size: 0.84rem;
   font-weight: 700;
 }
@@ -381,10 +422,51 @@
 .archiveItem strong {
   font-size: 1rem;
   line-height: 1.55;
+  color: var(--foreground);
 }
 
+/* ---------- contact (night panel finale) ---------- */
+
 .contactSection {
+  display: grid;
+  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1fr);
+  gap: 40px;
   align-items: stretch;
+  margin-top: 96px;
+  padding: clamp(36px, 5vw, 64px);
+  border: 1px solid rgba(20, 25, 38, 0.5);
+  border-radius: 24px;
+  color: var(--night-text);
+  background:
+    radial-gradient(
+      90% 80% at 88% 0%,
+      rgba(127, 212, 255, 0.09),
+      transparent 55%
+    ),
+    radial-gradient(
+      70% 70% at 8% 100%,
+      rgba(255, 210, 122, 0.07),
+      transparent 55%
+    ),
+    linear-gradient(180deg, #121a2c 0%, var(--night) 100%);
+  box-shadow: var(--shadow-strong);
+}
+
+.contactCopy p {
+  color: var(--signal-cyan);
+}
+
+.contactCopy span {
+  color: var(--night-muted);
+}
+
+.contactHint {
+  display: block;
+  margin-top: 16px;
+  color: var(--signal-gold);
+  font-style: normal;
+  font-size: 0.92rem;
+  line-height: 1.8;
 }
 
 .platformGrid {
@@ -396,12 +478,41 @@
   display: grid;
   gap: 10px;
   padding: 20px;
+  border: 1px solid var(--night-line);
+  border-radius: 14px;
+  background: var(--night-card);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.platformGrid a:hover,
+.platformGrid a:focus-visible {
+  border-color: rgba(127, 212, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+  outline: none;
+}
+
+.platformGrid a:focus-visible {
+  outline: 2px solid var(--signal-cyan);
+  outline-offset: 3px;
 }
 
 .platformGrid span {
-  color: var(--theme-color, #8fd7cb);
+  color: var(--signal-gold);
   font-weight: 700;
 }
+
+.platformGrid p {
+  margin: 0;
+  color: var(--night-muted);
+  font-size: 0.93rem;
+  line-height: 1.78;
+}
+
+/* ---------- footer ---------- */
 
 .footerNote {
   display: flex;
@@ -410,34 +521,97 @@
   gap: 18px;
   margin-top: 52px;
   padding-top: 20px;
-  border-top: 1px solid rgba(247, 243, 235, 0.12);
-  color: rgba(247, 243, 235, 0.62);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
 }
 
 .footerNote strong {
-  color: #f7f3eb;
+  color: var(--foreground);
   text-align: right;
 }
 
+/* ---------- per-project theme tokens ---------- */
+/* --theme-color: pastel for night surfaces / --theme-ink: dark for light */
+
 .themeDrone {
   --theme-color: #75a9ff;
+  --theme-ink: #2d5fb8;
 }
 
 .themePdm {
   --theme-color: #f0c15d;
+  --theme-ink: #a87b1e;
 }
 
 .themeAnomaly {
   --theme-color: #ff7b7b;
+  --theme-ink: #bf4040;
 }
 
 .themeEltres {
   --theme-color: #8fd7cb;
+  --theme-ink: #22766a;
 }
+
+/* ---------- idle motion (restored) ----------
+   `translate` property (not transform) so it composes with Framer Motion. */
+
+@keyframes cardBreathe {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -4px;
+  }
+}
+
+.workCard,
+.researchCard,
+.archiveItem {
+  animation: cardBreathe 7.4s ease-in-out infinite;
+}
+
+.workCard:nth-child(5n + 2),
+.researchCard:nth-child(5n + 2),
+.archiveItem:nth-child(5n + 2) {
+  animation-delay: -1.48s;
+}
+
+.workCard:nth-child(5n + 3),
+.researchCard:nth-child(5n + 3),
+.archiveItem:nth-child(5n + 3) {
+  animation-delay: -2.96s;
+}
+
+.workCard:nth-child(5n + 4),
+.researchCard:nth-child(5n + 4),
+.archiveItem:nth-child(5n + 4) {
+  animation-delay: -4.44s;
+}
+
+.workCard:nth-child(5n + 5),
+.researchCard:nth-child(5n + 5),
+.archiveItem:nth-child(5n + 5) {
+  animation-delay: -5.92s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workCard,
+  .researchCard,
+  .archiveItem {
+    animation: none;
+  }
+
+  .researchImage {
+    transition: none;
+  }
+}
+
+/* ---------- responsive ---------- */
 
 @media (max-width: 1020px) {
   .proofSection,
-  .positioningSection,
   .contactSection {
     grid-template-columns: 1fr;
   }
@@ -466,19 +640,21 @@
     width: min(100% - 28px, 640px);
   }
 
-  .section,
-  .positioningSection,
-  .contactSection {
+  .section {
     padding-top: 72px;
   }
 
+  .contactSection {
+    margin-top: 72px;
+    padding: 28px 22px;
+  }
+
   .proofSection {
-    padding-top: 32px;
+    padding-top: 56px;
   }
 
   .proofLead h2,
   .sectionHeader h2,
-  .positioningCopy h2,
   .contactCopy h2 {
     font-size: 1.74rem;
   }

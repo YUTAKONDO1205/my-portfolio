@@ -1,0 +1,503 @@
+- generic [active] [ref=f21e1]:
+  - button "Open Next.js Dev Tools" [ref=f21e7] [cursor=pointer]:
+    - img [ref=f21e8]
+  - generic [ref=f21e11]:
+    - region "近藤悠太 Portfolio" [ref=f21e12]:
+      - link "ページ上部へ" [ref=f21e14] [cursor=pointer]:
+        - /url: "#top"
+        - generic [ref=f21e15]: 近藤悠太
+        - generic [ref=f21e16]: Yuta Kondo
+      - generic [ref=f21e17]:
+        - paragraph [ref=f21e18]: Embedded × Edge AI
+        - heading "Sense. Decide. Share." [level=1] [ref=f21e19]:
+          - generic [ref=f21e20]: Sense.
+          - generic [ref=f21e21]: Decide.
+          - generic [ref=f21e22]: Share.
+        - paragraph [ref=f21e23]: 現場の信号を、使える判断へ。
+        - paragraph [ref=f21e24]: 振動・音響・画像をデバイス上で判断する組み込み AI エンジニア。研究 4 本・受賞 6 件・SecHack365 '26 採択。VibeGuard を 4 マーケットプレイスへ出荷し、Microsoft Agent Hackathon 特別賞も受賞。
+        - generic [ref=f21e25]:
+          - link "VibeGuard を試す" [ref=f21e26] [cursor=pointer]:
+            - /url: https://github.com/marketplace/actions/vibe-guard-aicoding
+          - link "研究を読む" [ref=f21e27] [cursor=pointer]:
+            - /url: /research
+    - main [ref=f21e28]:
+      - region "Recognition · 実績" [ref=f21e29]:
+        - generic [ref=f21e30]:
+          - generic [ref=f21e31]: Recognition · 実績
+          - generic [ref=f21e32]: 実績 8 件 · 2024–2026
+        - generic [ref=f21e33]:
+          - link "2026 Microsoft Agent Hackathon 特別賞" [ref=f21e34] [cursor=pointer]:
+            - /url: https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent
+            - generic [ref=f21e35]: "2026"
+            - generic [ref=f21e36]: Microsoft Agent Hackathon
+            - generic [ref=f21e37]: 特別賞
+            - generic [ref=f21e38]: ↗
+          - link "2026 SecHack365 '26 トレーニー採択" [ref=f21e39] [cursor=pointer]:
+            - /url: https://sechack365.nict.go.jp/
+            - generic [ref=f21e40]: "2026"
+            - generic [ref=f21e41]: SecHack365
+            - generic [ref=f21e42]: "'26 トレーニー採択"
+            - generic [ref=f21e43]: ↗
+          - link "2025 IEEJ C部門大会 学生ポスター発表" [ref=f21e44] [cursor=pointer]:
+            - /url: https://www.iee.jp/blog/c-taikai-2025/
+            - generic [ref=f21e45]: "2025"
+            - generic [ref=f21e46]: IEEJ C部門大会
+            - generic [ref=f21e47]: 学生ポスター発表
+            - generic [ref=f21e48]: ↗
+          - link "2025 IEEJ U-21 奨励賞" [ref=f21e49] [cursor=pointer]:
+            - /url: https://www.iee.jp/u-21-2025-award/
+            - generic [ref=f21e50]: "2025"
+            - generic [ref=f21e51]: IEEJ U-21
+            - generic [ref=f21e52]: 奨励賞
+            - generic [ref=f21e53]: ↗
+          - link "2025 SPRESENSE Contest クレイン電子 BLEアドオンボード特別賞" [ref=f21e54] [cursor=pointer]:
+            - /url: https://elchika.com/promotion/spresense2025/winner/#nav
+            - generic [ref=f21e55]: "2025"
+            - generic [ref=f21e56]: SPRESENSE Contest
+            - generic [ref=f21e57]: クレイン電子 BLEアドオンボード特別賞
+            - generic [ref=f21e58]: ↗
+          - link "2024 SPRESENSE Contest クレスコ ELTRES優秀賞" [ref=f21e59] [cursor=pointer]:
+            - /url: https://elchika.com/promotion/spresense2024/winner/#nav
+            - generic [ref=f21e60]: "2024"
+            - generic [ref=f21e61]: SPRESENSE Contest
+            - generic [ref=f21e62]: クレスコ ELTRES優秀賞
+            - generic [ref=f21e63]: ↗
+          - link "2024 SPRESENSE Contest LoRa活用アイデア賞" [ref=f21e64] [cursor=pointer]:
+            - /url: https://elchika.com/promotion/spresense2024/winner/#nav
+            - generic [ref=f21e65]: "2024"
+            - generic [ref=f21e66]: SPRESENSE Contest
+            - generic [ref=f21e67]: LoRa活用アイデア賞
+            - generic [ref=f21e68]: ↗
+          - link "2024 SPRESENSE Contest JBAT Qanat Universe賞" [ref=f21e69] [cursor=pointer]:
+            - /url: https://elchika.com/promotion/spresense2024/winner/#nav
+            - generic [ref=f21e70]: "2024"
+            - generic [ref=f21e71]: SPRESENSE Contest
+            - generic [ref=f21e72]: JBAT Qanat Universe賞
+            - generic [ref=f21e73]: ↗
+      - generic [ref=f21e74]:
+        - generic [ref=f21e75]:
+          - paragraph [ref=f21e76]: Field-ready portfolio
+          - heading "研究、実装、公開までをひとつの流れとして見せる。" [level=2] [ref=f21e77]
+        - generic [ref=f21e78]:
+          - generic [ref=f21e79]:
+            - strong [ref=f21e80]: "7"
+            - generic [ref=f21e81]: 受賞・採択・発表
+          - generic [ref=f21e82]:
+            - strong [ref=f21e83]: "4"
+            - generic [ref=f21e84]: 公開研究テーマ
+          - generic [ref=f21e85]:
+            - strong [ref=f21e86]: "5"
+            - generic [ref=f21e87]: プロダクト配布面
+          - generic [ref=f21e88]:
+            - strong [ref=f21e89]: "4"
+            - generic [ref=f21e90]: 技術記事
+      - generic [ref=f21e91]:
+        - generic [ref=f21e92]:
+          - paragraph [ref=f21e93]: Shipped Work
+          - heading "動くものとして届いている制作物" [level=2] [ref=f21e94]
+          - generic [ref=f21e95]: 公開リポジトリだけでなく、Marketplace、拡張機能、運用ワークフローまで届く形にした制作を前面に出しています。
+        - generic [ref=f21e96]:
+          - article [ref=f21e97]:
+            - link "Security Tooling VibeGuard AI 生成コードの「通ってしまうバグ」を 3 地点で止める 書くとき（VS Code / Open VSX）・読むとき（Chrome）・マージ前（GitHub Actions / CLI）の 3 地点に同じ analyzer-core を配り、注入・秘密情報・認証スキップ・スタブ実装の混入を同一基準で止める診断基盤です。コードは端末から出ません。" [ref=f21e98] [cursor=pointer]:
+              - /url: https://github.com/YUTAKONDO1205/VibeGuard
+              - generic [ref=f21e99]: Security Tooling
+              - heading "VibeGuard" [level=3] [ref=f21e100]
+              - paragraph [ref=f21e101]: AI 生成コードの「通ってしまうバグ」を 3 地点で止める
+              - paragraph [ref=f21e102]: 書くとき（VS Code / Open VSX）・読むとき（Chrome）・マージ前（GitHub Actions / CLI）の 3 地点に同じ analyzer-core を配り、注入・秘密情報・認証スキップ・スタブ実装の混入を同一基準で止める診断基盤です。コードは端末から出ません。
+            - list [ref=f21e103]:
+              - listitem [ref=f21e104]: 解析コア共通化 — 同じ analyzer-core を 4 つの配布チャネルに載せ、判定を 3 地点で揃える
+              - listitem [ref=f21e105]: 47 ルール / 8 言語 — 注入・認証・秘密情報・暗号などの系統を、js/ts/python/go/java/ruby/php/csharp で網羅
+              - listitem [ref=f21e106]: AI 痕跡 6 種 — スタブ実装 / placeholder メール / モックデータ / debug=true / 「for now」/ 空バリデータ
+              - listitem [ref=f21e107]: 100% ローカル — テレメトリ・外部送信なし。コードは端末から出ない
+            - generic [ref=f21e108]:
+              - link "GitHub Marketplace (Action)" [ref=f21e109] [cursor=pointer]:
+                - /url: https://github.com/marketplace/actions/vibe-guard-aicoding
+                - text: GitHub Marketplace (Action)
+              - link "VS Code Marketplace" [ref=f21e111] [cursor=pointer]:
+                - /url: https://marketplace.visualstudio.com/items?itemName=yutakondo.vibeguard-aicoding
+                - text: VS Code Marketplace
+              - link "Chrome Web Store" [ref=f21e113] [cursor=pointer]:
+                - /url: https://chromewebstore.google.com/detail/ggdiodcjmdnkhncnpafcjokgonhmhbdf
+                - text: Chrome Web Store
+              - link "Open VSX Registry" [ref=f21e115] [cursor=pointer]:
+                - /url: https://open-vsx.org/extension/yutakondo/vibeguard-aicoding
+                - text: Open VSX Registry
+            - generic [ref=f21e117]:
+              - generic [ref=f21e118]: TypeScript Monorepo
+              - generic [ref=f21e119]: SARIF
+              - generic [ref=f21e120]: esbuild
+              - generic [ref=f21e121]: GitHub Action
+              - generic [ref=f21e122]: VS Code Extension
+          - article [ref=f21e123]:
+            - link "LLM Multi-Agent EdgeOps Command Agent 点検データを「意思決定」まで変換する保全マルチエージェント 異常検知で終わらせず、センサ・画像・点検メモ・マニュアル・故障履歴を 8 エージェントで束ね、リスク判定・原因推定・作業指示・報告書まで一気通貫で変換する Azure ベースの保全 AI です。人間の承認（承認 / 修正依頼 / 却下）を前提とした Human-in-the-loop と監査ログを備えます。" [ref=f21e124] [cursor=pointer]:
+              - /url: https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent
+              - generic [ref=f21e125]: LLM Multi-Agent
+              - heading "EdgeOps Command Agent" [level=3] [ref=f21e126]
+              - paragraph [ref=f21e127]: 点検データを「意思決定」まで変換する保全マルチエージェント
+              - paragraph [ref=f21e128]: 異常検知で終わらせず、センサ・画像・点検メモ・マニュアル・故障履歴を 8 エージェントで束ね、リスク判定・原因推定・作業指示・報告書まで一気通貫で変換する Azure ベースの保全 AI です。人間の承認（承認 / 修正依頼 / 却下）を前提とした Human-in-the-loop と監査ログを備えます。
+            - list [ref=f21e129]:
+              - listitem [ref=f21e130]: 8 エージェント構成 — Intake → Signal → Vision → Manual RAG → Root Cause → Action → What-if → Governance
+              - listitem [ref=f21e131]: Azure OpenAI / Semantic Kernel / Azure AI Search による RAG とビジョン解析
+              - listitem [ref=f21e132]: Spresense などのエッジ機器から Event Hubs 経由で取り込むエッジ連携
+              - listitem [ref=f21e133]: 承認・監査ワークフロー — Cosmos DB へ実行履歴を残し Teams へ通知
+            - link "Microsoft Agent Hackathon 特別賞" [ref=f21e135] [cursor=pointer]:
+              - /url: https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent
+              - text: Microsoft Agent Hackathon 特別賞
+            - generic [ref=f21e137]:
+              - generic [ref=f21e138]: Azure OpenAI
+              - generic [ref=f21e139]: Semantic Kernel
+              - generic [ref=f21e140]: Multi-Agent
+              - generic [ref=f21e141]: RAG
+              - generic [ref=f21e142]: FastAPI
+          - article [ref=f21e143]:
+            - link "LLM Multi-Agent Maison Passage 片道航空券 2 枚で組み立てる海外旅行プランナー 海外旅行を「2 枚の片道航空券」として検索するプレミアム旅行プランナーです。Codex の Planner / Generator / Evaluator マルチエージェントハーネスをローカルで運用し、スプリント単位で機能を進化させています。" [ref=f21e144] [cursor=pointer]:
+              - /url: https://github.com/YUTAKONDO1205/travel_app_patch
+              - generic [ref=f21e145]: LLM Multi-Agent
+              - heading "Maison Passage" [level=3] [ref=f21e146]
+              - paragraph [ref=f21e147]: 片道航空券 2 枚で組み立てる海外旅行プランナー
+              - paragraph [ref=f21e148]: 海外旅行を「2 枚の片道航空券」として検索するプレミアム旅行プランナーです。Codex の Planner / Generator / Evaluator マルチエージェントハーネスをローカルで運用し、スプリント単位で機能を進化させています。
+            - generic [ref=f21e149]:
+              - generic [ref=f21e150]: Next.js
+              - generic [ref=f21e151]: TypeScript
+              - generic [ref=f21e152]: Codex
+              - generic [ref=f21e153]: Multi-Agent
+              - generic [ref=f21e154]: Skyscanner
+          - article [ref=f21e155]:
+            - link "Business System Mountain Supply System 山小屋補給品の在庫・受注・売上管理 Java / Spring Boot / SQL / テストを盛り込んだ業務アプリ風ミニシステムです。商品マスタ、入出庫履歴、注文ヘッダと明細、ユーザー認証を分離した正規化設計と、JOIN・GROUP BY を中心とした集計 SQL を組み合わせています。" [ref=f21e156] [cursor=pointer]:
+              - /url: https://github.com/YUTAKONDO1205/Mountain-Supply-System
+              - generic [ref=f21e157]: Business System
+              - heading "Mountain Supply System" [level=3] [ref=f21e158]
+              - paragraph [ref=f21e159]: 山小屋補給品の在庫・受注・売上管理
+              - paragraph [ref=f21e160]: Java / Spring Boot / SQL / テストを盛り込んだ業務アプリ風ミニシステムです。商品マスタ、入出庫履歴、注文ヘッダと明細、ユーザー認証を分離した正規化設計と、JOIN・GROUP BY を中心とした集計 SQL を組み合わせています。
+            - generic [ref=f21e161]:
+              - generic [ref=f21e162]: Java 21
+              - generic [ref=f21e163]: Spring Boot
+              - generic [ref=f21e164]: Spring Security
+              - generic [ref=f21e165]: H2
+              - generic [ref=f21e166]: JUnit 5
+          - article [ref=f21e167]:
+            - link "LLM Workflow Zumen LLM Docker Lab 図面業務を LLM で半自動化する実験基盤 図面画像からの説明生成、判定理由の文章化、プロンプトのバージョン管理、顧客別用語集、評価データセットの自動採点、監査ログまでを 1 つの FastAPI + htmx アプリにまとめた、図面 LLM ワークフローの実験基盤です。Docker / Dev Container で再現でき、LLM プロバイダは mock ↔ OpenAI 互換で切り替えられます。" [ref=f21e168] [cursor=pointer]:
+              - /url: https://github.com/YUTAKONDO1205/zumen_llm_docker
+              - generic [ref=f21e169]: LLM Workflow
+              - heading "Zumen LLM Docker Lab" [level=3] [ref=f21e170]
+              - paragraph [ref=f21e171]: 図面業務を LLM で半自動化する実験基盤
+              - paragraph [ref=f21e172]: 図面画像からの説明生成、判定理由の文章化、プロンプトのバージョン管理、顧客別用語集、評価データセットの自動採点、監査ログまでを 1 つの FastAPI + htmx アプリにまとめた、図面 LLM ワークフローの実験基盤です。Docker / Dev Container で再現でき、LLM プロバイダは mock ↔ OpenAI 互換で切り替えられます。
+            - generic [ref=f21e173]:
+              - generic [ref=f21e174]: FastAPI
+              - generic [ref=f21e175]: htmx
+              - generic [ref=f21e176]: SQLite
+              - generic [ref=f21e177]: Docker
+              - generic [ref=f21e178]: LLM
+      - generic [ref=f21e181]:
+        - generic [ref=f21e182]: Sense
+        - generic [ref=f21e184]: Decide
+        - generic [ref=f21e186]: Share
+        - emphasis [ref=f21e189]: Edge AI
+        - generic [ref=f21e191]: Embedded
+        - emphasis [ref=f21e194]: Local First
+        - generic [ref=f21e196]: Sense
+        - generic [ref=f21e198]: Decide
+        - generic [ref=f21e200]: Share
+        - emphasis [ref=f21e203]: Edge AI
+        - generic [ref=f21e205]: Embedded
+        - emphasis [ref=f21e208]: Local First
+      - generic [ref=f21e210]:
+        - generic [ref=f21e211]:
+          - paragraph [ref=f21e212]: Research
+          - heading "現場の信号を、判断と公開へつないでいく" [level=2] [ref=f21e213]
+          - generic [ref=f21e214]: このサイトの軸は、センサで拾った信号をエッジで読み、必要な情報だけを送り、公開しながら次の研究へつなげる流れです。
+        - generic [ref=f21e215]:
+          - article [ref=f21e216]:
+            - link "2026 DroneInspector インフラ点検向けエッジAIドローン 狭小インフラ空間での点検を想定し、Spresense ベースで画像取得、IMU 記録、保存、通知をつなげた研究です。" [ref=f21e217] [cursor=pointer]:
+              - /url: /research/drone-inspector
+              - generic [ref=f21e220]: "2026"
+              - heading "DroneInspector" [level=3] [ref=f21e221]
+              - paragraph [ref=f21e222]: インフラ点検向けエッジAIドローン
+              - paragraph [ref=f21e223]: 狭小インフラ空間での点検を想定し、Spresense ベースで画像取得、IMU 記録、保存、通知をつなげた研究です。
+            - generic [ref=f21e224]:
+              - generic [ref=f21e225]: Spresense
+              - generic [ref=f21e226]: Drone
+              - generic [ref=f21e227]: BLE
+              - generic [ref=f21e228]: TensorFlow Lite Micro
+          - article [ref=f21e229]:
+            - link "2026 pdm_edge 加速度・音響を用いた異常検知エッジAI 加速度 3 軸と音響の 4 チャンネルを FFT 特徴へ落とし込み、SPRESENSE 上で扱える軽量な異常検知構成としてまとめた研究です。" [ref=f21e230] [cursor=pointer]:
+              - /url: /research/pdm-edge
+              - generic [ref=f21e233]: "2026"
+              - heading "pdm_edge" [level=3] [ref=f21e234]
+              - paragraph [ref=f21e235]: 加速度・音響を用いた異常検知エッジAI
+              - paragraph [ref=f21e236]: 加速度 3 軸と音響の 4 チャンネルを FFT 特徴へ落とし込み、SPRESENSE 上で扱える軽量な異常検知構成としてまとめた研究です。
+            - generic [ref=f21e237]:
+              - generic [ref=f21e238]: SPRESENSE
+              - generic [ref=f21e239]: FFT
+              - generic [ref=f21e240]: Random Forest
+              - generic [ref=f21e241]: MPU6050
+          - article [ref=f21e242]:
+            - link "2026 anomaly-event-api 異常検知をイベント運用までつなぐ API 画像アップロード、異常検知、説明、イベント保存、ダッシュボード可視化を一体化し、研究を運用視点まで広げた実装です。" [ref=f21e243] [cursor=pointer]:
+              - /url: /research/anomaly-event-api
+              - generic [ref=f21e246]: "2026"
+              - heading "anomaly-event-api" [level=3] [ref=f21e247]
+              - paragraph [ref=f21e248]: 異常検知をイベント運用までつなぐ API
+              - paragraph [ref=f21e249]: 画像アップロード、異常検知、説明、イベント保存、ダッシュボード可視化を一体化し、研究を運用視点まで広げた実装です。
+            - generic [ref=f21e250]:
+              - generic [ref=f21e251]: Node.js
+              - generic [ref=f21e252]: TypeScript
+              - generic [ref=f21e253]: PyTorch
+              - generic [ref=f21e254]: Grad-CAM
+          - article [ref=f21e255]:
+            - link "2025 Eltres_CO2_Mapping ELTRES通信によるCO2濃度マッピング Spresense と ELTRES を組み合わせ、CO2 濃度と位置情報を交互に送信して都市と郊外の濃度差を可視化した研究です。" [ref=f21e256] [cursor=pointer]:
+              - /url: /research/eltres-co2-mapping
+              - generic [ref=f21e259]: "2025"
+              - heading "Eltres_CO2_Mapping" [level=3] [ref=f21e260]
+              - paragraph [ref=f21e261]: ELTRES通信によるCO2濃度マッピング
+              - paragraph [ref=f21e262]: Spresense と ELTRES を組み合わせ、CO2 濃度と位置情報を交互に送信して都市と郊外の濃度差を可視化した研究です。
+            - generic [ref=f21e263]:
+              - generic [ref=f21e264]: ELTRES
+              - generic [ref=f21e265]: SPRESENSE
+              - generic [ref=f21e266]: MATLAB
+              - generic [ref=f21e267]: IoT
+      - generic [ref=f21e268]:
+        - generic [ref=f21e269]:
+          - paragraph [ref=f21e270]: Research Flow
+          - heading "Sense → Decide → Share" [level=2] [ref=f21e271]
+          - generic [ref=f21e272]: 現場で信号を取り、軽量に判断し、通信制約を前提にデータを設計し、GitHub と Elchika で公開するまでの流れを、このサイト全体の軸にしています。
+        - generic [ref=f21e273]:
+          - article [ref=f21e274]:
+            - generic [ref=f21e275]: "01"
+            - generic [ref=f21e276]:
+              - strong [ref=f21e277]: Sense
+              - generic [ref=f21e278]: 現場で拾う
+            - paragraph [ref=f21e279]: 画像、振動、音響、位置情報のような信号を、実験だけで終わらない粒度で現場から取る。
+          - article [ref=f21e280]:
+            - generic [ref=f21e281]: "02"
+            - generic [ref=f21e282]:
+              - strong [ref=f21e283]: Decide
+              - generic [ref=f21e284]: 軽量に判断する
+            - paragraph [ref=f21e285]: SPRESENSE 級の制約を前提に、特徴量設計や軽量モデルで判断をデバイス側へ寄せる。
+          - article [ref=f21e286]:
+            - generic [ref=f21e287]: "03"
+            - generic [ref=f21e288]:
+              - strong [ref=f21e289]: Share
+              - generic [ref=f21e290]: 公開して次へつなぐ
+            - paragraph [ref=f21e291]: GitHub、Elchika、受賞歴まで含めて研究の流れを公開し、次のテーマに接続していく。
+      - region "研究と実装と公開を、ひとりで閉じる" [ref=f21e293]:
+        - generic [ref=f21e294]:
+          - generic [ref=f21e295]:
+            - generic [ref=f21e296]: Positioning
+            - heading "研究と実装と公開を、ひとりで閉じる" [level=2] [ref=f21e297]
+            - paragraph [ref=f21e298]: 研究の公開ループも、出荷した製品も、両方ある。組み込みエンジニアの多くは前者で止まり、AI エンジニアの多くは後者を持たない。
+            - paragraph [ref=f21e299]: Most embedded engineers stop at the device. Most AI engineers stop at the notebook. I ship both ends.
+          - generic [ref=f21e300]:
+            - generic [ref=f21e301]:
+              - 'img "Positioning radar: Yuta Kondo versus typical embedded and AI engineer silhouettes across five axes." [ref=f21e302]':
+                - generic [ref=f21e312]: "2"
+                - generic [ref=f21e313]: "4"
+                - generic [ref=f21e314]: "6"
+                - generic [ref=f21e315]: "8"
+                - generic [ref=f21e316]: "10"
+                - generic [ref=f21e321]:
+                  - generic: "9"
+                - generic [ref=f21e323]:
+                  - generic: "9"
+                - generic [ref=f21e325]:
+                  - generic: "8"
+                - generic [ref=f21e327]:
+                  - generic: "9"
+                - generic [ref=f21e329]:
+                  - generic: "8"
+                - generic [ref=f21e331]:
+                  - generic [ref=f21e332]: 信号の幅
+                  - generic [ref=f21e333]: Signal Breadth
+                - generic [ref=f21e334]:
+                  - generic [ref=f21e335]: エッジ制約下の実装
+                  - generic [ref=f21e336]: Edge Constraint
+                - generic [ref=f21e337]:
+                  - generic [ref=f21e338]: 市場への到達
+                  - generic [ref=f21e339]: Ship to Market
+                - generic [ref=f21e340]:
+                  - generic [ref=f21e341]: 公開研究の継続性
+                  - generic [ref=f21e342]: Public Research
+                - generic [ref=f21e343]:
+                  - generic [ref=f21e344]: 運用接続
+                  - generic [ref=f21e345]: Operationalization
+              - list [ref=f21e346]:
+                - listitem [ref=f21e347]: 近藤悠太
+                - listitem [ref=f21e349]: 一般的な組み込みエンジニア
+                - listitem [ref=f21e351]: 一般的な AI エンジニア
+            - list [ref=f21e353]:
+              - listitem "信号の幅 (Signal Breadth) — score 9 of 10. 画像・振動・音響・GPS+CO2・AI生成コード — 5 modalities" [ref=f21e354]:
+                - generic [ref=f21e355]: 9 / 10
+                - generic [ref=f21e356]:
+                  - generic [ref=f21e357]: 信号の幅Signal Breadth
+                  - generic [ref=f21e358]: 画像・振動・音響・GPS+CO2・AI生成コード — 5 modalities
+              - listitem "エッジ制約下の実装 (Edge Constraint) — score 9 of 10. SPRESENSE FFT + Random Forest + TFLite Micro + .tflite→C++ header" [ref=f21e359]:
+                - generic [ref=f21e360]: 9 / 10
+                - generic [ref=f21e361]:
+                  - generic [ref=f21e362]: エッジ制約下の実装Edge Constraint
+                  - generic [ref=f21e363]: SPRESENSE FFT + Random Forest + TFLite Micro + .tflite→C++ header
+              - 'listitem "市場への到達 (Ship to Market) — score 8 of 10. VibeGuard live: GitHub Marketplace, VS Code, Chrome Web Store, Open VSX" [ref=f21e364]':
+                - generic [ref=f21e365]: 8 / 10
+                - generic [ref=f21e366]:
+                  - generic [ref=f21e367]: 市場への到達Ship to Market
+                  - generic [ref=f21e368]: "VibeGuard live: GitHub Marketplace, VS Code, Chrome Web Store, Open VSX"
+              - listitem "公開研究の継続性 (Public Research) — score 9 of 10. 4 Elchika 記事 + 受賞 6 件 + 電気学会 C部門発表 + SecHack365 '26 採択" [ref=f21e369]:
+                - generic [ref=f21e370]: 9 / 10
+                - generic [ref=f21e371]:
+                  - generic [ref=f21e372]: 公開研究の継続性Public Research
+                  - generic [ref=f21e373]: 4 Elchika 記事 + 受賞 6 件 + 電気学会 C部門発表 + SecHack365 '26 採択
+              - listitem "運用接続 (Operationalization) — score 8 of 10. EdgeOps 8-agent + 承認/監査ワークフロー、anomaly-event-api の NEW/CHECKING/RESOLVED" [ref=f21e374]:
+                - generic [ref=f21e375]: 8 / 10
+                - generic [ref=f21e376]:
+                  - generic [ref=f21e377]: 運用接続Operationalization
+                  - generic [ref=f21e378]: EdgeOps 8-agent + 承認/監査ワークフロー、anomaly-event-api の NEW/CHECKING/RESOLVED
+      - region "Impact metrics" [ref=f21e380]:
+        - generic [ref=f21e381]: インパクト
+        - heading "軌跡を、データで" [level=2] [ref=f21e382]
+        - paragraph [ref=f21e383]: 2024 → 2026、4 つのモダリティ、7 件の受賞、4 つの配布チャネル。
+        - generic [ref=f21e384]:
+          - article [ref=f21e385]:
+            - generic [ref=f21e386]:
+              - heading "制作のペース" [level=3] [ref=f21e387]
+              - paragraph [ref=f21e388]: 年ごとの公開、3 年連続
+            - generic [ref=f21e389]:
+              - img "Timeline of 4 publications across 3 years" [ref=f21e390]:
+                - generic [ref=f21e392]: "2024"
+                - generic [ref=f21e395]:
+                  - generic [ref=f21e396]: "2025"
+                  - generic "2025.01.31 · SPRESENSEと振動解析による設備保全の最前線" [ref=f21e399]
+                  - generic "2025.01.31 · SPRESENSEとELTRES通信でCO2濃度をマッピング" [ref=f21e402]
+                - generic [ref=f21e406]:
+                  - generic [ref=f21e407]: "2026"
+                  - generic "2026.01.31 · SPRESENSEでインフラ点検向けのエッジAIドローン" [ref=f21e410]
+                  - generic "2026.01.31 · 加速度・音響信号を活用した異常検知エッジAIモデルの構築" [ref=f21e412]
+                - generic [ref=f21e417]: 2025年に受賞 3 件
+              - generic [ref=f21e418]:
+                - generic [ref=f21e419]: 画像 + IMU
+                - generic [ref=f21e421]: 振動 + 音響
+                - generic [ref=f21e423]: 画像 + 運用
+                - generic [ref=f21e425]: CO2 + GPS
+                - generic [ref=f21e427]: 受賞作品
+              - paragraph [ref=f21e429]: 記事 4 本 · 受賞 7 件
+          - article [ref=f21e430]:
+            - generic [ref=f21e431]:
+              - heading "4 / 4 モダリティ稼働中" [level=3] [ref=f21e432]
+              - paragraph [ref=f21e433]: 信号モダリティのカバー範囲
+            - generic [ref=f21e434]:
+              - generic [ref=f21e435]:
+                - generic [ref=f21e436]:
+                  - generic [ref=f21e437]: 画像 + IMU
+                  - generic [ref=f21e438]: Image + IMU
+                - generic [ref=f21e442]: "3"
+              - generic [ref=f21e443]:
+                - generic [ref=f21e444]:
+                  - generic [ref=f21e445]: 振動 + 音響
+                  - generic [ref=f21e446]: Vibration + Audio
+                - generic [ref=f21e450]: "4"
+              - generic [ref=f21e451]:
+                - generic [ref=f21e452]:
+                  - generic [ref=f21e453]: 画像 + 運用
+                  - generic [ref=f21e454]: Image + Ops
+                - generic [ref=f21e458]: "3"
+              - generic [ref=f21e459]:
+                - generic [ref=f21e460]:
+                  - generic [ref=f21e461]: CO2 + GPS
+                  - generic [ref=f21e462]: CO2 + GPS
+                - generic [ref=f21e466]: "5"
+          - article [ref=f21e467]:
+            - generic [ref=f21e468]:
+              - heading "4 マーケットプレイス · 1 codebase" [level=3] [ref=f21e469]
+              - paragraph [ref=f21e470]: VibeGuard の到達範囲
+            - generic [ref=f21e471]:
+              - generic [ref=f21e474]: GitHub Marketplace (Action)
+              - generic [ref=f21e477]: VS Code Marketplace
+              - generic [ref=f21e480]: Chrome Web Store
+              - generic [ref=f21e483]: Open VSX Registry
+            - generic [ref=f21e484]:
+              - generic [ref=f21e485]: "0"
+              - generic [ref=f21e486]:
+                - generic [ref=f21e487]: テレメトリ送信なし
+                - text: コードは端末から出ない
+                - text: 0 telemetry · code never leaves the device
+      - generic [ref=f21e488]:
+        - generic [ref=f21e489]:
+          - paragraph [ref=f21e490]: Recognition Archive
+          - heading "外部評価と公開ログ" [level=2] [ref=f21e491]
+          - generic [ref=f21e492]: 研究記事、コンテスト、学会発表、セキュリティ育成プログラムまで、公開された実績を年表として追えるようにしています。
+        - generic [ref=f21e493]:
+          - generic [ref=f21e494]:
+            - heading "Articles" [level=3] [ref=f21e495]
+            - link "2026.01.31 SPRESENSEでインフラ点検向けのエッジAIドローン カメラ、BLE、エッジAI、軽量ドローンを組み合わせ、機体側で判断するインフラ点検の可能性を探った作品です。" [ref=f21e496] [cursor=pointer]:
+              - /url: https://elchika.com/article/663a49cf-c895-44d7-a989-6e45e7d92056/
+              - generic [ref=f21e497]: 2026.01.31
+              - strong [ref=f21e498]: SPRESENSEでインフラ点検向けのエッジAIドローン
+              - paragraph [ref=f21e499]: カメラ、BLE、エッジAI、軽量ドローンを組み合わせ、機体側で判断するインフラ点検の可能性を探った作品です。
+            - link "2026.01.31 加速度・音響信号を活用した異常検知エッジAIモデルの構築 加速度と音響を 1 kHz で取得し、FFT ベースの特徴から軽量に異常兆候を判定する構成を整理した記事です。" [ref=f21e500] [cursor=pointer]:
+              - /url: https://elchika.com/article/7301ab59-0921-4ba7-9935-b9309cf8c59c/
+              - generic [ref=f21e501]: 2026.01.31
+              - strong [ref=f21e502]: 加速度・音響信号を活用した異常検知エッジAIモデルの構築
+              - paragraph [ref=f21e503]: 加速度と音響を 1 kHz で取得し、FFT ベースの特徴から軽量に異常兆候を判定する構成を整理した記事です。
+            - link "2025.01.31 SPRESENSEと振動解析による設備保全の最前線 LoRa と振動解析を組み合わせ、遠隔監視と設備保全をつなぐ実装としてまとめた作品です。" [ref=f21e504] [cursor=pointer]:
+              - /url: https://elchika.com/article/ac986cc9-5c24-4778-952d-a3ec8dca25d0/
+              - generic [ref=f21e505]: 2025.01.31
+              - strong [ref=f21e506]: SPRESENSEと振動解析による設備保全の最前線
+              - paragraph [ref=f21e507]: LoRa と振動解析を組み合わせ、遠隔監視と設備保全をつなぐ実装としてまとめた作品です。
+            - link "2025.01.31 SPRESENSEとELTRES通信でCO2濃度をマッピング ELTRES とセンシングを組み合わせ、都市部と郊外の CO2 濃度差を可視化した環境モニタリング研究です。" [ref=f21e508] [cursor=pointer]:
+              - /url: https://elchika.com/article/504f286c-413b-47d3-89f9-38920ca5e5c7/
+              - generic [ref=f21e509]: 2025.01.31
+              - strong [ref=f21e510]: SPRESENSEとELTRES通信でCO2濃度をマッピング
+              - paragraph [ref=f21e511]: ELTRES とセンシングを組み合わせ、都市部と郊外の CO2 濃度差を可視化した環境モニタリング研究です。
+          - generic [ref=f21e512]:
+            - heading "Awards" [level=3] [ref=f21e513]
+            - link "2026 特別賞 Microsoft Agent Hackathon" [ref=f21e514] [cursor=pointer]:
+              - /url: https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent
+              - generic [ref=f21e515]: "2026"
+              - strong [ref=f21e516]: 特別賞
+              - paragraph [ref=f21e517]: Microsoft Agent Hackathon
+            - link "2026 '26 トレーニー採択 SecHack365" [ref=f21e518] [cursor=pointer]:
+              - /url: https://sechack365.nict.go.jp/
+              - generic [ref=f21e519]: "2026"
+              - strong [ref=f21e520]: "'26 トレーニー採択"
+              - paragraph [ref=f21e521]: SecHack365
+            - link "2025 学生ポスター発表 IEEJ C部門大会" [ref=f21e522] [cursor=pointer]:
+              - /url: https://www.iee.jp/blog/c-taikai-2025/
+              - generic [ref=f21e523]: "2025"
+              - strong [ref=f21e524]: 学生ポスター発表
+              - paragraph [ref=f21e525]: IEEJ C部門大会
+            - link "2025 奨励賞 IEEJ U-21" [ref=f21e526] [cursor=pointer]:
+              - /url: https://www.iee.jp/u-21-2025-award/
+              - generic [ref=f21e527]: "2025"
+              - strong [ref=f21e528]: 奨励賞
+              - paragraph [ref=f21e529]: IEEJ U-21
+            - link "2025 クレイン電子 BLEアドオンボード特別賞 SPRESENSE Contest" [ref=f21e530] [cursor=pointer]:
+              - /url: https://elchika.com/promotion/spresense2025/winner/#nav
+              - generic [ref=f21e531]: "2025"
+              - strong [ref=f21e532]: クレイン電子 BLEアドオンボード特別賞
+              - paragraph [ref=f21e533]: SPRESENSE Contest
+            - link "2024 クレスコ ELTRES優秀賞 SPRESENSE Contest" [ref=f21e534] [cursor=pointer]:
+              - /url: https://elchika.com/promotion/spresense2024/winner/#nav
+              - generic [ref=f21e535]: "2024"
+              - strong [ref=f21e536]: クレスコ ELTRES優秀賞
+              - paragraph [ref=f21e537]: SPRESENSE Contest
+      - generic [ref=f21e538]:
+        - generic [ref=f21e539]:
+          - paragraph [ref=f21e540]: Philosophy
+          - heading "「どう動くか」だけでなく「どう使われるか」まで設計する" [level=2] [ref=f21e541]
+          - generic [ref=f21e542]: 良いエンジニアリングは、ただ動くものを作ることではなく、現場で実際に使えるシステムを設計することだと考えています。だからこそ、センサ取得、エッジ推論、通信、API、可視化までを横断し、必要な情報だけを送る省通信設計と、運用へつなげるイベント設計をひとつの体験として組み立てています。
+        - generic [ref=f21e543]:
+          - link "GitHub コードと検証ログを残す公開リポジトリ 研究の途中経過まで含めて公開し、組み込み、機械学習、API、実験スクリプトを横断して整理しています。" [ref=f21e544] [cursor=pointer]:
+            - /url: https://github.com/YUTAKONDO1205
+            - generic [ref=f21e545]: GitHub
+            - strong [ref=f21e546]: コードと検証ログを残す公開リポジトリ
+            - paragraph [ref=f21e547]: 研究の途中経過まで含めて公開し、組み込み、機械学習、API、実験スクリプトを横断して整理しています。
+          - link "Elchika 背景と評価を日本語でまとめた制作ノート 課題設定、構成、評価、今後の展望を記事として残し、作品単位で読めるようにしています。" [ref=f21e548] [cursor=pointer]:
+            - /url: https://elchika.com/user/kd_yuta/?page=0
+            - generic [ref=f21e549]: Elchika
+            - strong [ref=f21e550]: 背景と評価を日本語でまとめた制作ノート
+            - paragraph [ref=f21e551]: 課題設定、構成、評価、今後の展望を記事として残し、作品単位で読めるようにしています。
+          - link "LinkedIn 活動全体を俯瞰して見せる外部プロフィール 研究、制作、プロフィールをまとめて見せる窓口として運用しています。" [ref=f21e552] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/kondo-yuta-985430317
+            - generic [ref=f21e553]: LinkedIn
+            - strong [ref=f21e554]: 活動全体を俯瞰して見せる外部プロフィール
+            - paragraph [ref=f21e555]: 研究、制作、プロフィールをまとめて見せる窓口として運用しています。
+      - generic [ref=f21e556]:
+        - generic [ref=f21e557]: Featured shipping focus
+        - strong [ref=f21e558]: VibeGuard / EdgeOps Command Agent

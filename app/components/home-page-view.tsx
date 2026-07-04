@@ -1,9 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import { getArtworkStyle, getProjectArtwork } from "../artwork";
 import { FrameSequenceHero } from "./frame-sequence-hero";
+import { AwardsStrip } from "./awards-strip";
+import { ImpactDashboard } from "./impact-dashboard";
+import { PositioningSection } from "./positioning-section";
 import type {
   AwardBadge,
   Philosophy,
@@ -31,30 +35,54 @@ type HomePageViewProps = {
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
+/* margin-based trigger: fires as soon as the element's top clears the bottom
+   edge minus 90px — unlike a fractional `amount`, this stays satisfiable for
+   sections taller than the viewport (small screens). */
+const revealViewport = { once: true, margin: "0px 0px -90px 0px" } as const;
+
 const sectionVariants: Variants = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 44, filter: "blur(14px)" },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.64, ease: easeOut },
+    filter: "blur(0px)",
+    transition: { duration: 0.8, ease: easeOut },
   },
 };
 
 const groupVariants: Variants = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.06, delayChildren: 0.08 },
+    transition: { staggerChildren: 0.07, delayChildren: 0.08 },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 28, scale: 0.97, filter: "blur(8px)" },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.52, ease: easeOut },
+    scale: 1,
+    filter: "blur(0px)",
+    transition: { duration: 0.68, ease: easeOut },
   },
 };
+
+const charVariants: Variants = {
+  hidden: { opacity: 0, y: "0.42em", filter: "blur(8px)" },
+  show: {
+    opacity: 1,
+    y: "0em",
+    filter: "blur(0px)",
+    transition: { duration: 0.56, ease: easeOut },
+  },
+};
+
+const hoverLift = {
+  y: -8,
+  scale: 1.012,
+  transition: { type: "spring", stiffness: 240, damping: 20 },
+} as const;
 
 function themeClassName(themeClass: ResearchProject["themeClass"]) {
   switch (themeClass) {
@@ -69,6 +97,85 @@ function themeClassName(themeClass: ResearchProject["themeClass"]) {
   }
 }
 
+/* Per-character heading reveal — restored from the pre-rewrite design. */
+function SplitHeading({ text }: { text: string }) {
+  const reduceMotion = useReducedMotion();
+
+  if (reduceMotion) {
+    return <h2>{text}</h2>;
+  }
+
+  return (
+    <motion.h2
+      aria-label={text}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-80px" }}
+      variants={{
+        hidden: {},
+        show: { transition: { staggerChildren: 0.024 } },
+      }}
+    >
+      {Array.from(text).map((char, index) =>
+        char === " " || char === "　" ? (
+          <span
+            key={`${char}-${index}`}
+            className="heading-char-space"
+            aria-hidden="true"
+          />
+        ) : (
+          <motion.span
+            key={`${char}-${index}`}
+            className="heading-char"
+            aria-hidden="true"
+            variants={charVariants}
+          >
+            {char}
+          </motion.span>
+        ),
+      )}
+    </motion.h2>
+  );
+}
+
+/* Count-up numerals for the proof strip — restored utility. */
+function AnimatedCount({ value }: { value: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const el = ref.current;
+    if (!el) return;
+
+    let raf = 0;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0]?.isIntersecting) return;
+        observer.disconnect();
+        const started = performance.now();
+        const duration = 1300;
+        const step = (now: number) => {
+          const t = Math.min(1, (now - started) / duration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = String(Math.round(eased * value));
+          if (t < 1) raf = requestAnimationFrame(step);
+        };
+        raf = requestAnimationFrame(step);
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [value, reduceMotion]);
+
+  return <span ref={ref}>{value}</span>;
+}
+
 function SectionHeader({
   eyebrow,
   title,
@@ -81,8 +188,41 @@ function SectionHeader({
   return (
     <div className={styles.sectionHeader}>
       <p>{eyebrow}</p>
-      <h2>{title}</h2>
+      <SplitHeading text={title} />
       <span>{body}</span>
+    </div>
+  );
+}
+
+const MARQUEE_WORDS = [
+  "Sense",
+  "Decide",
+  "Share",
+  "Edge AI",
+  "Embedded",
+  "Local First",
+] as const;
+
+function MarqueeInterlude() {
+  // 8 copies ≈ 5300px track — one half must exceed the widest supported
+  // viewport for the translateX(-50%) loop to stay seamless at 4K.
+  const sequence = Array.from({ length: 8 }, () => MARQUEE_WORDS).flat();
+  return (
+    <div className="interlude-marquee" aria-hidden="true">
+      <div className="marquee">
+        <div className="marquee-track">
+          {sequence.flatMap((word, index) => [
+            <span key={`${word}-${index}`}>
+              {index % 6 === 3 || index % 6 === 5 ? <em>{word}</em> : word}
+            </span>,
+            <span
+              key={`dot-${word}-${index}`}
+              className="marquee-dot"
+              aria-hidden="true"
+            />,
+          ])}
+        </div>
+      </div>
     </div>
   );
 }
@@ -102,11 +242,7 @@ export function HomePageView({
   const liveChannels = selectedWorks.flatMap((work) => work.distribution ?? []);
   const featuredWorks = selectedWorks.filter((work) => work.feature);
 
-  const hoverLift = reduceMotion
-    ? undefined
-    : {
-        y: -4,
-      };
+  const cardHover = reduceMotion ? undefined : hoverLift;
 
   return (
     <>
@@ -114,12 +250,15 @@ export function HomePageView({
       <FrameSequenceHero />
 
       <main className={styles.home}>
+        {/* Social proof rail — restored, directly under the hero (full-bleed) */}
+        <AwardsStrip awards={awardBadges} />
+
         <motion.section
           className={`${styles.shell} ${styles.proofSection}`}
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.24 }}
+          viewport={revealViewport}
         >
           <div className={styles.proofLead}>
             <p>Field-ready portfolio</p>
@@ -127,19 +266,27 @@ export function HomePageView({
           </div>
           <div className={styles.proofGrid}>
             <div>
-              <strong>{recognitions.length}</strong>
+              <strong>
+                <AnimatedCount value={recognitions.length} />
+              </strong>
               <span>受賞・採択・発表</span>
             </div>
             <div>
-              <strong>{researchProjects.length}</strong>
+              <strong>
+                <AnimatedCount value={researchProjects.length} />
+              </strong>
               <span>公開研究テーマ</span>
             </div>
             <div>
-              <strong>{liveChannels.length}</strong>
+              <strong>
+                <AnimatedCount value={liveChannels.length} />
+              </strong>
               <span>プロダクト配布面</span>
             </div>
             <div>
-              <strong>{publicationTimeline.length}</strong>
+              <strong>
+                <AnimatedCount value={publicationTimeline.length} />
+              </strong>
               <span>技術記事</span>
             </div>
           </div>
@@ -151,7 +298,7 @@ export function HomePageView({
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.16 }}
+          viewport={revealViewport}
         >
           <SectionHeader
             eyebrow="Shipped Work"
@@ -164,7 +311,7 @@ export function HomePageView({
             variants={groupVariants}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, amount: 0.12 }}
+            viewport={revealViewport}
           >
             {selectedWorks.map((work) => (
               <motion.article
@@ -173,20 +320,30 @@ export function HomePageView({
                   work.feature ? styles.workCardFeature : ""
                 } ${themeClassName(work.themeClass)}`}
                 variants={itemVariants}
-                whileHover={hoverLift}
+                whileHover={cardHover}
               >
                 <a href={work.href} target="_blank" rel="noreferrer">
                   <span className={styles.cardMeta}>{work.category}</span>
-                  <h3>{work.title}</h3>
+                  <h3>
+                    {work.feature && !reduceMotion ? (
+                      <span className="glitch-text" data-text={work.title}>
+                        {work.title}
+                      </span>
+                    ) : (
+                      work.title
+                    )}
+                  </h3>
                   <p className={styles.cardSubtitle}>{work.subtitle}</p>
                   <p>{work.summary}</p>
                 </a>
 
                 {work.highlights && (
                   <ul className={styles.highlights}>
-                    {work.highlights.slice(0, work.feature ? 4 : 2).map((line) => (
-                      <li key={line}>{line}</li>
-                    ))}
+                    {work.highlights
+                      .slice(0, work.feature ? 4 : 2)
+                      .map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
                   </ul>
                 )}
 
@@ -198,8 +355,11 @@ export function HomePageView({
                         href={channel.href}
                         target="_blank"
                         rel="noreferrer"
+                        data-status={channel.status ?? "live"}
                       >
+                        <i aria-hidden="true" />
                         {channel.label}
+                        {channel.status === "pending" ? "（申請中）" : ""}
                       </a>
                     ))}
                   </div>
@@ -215,13 +375,15 @@ export function HomePageView({
           </motion.div>
         </motion.section>
 
+        <MarqueeInterlude />
+
         <motion.section
           id="research"
           className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.16 }}
+          viewport={revealViewport}
         >
           <SectionHeader
             eyebrow="Research"
@@ -234,7 +396,7 @@ export function HomePageView({
             variants={groupVariants}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, amount: 0.12 }}
+            viewport={revealViewport}
           >
             {researchProjects.map((project) => {
               const artworkStyle = getArtworkStyle(getProjectArtwork(project));
@@ -246,7 +408,7 @@ export function HomePageView({
                     project.themeClass,
                   )}`}
                   variants={itemVariants}
-                  whileHover={hoverLift}
+                  whileHover={cardHover}
                 >
                   <Link href={`/research/${project.slug}`}>
                     <div className={styles.researchImageWrap} aria-hidden="true">
@@ -271,50 +433,67 @@ export function HomePageView({
           </motion.div>
         </motion.section>
 
+        {/* Sense → Decide → Share pipeline — restored axis flow */}
         <motion.section
-          className={`${styles.shell} ${styles.positioningSection}`}
+          className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.18 }}
+          viewport={revealViewport}
         >
-          <div className={styles.positioningCopy}>
-            <p>{positioning.label}</p>
-            <h2>{positioning.title}</h2>
-            <span>{positioning.thesisJa}</span>
-            <em>{positioning.thesisEn}</em>
-          </div>
+          <SectionHeader
+            eyebrow={siteAxis.label}
+            title="Sense → Decide → Share"
+            body={siteAxis.detail}
+          />
           <motion.div
-            className={styles.axisList}
+            className="axis-flow"
             variants={groupVariants}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, amount: 0.18 }}
+            viewport={revealViewport}
           >
-            {positioning.axes.map((axis) => (
-              <motion.article key={axis.key} variants={itemVariants}>
-                <div className={styles.axisTopline}>
-                  <strong>{axis.labelJa}</strong>
-                  <span>{axis.score}/10</span>
+            {siteAxis.steps.map((step, index) => (
+              <motion.article
+                key={step.en}
+                className="axis-step"
+                variants={itemVariants}
+                whileHover={cardHover}
+              >
+                <span className="axis-step-index">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="axis-step-heading">
+                  <strong>{step.en}</strong>
+                  <span>{step.ja}</span>
                 </div>
-                <div
-                  className={styles.axisTrack}
-                  aria-label={`${axis.labelJa} ${axis.score} out of 10`}
-                >
-                  <span style={{ width: `${axis.score * 10}%` }} />
-                </div>
-                <p>{axis.evidence}</p>
+                <p className="axis-step-copy">{step.description}</p>
               </motion.article>
             ))}
           </motion.div>
         </motion.section>
+
+        {/* Pentagon radar — restored interactive positioning */}
+        <div className={`${styles.shell} ${styles.section}`}>
+          <PositioningSection positioning={positioning} />
+        </div>
+
+        {/* Data room — restored impact dashboard as a night panel */}
+        <div className={`${styles.shell} ${styles.section}`}>
+          <ImpactDashboard
+            publications={publicationTimeline}
+            recognitions={recognitions}
+            research={researchProjects}
+            works={selectedWorks}
+          />
+        </div>
 
         <motion.section
           className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.16 }}
+          viewport={revealViewport}
         >
           <SectionHeader
             eyebrow="Recognition Archive"
@@ -322,69 +501,82 @@ export function HomePageView({
             body="研究記事、コンテスト、学会発表、セキュリティ育成プログラムまで、公開された実績を年表として追えるようにしています。"
           />
 
-          <div className={styles.archiveGrid}>
+          <motion.div
+            className={styles.archiveGrid}
+            variants={groupVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={revealViewport}
+          >
             <div className={styles.archiveColumn}>
               <h3>Articles</h3>
               {publicationTimeline.map((entry) => (
-                <a
+                <motion.a
                   key={entry.id}
                   className={styles.archiveItem}
                   href={entry.href}
                   target="_blank"
                   rel="noreferrer"
+                  variants={itemVariants}
                 >
                   <span>{entry.dateLabel}</span>
                   <strong>{entry.title}</strong>
                   <p>{entry.summary}</p>
-                </a>
+                </motion.a>
               ))}
             </div>
 
             <div className={styles.archiveColumn}>
               <h3>Awards</h3>
               {awardBadges.slice(0, 6).map((award) => (
-                <a
+                <motion.a
                   key={`${award.year}-${award.organization}-${award.award}`}
                   className={styles.archiveItem}
                   href={award.href}
                   target="_blank"
                   rel="noreferrer"
+                  variants={itemVariants}
                 >
                   <span>{award.year}</span>
                   <strong>{award.award}</strong>
                   <p>{award.organization}</p>
-                </a>
+                </motion.a>
               ))}
             </div>
-          </div>
+          </motion.div>
         </motion.section>
 
+        {/* Contact — night panel finale */}
         <motion.section
           id="contact"
           className={`${styles.shell} ${styles.contactSection}`}
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.18 }}
+          viewport={revealViewport}
         >
           <div className={styles.contactCopy}>
-            <p>{philosophy.label}</p>
+            <p>Contact — {philosophy.label}</p>
             <h2>{philosophy.title}</h2>
             <span>{philosophy.body}</span>
+            <em className={styles.contactHint}>
+              お仕事・研究のご相談は LinkedIn または GitHub からお気軽にどうぞ。
+            </em>
           </div>
 
           <div className={styles.platformGrid}>
             {platformLinks.map((platform) => (
-              <a
+              <motion.a
                 key={platform.label}
                 href={platform.href}
                 target="_blank"
                 rel="noreferrer"
+                whileHover={cardHover}
               >
                 <span>{platform.label}</span>
                 <strong>{platform.description}</strong>
                 <p>{platform.detail}</p>
-              </a>
+              </motion.a>
             ))}
           </div>
         </motion.section>

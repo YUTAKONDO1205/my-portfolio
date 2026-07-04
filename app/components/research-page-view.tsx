@@ -33,6 +33,13 @@ type ResearchPageViewProps = {
 const easeOutExpo = [0.22, 1, 0.36, 1] as const;
 const viewport = { once: true, amount: 0.22 } as const;
 
+/* Latin project names like "Eltres_CO2_Mapping" have no natural break
+   points — insert zero-width spaces after underscores so wrapping happens
+   there instead of orphaning a single character. */
+function softBreakTitle(title: string) {
+  return title.replace(/_/g, "_​");
+}
+
 const sectionVariants: Variants = {
   hidden: {
     opacity: 0,
@@ -266,7 +273,7 @@ export function ResearchPageView({
                     <p className="card-label card-label-inverse">
                       {project.heroKicker}
                     </p>
-                    <h3>{project.title}</h3>
+                    <h3>{softBreakTitle(project.title)}</h3>
                     <p className="project-preview-subtitle">
                       {project.subtitle}
                     </p>

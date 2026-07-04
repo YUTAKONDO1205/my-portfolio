@@ -1,6 +1,6 @@
 /* ============================================================
- * Awards Strip — social proof for hero overhaul
- * Premium dark-panel + gold accent treatment
+ * Awards Strip — social proof band under the dark hero
+ * Light "porcelain" band · white cards · brass gold accents
  * ============================================================ */
 
 .section {
@@ -8,13 +8,12 @@
   padding: 72px 32px;
   background:
     radial-gradient(
-      120% 80% at 50% -10%,
-      rgba(212, 175, 55, 0.06) 0%,
-      rgba(0, 0, 0, 0) 60%
+      120% 90% at 50% -20%,
+      rgba(217, 168, 63, 0.07) 0%,
+      rgba(217, 168, 63, 0) 60%
     ),
-    linear-gradient(180deg, #0c0b10 0%, #0a090d 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    var(--background);
+  border-bottom: 1px solid var(--line);
   overflow: hidden;
 }
 
@@ -32,13 +31,15 @@
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(212, 175, 55, 0.85);
-  font-weight: 500;
+  /* brass, darkened toward ink for AA at small sizes (fallback first) */
+  color: var(--accent);
+  color: color-mix(in srgb, var(--accent) 72%, var(--foreground));
+  font-weight: 600;
 }
 
 .count {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--muted);
   letter-spacing: 0.08em;
 }
 
@@ -52,7 +53,7 @@
   padding: 6px 2px 22px;
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
-  scrollbar-color: rgba(212, 175, 55, 0.3) transparent;
+  scrollbar-color: rgba(217, 168, 63, 0.75) rgba(20, 25, 38, 0.08);
   -webkit-overflow-scrolling: touch;
 }
 
@@ -60,11 +61,15 @@
   height: 6px;
 }
 .row::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(20, 25, 38, 0.08);
+  border-radius: 3px;
 }
 .row::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.25);
+  background: rgba(217, 168, 63, 0.75);
   border-radius: 3px;
+}
+.row::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-bright);
 }
 
 .card {
@@ -76,70 +81,67 @@
   flex: 0 0 240px;
   padding: 20px 22px 22px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
   text-decoration: none;
   color: inherit;
   scroll-snap-align: start;
   transition:
-    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 320ms ease,
-    box-shadow 320ms ease,
-    background 320ms ease;
+    border-color 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1);
   isolation: isolate;
   overflow: hidden;
 }
 
-/* gold top edge */
+/* brass top edge */
 .card::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 1px;
+  height: 2px;
   background: linear-gradient(
     90deg,
-    rgba(212, 175, 55, 0) 0%,
-    rgba(212, 175, 55, 0.55) 30%,
-    rgba(238, 207, 99, 0.9) 50%,
-    rgba(212, 175, 55, 0.55) 70%,
-    rgba(212, 175, 55, 0) 100%
+    rgba(217, 168, 63, 0) 0%,
+    rgba(217, 168, 63, 0.55) 30%,
+    rgba(217, 168, 63, 0.9) 50%,
+    rgba(217, 168, 63, 0.55) 70%,
+    rgba(217, 168, 63, 0) 100%
   );
-  opacity: 0.7;
-  transition: opacity 320ms ease;
+  opacity: 0.65;
+  transition: opacity 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* gold glow on hover */
+/* very subtle brass tint on hover */
 .card::after {
   content: "";
   position: absolute;
-  inset: -1px;
-  border-radius: 14px;
+  inset: 0;
+  border-radius: inherit;
   pointer-events: none;
-  background:
-    radial-gradient(
-      120% 60% at 50% -10%,
-      rgba(212, 175, 55, 0.18) 0%,
-      rgba(212, 175, 55, 0) 70%
-    );
+  background: radial-gradient(
+    120% 60% at 50% -10%,
+    rgba(217, 168, 63, 0.07) 0%,
+    rgba(217, 168, 63, 0) 70%
+  );
   opacity: 0;
-  transition: opacity 320ms ease;
+  transition: opacity 320ms cubic-bezier(0.22, 1, 0.36, 1);
   z-index: -1;
 }
 
 .card:hover,
 .card:focus-visible {
-  transform: translateY(-4px);
-  border-color: rgba(212, 175, 55, 0.35);
-  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(168, 123, 30, 0.45);
   box-shadow:
-    0 18px 40px -20px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(212, 175, 55, 0.15),
-    0 0 28px -6px rgba(212, 175, 55, 0.35);
-  outline: none;
+    var(--shadow-strong),
+    0 0 0 1px rgba(217, 168, 63, 0.2);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 .card:hover::before,
@@ -155,11 +157,12 @@
 .year {
   font-size: 34px;
   line-height: 1;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: -0.01em;
-  color: #f3e9c8;
+  /* fallback for non-clip browsers */
+  color: var(--accent);
   font-feature-settings: "tnum" 1;
-  background: linear-gradient(180deg, #f3e9c8 0%, #d4af37 100%);
+  background: linear-gradient(180deg, #d9a83f 0%, #a87b1e 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -171,7 +174,7 @@
   font-size: 10.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--muted);
 }
 
 .award {
@@ -179,7 +182,7 @@
   margin-top: 6px;
   font-size: 14px;
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--foreground);
   font-weight: 500;
   letter-spacing: 0.01em;
 }
@@ -193,21 +196,21 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(212, 175, 55, 0.08);
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  color: rgba(212, 175, 55, 0.9);
+  background: rgba(217, 168, 63, 0.12);
+  border: 1px solid rgba(168, 123, 30, 0.35);
+  color: var(--accent);
   font-size: 11px;
   line-height: 1;
   transition:
-    transform 320ms ease,
-    background 320ms ease;
-  opacity: 0.65;
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0.75;
 }
 
 .card:hover .arrow {
   transform: translate(2px, -2px);
   opacity: 1;
-  background: rgba(212, 175, 55, 0.18);
+  background: rgba(217, 168, 63, 0.22);
 }
 
 /* Mobile: wraps to grid */
@@ -246,13 +249,5 @@
 @media (max-width: 420px) {
   .row {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .card {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: rgba(14, 14, 20, 0.96);
   }
 }

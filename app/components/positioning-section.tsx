@@ -118,10 +118,13 @@ export function PositioningSection({ positioning }: PositioningSectionProps) {
 
   // Motion variants for entrance + evidence stagger.
   const headerVariants: Variants = {
-    hidden: reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 },
+    hidden: reduceMotion
+      ? { opacity: 1, y: 0 }
+      : { opacity: 0, y: 24, filter: "blur(10px)" },
     visible: {
       opacity: 1,
       y: 0,
+      filter: "blur(0px)",
       transition: reduceMotion
         ? { duration: 0 }
         : { duration: 0.7, ease: easeOutQuart },
@@ -129,10 +132,13 @@ export function PositioningSection({ positioning }: PositioningSectionProps) {
   };
 
   const radarVariants: Variants = {
-    hidden: reduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.96 },
+    hidden: reduceMotion
+      ? { opacity: 1 }
+      : { opacity: 0, scale: 0.96, filter: "blur(12px)" },
     visible: {
       opacity: 1,
       scale: 1,
+      filter: "blur(0px)",
       transition: reduceMotion
         ? { duration: 0 }
         : { duration: 0.9, ease: easeOutQuart, delay: 0.1 },
@@ -150,10 +156,13 @@ export function PositioningSection({ positioning }: PositioningSectionProps) {
   };
 
   const evidenceItemVariants: Variants = {
-    hidden: reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 16 },
+    hidden: reduceMotion
+      ? { opacity: 1, x: 0 }
+      : { opacity: 0, x: 16, filter: "blur(8px)" },
     visible: {
       opacity: 1,
       x: 0,
+      filter: "blur(0px)",
       transition: reduceMotion
         ? { duration: 0 }
         : { duration: 0.55, ease: easeOutQuart },
@@ -204,18 +213,8 @@ export function PositioningSection({ positioning }: PositioningSectionProps) {
                   x2="1"
                   y2="1"
                 >
-                  <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.55" />
-                  <stop offset="100%" stopColor="#ec4899" stopOpacity="0.45" />
-                </linearGradient>
-                <linearGradient
-                  id="positioning-primary-stroke"
-                  x1="0"
-                  y1="0"
-                  x2="1"
-                  y2="1"
-                >
-                  <stop offset="0%" stopColor="#a78bfa" />
-                  <stop offset="100%" stopColor="#ec4899" />
+                  <stop offset="0%" stopColor="#2e6b84" />
+                  <stop offset="100%" stopColor="#d9a83f" />
                 </linearGradient>
               </defs>
 

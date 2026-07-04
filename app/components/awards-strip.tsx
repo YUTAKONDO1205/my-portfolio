@@ -10,6 +10,11 @@ type AwardsStripProps = {
 
 const easeOutQuart = [0.22, 1, 0.36, 1] as const;
 
+const hoverLift = {
+  y: -6,
+  transition: { type: "spring", stiffness: 240, damping: 20 },
+} as const;
+
 export function AwardsStrip({ awards }: AwardsStripProps) {
   const reduceMotion = useReducedMotion();
 
@@ -65,6 +70,8 @@ export function AwardsStrip({ awards }: AwardsStripProps) {
             target="_blank"
             rel="noreferrer"
             variants={itemVariants}
+            whileHover={reduceMotion ? undefined : hoverLift}
+            whileFocus={reduceMotion ? undefined : hoverLift}
             aria-label={`${award.year} ${award.organization} ${award.award}`}
           >
             <span className={styles.year}>{award.year}</span>

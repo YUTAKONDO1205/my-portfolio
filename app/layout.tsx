@@ -6,6 +6,7 @@ import {
   Space_Grotesk,
 } from "next/font/google";
 import { LenisProvider } from "./components/lenis-provider";
+import { SiteMotionChrome } from "./components/site-motion";
 import {
   personName,
   siteDescription,
@@ -140,6 +141,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
+        <SiteMotionChrome />
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useEffectEvent, useRef } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   AnimatePresence,
@@ -19,9 +19,9 @@ function spawnBeam(container: HTMLElement) {
   const beam = document.createElement("span");
   beam.className = "site-beam-tracer";
 
-  const isRed = Math.random() < 0.45;
+  const isBrass = Math.random() < 0.45;
   const lengthVmax = 32 + Math.random() * 28; // 32 to 60vmax
-  const thickness = 4 + Math.random() * 3; // 4 to 7px
+  const thickness = 3 + Math.random() * 3; // 3 to 6px
   const duration = 5 + Math.random() * 3.5; // 5 to 8.5s — slow projectile feel
   const angle = Math.random() * 360;
 
@@ -33,9 +33,10 @@ function spawnBeam(container: HTMLElement) {
   const originX = 20 + Math.random() * 60;
   const originY = 20 + Math.random() * 60;
 
-  const headColor = isRed ? "255, 220, 230" : "200, 240, 255";
-  const tailColor = isRed ? "255, 130, 150" : "122, 215, 255";
-  const glowColor = isRed ? "255, 91, 118" : "122, 215, 255";
+  // Light-stage tracers: tinted ink streaks (brass / steel), no white head.
+  const headColor = isBrass ? "168, 123, 30" : "46, 107, 132";
+  const tailColor = isBrass ? "217, 168, 63" : "95, 178, 201";
+  const glowColor = isBrass ? "217, 168, 63" : "95, 178, 201";
 
   beam.style.cssText = `
     position: absolute;
@@ -47,14 +48,14 @@ function spawnBeam(container: HTMLElement) {
     background: linear-gradient(
       to right,
       transparent 0%,
-      rgba(${tailColor}, 0.18) 60%,
-      rgba(${headColor}, 0.55) 92%,
-      rgba(255, 255, 255, 0.7) 100%
+      rgba(${tailColor}, 0.14) 60%,
+      rgba(${headColor}, 0.34) 96%,
+      rgba(${headColor}, 0.4) 100%
     );
-    filter: blur(3.6px);
+    filter: blur(3.2px);
     box-shadow:
-      0 0 32px rgba(${glowColor}, 0.4),
-      0 0 96px rgba(${glowColor}, 0.18);
+      0 0 28px rgba(${glowColor}, 0.22),
+      0 0 80px rgba(${glowColor}, 0.1);
     opacity: 0;
     pointer-events: none;
     will-change: transform, opacity;
@@ -71,6 +72,9 @@ function spawnBeam(container: HTMLElement) {
 export function SiteMotionChrome() {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
+  // useReducedMotion() is null during SSR, so branching markup on it directly
+  // mismatches at hydration for reduced-motion visitors — gate on mount.
+  const [mounted, setMounted] = useState(false);
   const beamContainerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll();
   const progressScale = useSpring(scrollYProgress, {
@@ -94,9 +98,9 @@ export function SiteMotionChrome() {
 
   const pointerAura = useMotionTemplate`radial-gradient(
     320px circle at ${springPointerX}px ${springPointerY}px,
-    rgba(196, 67, 92, 0.18) 0%,
-    rgba(80, 120, 172, 0.1) 28%,
-    rgba(16, 18, 22, 0) 74%
+    rgba(217, 168, 63, 0.1) 0%,
+    rgba(46, 107, 132, 0.07) 28%,
+    rgba(236, 239, 243, 0) 74%
   )`;
 
   const updatePointer = useEffectEvent((event: PointerEvent) => {
@@ -108,6 +112,10 @@ export function SiteMotionChrome() {
     pointerX.set(-280);
     pointerY.set(-280);
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (reduceMotion) {
@@ -133,8 +141,9 @@ export function SiteMotionChrome() {
 
   // Random beam spawner — fires tracers at random intervals with random
   // direction, color, length, speed. Each beam removes itself on animationend.
+  // `mounted` is a dep because the container div only renders post-mount.
   useEffect(() => {
-    if (reduceMotion) return;
+    if (!mounted || reduceMotion) return;
     const container = beamContainerRef.current;
     if (!container) return;
 
@@ -164,7 +173,7 @@ export function SiteMotionChrome() {
         style={{ scaleX: progressScale }}
       />
 
-      {!reduceMotion && (
+      {mounted && !reduceMotion && (
         <>
           <motion.div className="site-pointer-aura" style={{ background: pointerAura }} />
           <div
