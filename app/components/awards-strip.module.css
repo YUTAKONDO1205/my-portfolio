@@ -4,20 +4,99 @@
  * ============================================================ */
 
 .section {
+  --dawn-h: clamp(190px, 24vh, 320px);
   position: relative;
-  padding: 72px 32px;
+  /* top padding clears the dawn seam so content lands on porcelain */
+  padding: calc(var(--dawn-h) + 30px) 32px 76px;
   background:
     radial-gradient(
-      120% 90% at 50% -20%,
-      rgba(217, 168, 63, 0.07) 0%,
+      120% 70% at 50% 30%,
+      rgba(217, 168, 63, 0.06) 0%,
       rgba(217, 168, 63, 0) 60%
     ),
     var(--background);
-  border-bottom: 1px solid var(--line);
   overflow: hidden;
 }
 
+/* ---- dawn: night → porcelain melt that continues the hero field ---- */
+.dawn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--dawn-h);
+  z-index: 0;
+  pointer-events: none;
+  /* luminance ramp kept slightly blue so the melt never turns muddy gray;
+     top is pure --night to seam invisibly with the hero's dark bottom */
+  background:
+    radial-gradient(
+      72% 128% at 26% -8%,
+      rgba(127, 212, 255, 0.16),
+      transparent 60%
+    ),
+    radial-gradient(
+      60% 120% at 78% -6%,
+      rgba(255, 210, 122, 0.12),
+      transparent 58%
+    ),
+    linear-gradient(
+      180deg,
+      var(--night) 0%,
+      #0d1524 12%,
+      #182234 34%,
+      #303b52 54%,
+      #5c6578 70%,
+      #9aa2b2 84%,
+      #c7cdd6 93%,
+      var(--background) 100%
+    );
+}
+
+/* faint luminous horizon line — an echo of the hero's signal streams
+   depositing into the light */
+.horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 60%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(127, 212, 255, 0.55) 28%,
+    rgba(238, 242, 248, 0.7) 50%,
+    rgba(255, 210, 122, 0.55) 72%,
+    transparent 100%
+  );
+  height: 1.5px;
+  opacity: 0.72;
+  filter: blur(0.3px);
+  box-shadow:
+    0 0 10px rgba(238, 242, 248, 0.35),
+    0 0 30px rgba(127, 212, 255, 0.4);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .horizon {
+    animation: horizonPulse 9s ease-in-out infinite;
+  }
+}
+
+@keyframes horizonPulse {
+  0%,
+  100% {
+    opacity: 0.58;
+    transform: translateY(0.5px);
+  }
+  50% {
+    opacity: 0.82;
+    transform: translateY(-1.5px);
+  }
+}
+
 .header {
+  position: relative;
+  z-index: 1;
   max-width: 1200px;
   margin: 0 auto 32px;
   display: flex;
@@ -44,6 +123,8 @@
 }
 
 .row {
+  position: relative;
+  z-index: 1;
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -76,10 +157,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   min-width: 240px;
   flex: 0 0 240px;
-  padding: 20px 22px 22px;
+  padding: 22px 22px 22px;
   border-radius: 14px;
   background: var(--card);
   border: 1px solid var(--line);
@@ -154,37 +235,49 @@
   opacity: 1;
 }
 
-.year {
-  font-size: 34px;
-  line-height: 1;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  /* fallback for non-clip browsers */
-  color: var(--accent);
-  font-feature-settings: "tnum" 1;
-  background: linear-gradient(180deg, #d9a83f 0%, #a87b1e 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* MAIN — the award name, promoted to the headline of the card */
+.award {
+  display: block;
+  font-size: 19px;
+  line-height: 1.32;
+  color: var(--foreground);
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  /* keep long names to a tidy block; ellipsis the overflow */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding-right: 20px;
 }
 
 .organization {
   display: block;
-  margin-top: 12px;
-  font-size: 10.5px;
-  letter-spacing: 0.18em;
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
-.award {
-  display: block;
-  margin-top: 6px;
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--foreground);
-  font-weight: 500;
-  letter-spacing: 0.01em;
+/* SECONDARY — the year, demoted to a small brass label at the card foot */
+.year {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(168, 123, 30, 0.28);
+  background: rgba(217, 168, 63, 0.09);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  font-feature-settings: "tnum" 1;
+  /* fallback for non-clip browsers */
+  color: var(--accent);
+  background-clip: padding-box;
 }
 
 .arrow {
@@ -216,7 +309,8 @@
 /* Mobile: wraps to grid */
 @media (max-width: 768px) {
   .section {
-    padding: 56px 20px;
+    --dawn-h: clamp(150px, 30vh, 240px);
+    padding: calc(var(--dawn-h) + 24px) 20px 56px;
   }
 
   .row {
@@ -233,12 +327,13 @@
     padding: 16px 16px 18px;
   }
 
-  .year {
-    font-size: 28px;
+  .award {
+    font-size: 16px;
   }
 
-  .award {
-    font-size: 13px;
+  .year {
+    font-size: 11px;
+    margin-top: 12px;
   }
 
   .organization {

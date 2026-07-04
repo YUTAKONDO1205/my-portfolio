@@ -46,6 +46,12 @@ export function AwardsStrip({ awards }: AwardsStripProps) {
 
   return (
     <section className={styles.section} aria-labelledby="awards-strip-heading">
+      {/* Dawn seam — the night hero dissolves into the porcelain band so the
+          two surfaces read as one continuous field rather than a hard cut. */}
+      <div className={styles.dawn} aria-hidden="true">
+        <span className={styles.horizon} />
+      </div>
+
       <div className={styles.header}>
         <span id="awards-strip-heading" className={styles.eyebrow}>
           Recognition · 実績
@@ -74,9 +80,9 @@ export function AwardsStrip({ awards }: AwardsStripProps) {
             whileFocus={reduceMotion ? undefined : hoverLift}
             aria-label={`${award.year} ${award.organization} ${award.award}`}
           >
-            <span className={styles.year}>{award.year}</span>
-            <span className={styles.organization}>{award.organization}</span>
             <span className={styles.award}>{award.award}</span>
+            <span className={styles.organization}>{award.organization}</span>
+            <span className={styles.year}>{award.year}</span>
             <span aria-hidden="true" className={styles.arrow}>
               ↗
             </span>

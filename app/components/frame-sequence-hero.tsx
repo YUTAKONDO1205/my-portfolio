@@ -10,7 +10,7 @@ import {
   useTransform,
   type MotionValue,
 } from "motion/react";
-import { heroCopyV2 } from "../portfolio-data";
+import { awardPrizeCount, heroCopyV2 } from "../portfolio-data";
 import styles from "./frame-sequence-hero.module.css";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
@@ -526,8 +526,8 @@ function SignalHero() {
           <p className={styles.lead}>{heroCopyV2.subJa}</p>
           <div className={styles.tileRow}>
             <div className={styles.tile}>
-              <strong>6+</strong>
-              <span>受賞・採択</span>
+              <strong>{awardPrizeCount}</strong>
+              <span>受賞</span>
             </div>
             <div className={styles.tile}>
               <strong>4</strong>

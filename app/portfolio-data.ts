@@ -708,6 +708,9 @@ export type AwardBadge = {
   organization: string;
   award: string;
   href: string;
+  /** Distinguishes actual prizes (受賞) from selections/presentations so the
+      "受賞 N 件" headline stays consistent across the site. Omitted = award. */
+  kind?: "award" | "selection" | "presentation";
 };
 
 export const awardBadges: readonly AwardBadge[] = [
@@ -722,12 +725,14 @@ export const awardBadges: readonly AwardBadge[] = [
     organization: "SecHack365",
     award: "'26 トレーニー採択",
     href: "https://sechack365.nict.go.jp/",
+    kind: "selection",
   },
   {
     year: "2025",
     organization: "IEEJ C部門大会",
     award: "学生ポスター発表",
     href: "https://www.iee.jp/blog/c-taikai-2025/",
+    kind: "presentation",
   },
   {
     year: "2025",
@@ -760,6 +765,15 @@ export const awardBadges: readonly AwardBadge[] = [
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
 ] as const;
+
+/** True for an actual prize (受賞) — excludes selections (採択) / presentations
+    (発表). Single source of truth for the "受賞 N 件" count across the site. */
+export function isAwardPrize(badge: AwardBadge): boolean {
+  return badge.kind === undefined || badge.kind === "award";
+}
+
+/** Canonical 受賞 count (currently 6). Use this everywhere "受賞 N 件" appears. */
+export const awardPrizeCount = awardBadges.filter(isAwardPrize).length;
 
 // ============================================================================
 // Positioning radar — competitor-teardown derived

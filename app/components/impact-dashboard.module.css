@@ -24,6 +24,9 @@
   --c-pdm: #f0c15d;
   --c-anomaly: #ff7b7b;
   --c-eltres: #8fd7cb;
+  /* dedicated 'articles' hue for the cadence chart — a desaturated steel kept
+     distinct from --c-drone so it never reads as the Image+IMU modality */
+  --c-article: #8ea3c4;
 
   position: relative;
   width: 100%;
@@ -44,6 +47,7 @@
     linear-gradient(158deg, #131b31 0%, var(--night) 52%, #080c15 100%);
   box-shadow:
     var(--shadow-strong),
+    0 60px 150px -70px rgba(11, 16, 28, 0.6),
     inset 0 1px 0 rgba(238, 242, 248, 0.06);
   padding: clamp(44px, 6vw, 84px) clamp(24px, 5vw, 64px);
   color: var(--night-text);
@@ -122,110 +126,146 @@
   margin: 0;
 }
 
-/* ---------- Viz A: Output Cadence Timeline ---------- */
+/* ---------- Viz A: Output Cadence (stacked columns) ---------- */
 .vizA {
   grid-column: span 7;
   min-height: 280px;
 }
 
-.timelineWrap {
+.cadenceWrap {
   position: relative;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.timelineSvg {
+.cadenceSvg {
   display: block;
   width: 100%;
   height: auto;
   overflow: visible;
 }
 
-.yearLabel {
-  fill: var(--night-muted);
-  font-family: var(--font-mono-stack);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  font-variant-numeric: tabular-nums;
-}
-
-.yearRule {
+.cadenceGrid {
   stroke: var(--night-line);
   stroke-width: 1;
+  stroke-dasharray: 2 5;
 }
 
-.dot {
-  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.dotDrone { fill: var(--c-drone); }
-.dotPdm { fill: var(--c-pdm); }
-.dotAnomaly { fill: var(--c-anomaly); }
-.dotEltres { fill: var(--c-eltres); }
-.dotNeutral { fill: var(--night-muted-soft); }
-
-.awardRing {
-  fill: none;
-  stroke: var(--signal-gold);
+.cadenceBaseline {
+  stroke: var(--night-line-strong);
   stroke-width: 1.5;
 }
 
-.chevron {
-  fill: var(--signal-gold);
-}
-
-.annotation {
-  fill: var(--signal-gold);
-  font-size: 11px;
-  letter-spacing: 0.05em;
-  font-weight: 400;
-}
-
-.annotationPointer {
-  stroke: var(--signal-gold);
-  stroke-width: 0.75;
-  fill: none;
-  opacity: 0.7;
-}
-
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 18px;
-  margin-top: 12px;
-}
-
-.legendItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--night-muted);
-  letter-spacing: 0.04em;
-}
-
-.legendSwatch {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-.legendSwatch.drone { background: var(--c-drone); }
-.legendSwatch.pdm { background: var(--c-pdm); }
-.legendSwatch.anomaly { background: var(--c-anomaly); }
-.legendSwatch.eltres { background: var(--c-eltres); }
-
-.legendRing {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1.5px solid var(--signal-gold);
-}
-
-.vizCaption {
+.cadenceAxisLabel {
+  fill: var(--night-muted-soft);
   font-family: var(--font-mono-stack);
   font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cadenceYearLabel {
+  fill: var(--night-muted);
+  font-family: var(--font-mono-stack);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cadenceTotalLabel {
+  fill: var(--night-text);
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.barArticle {
+  fill: var(--c-article);
+}
+
+.barAward {
+  fill: var(--signal-gold);
+}
+
+/* in-progress (YTD) year — lighter, hatched so a partial year does not read
+   as a decline against completed years */
+.barArticleYtd {
+  fill: var(--c-article);
+  opacity: 0.4;
+}
+
+.barAwardYtd {
+  fill: var(--signal-gold);
+  opacity: 0.42;
+}
+
+.barYtdOutline {
+  fill: none;
+  stroke: var(--night-line-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.cadenceYtdTag {
+  fill: var(--night-muted-soft);
+  font-family: var(--font-mono-stack);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+}
+
+.cadenceFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.cadenceLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.cadenceLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--night-muted);
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cadenceSwatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.swatchArticle {
+  background: var(--c-article);
+}
+
+.swatchAward {
+  background: var(--signal-gold);
+}
+
+.cadenceCumulative {
+  font-size: 12px;
   color: var(--night-muted-soft);
-  margin-top: 4px;
   letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cadenceCumulative strong {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--signal-cyan);
+  margin: 0 2px;
 }
 
 /* ---------- Viz B: Modality Coverage ---------- */
@@ -417,11 +457,5 @@
 
   .ban {
     font-size: 72px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .dot {
-    transition: none;
   }
 }

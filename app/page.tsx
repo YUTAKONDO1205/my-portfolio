@@ -5,7 +5,6 @@ import {
   platformLinks,
   positioning,
   publicationTimeline,
-  recognitions,
   researchProjects,
   selectedWorks,
   siteAxis,
@@ -18,7 +17,6 @@ export default function Home() {
       platformLinks={platformLinks}
       positioning={positioning}
       publicationTimeline={publicationTimeline}
-      recognitions={recognitions}
       researchProjects={researchProjects}
       selectedWorks={selectedWorks}
       siteAxis={siteAxis}

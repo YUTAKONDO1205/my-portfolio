@@ -2,46 +2,59 @@
 
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import type {
+  AwardBadge,
   PublicationEntry,
-  Recognition,
   ResearchProject,
   SelectedWork,
 } from "../portfolio-data";
+import { isAwardPrize } from "../portfolio-data";
 import {
   getModalityCounts,
-  getPublicationThemeClass,
-  getYearBuckets,
   type ModalityThemeClass,
 } from "../lib/impact-metrics";
 import styles from "./impact-dashboard.module.css";
 
 export type ImpactDashboardProps = {
   publications: readonly PublicationEntry[];
-  recognitions: readonly Recognition[];
+  /** Full recognition badges; the "受賞" count uses only actual prizes. */
+  awards: readonly AwardBadge[];
   research: readonly ResearchProject[];
   works: readonly SelectedWork[];
 };
 
-const SLOTS_PER_YEAR = 8;
-const TIMELINE_PADDING_X = 64;
-const TIMELINE_ROW_HEIGHT = 56;
-const TIMELINE_TOP = 24;
-const DOT_RADIUS = 6;
-const RING_RADIUS = 8;
+/* ---- Cadence column-chart geometry (Viz A) ---- */
+const CAD_W = 480;
+const CAD_H = 258;
+const CAD_PAD_L = 30;
+const CAD_PAD_R = 14;
+const CAD_PAD_T = 28;
+const CAD_PAD_B = 44;
+const CAD_PLOT_X0 = CAD_PAD_L;
+const CAD_PLOT_X1 = CAD_W - CAD_PAD_R;
+const CAD_BASELINE = CAD_H - CAD_PAD_B;
+const CAD_PLOT_TOP = CAD_PAD_T;
+const CAD_PLOT_H = CAD_BASELINE - CAD_PLOT_TOP;
 
-function dotClassFor(themeClass: ModalityThemeClass | null): string {
-  switch (themeClass) {
-    case "theme-drone":
-      return styles.dotDrone;
-    case "theme-pdm":
-      return styles.dotPdm;
-    case "theme-anomaly":
-      return styles.dotAnomaly;
-    case "theme-eltres":
-      return styles.dotEltres;
-    default:
-      return styles.dotNeutral;
-  }
+function niceMax(v: number): number {
+  if (v <= 4) return 4;
+  if (v <= 6) return 6;
+  return Math.ceil(v / 2) * 2;
+}
+
+/* A bar segment with only its TOP corners rounded and a flush square bottom —
+   lets stacked segments sit seamlessly and the column foot stay flat on the
+   baseline (no rounded-corner notch), for any articles/awards combination. */
+function roundedTopBar(
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  radius: number,
+): string {
+  const r = Math.max(0, Math.min(radius, w / 2, h));
+  return `M ${x} ${y + h} L ${x} ${y + r} Q ${x} ${y} ${x + r} ${y} L ${
+    x + w - r
+  } ${y} Q ${x + w} ${y} ${x + w} ${y + r} L ${x + w} ${y + h} Z`;
 }
 
 function modalityColorClass(themeClass: ModalityThemeClass): string {
@@ -59,13 +72,12 @@ function modalityColorClass(themeClass: ModalityThemeClass): string {
 
 export function ImpactDashboard({
   publications,
-  recognitions,
+  awards,
   research,
   works,
 }: ImpactDashboardProps) {
   const reduceMotion = useReducedMotion();
 
-  const yearBuckets = getYearBuckets(publications, recognitions);
   const modalityCounts = getModalityCounts(research, publications, works);
 
   const maxArtifacts = Math.max(
@@ -76,22 +88,35 @@ export function ImpactDashboard({
   const featuredWork = works.find((w) => w.feature);
   const channels = featuredWork?.distribution ?? [];
 
-  const rowCount = Math.max(yearBuckets.length, 1);
-  const svgHeight = TIMELINE_TOP + rowCount * TIMELINE_ROW_HEIGHT + 32;
-  const svgWidth = 600;
-  const trackStart = TIMELINE_PADDING_X;
-  const trackEnd = svgWidth - 28;
-  const trackWidth = trackEnd - trackStart;
-  const slotStep = trackWidth / SLOTS_PER_YEAR;
-
-  // Annotation: find year with most awards (defensible "headline").
-  const annotatedBucket = yearBuckets.reduce<typeof yearBuckets[number] | null>(
-    (best, bucket) => {
-      if (!best) return bucket.awards.length > 0 ? bucket : null;
-      return bucket.awards.length > best.awards.length ? bucket : best;
-    },
-    null,
+  // ---- Cadence chart: per-year stacked columns (記事 + 受賞) ----
+  // "受賞" counts actual prizes only (excludes 採択 / 発表), so the chart and the
+  // headline "受賞 N 件" agree everywhere on the site.
+  const prizeBadges = awards.filter(isAwardPrize);
+  const cadenceYears = Array.from(
+    new Set([
+      ...publications.map((p) => p.date.slice(0, 4)),
+      ...prizeBadges.map((a) => a.year),
+    ]),
+  ).sort();
+  const cadence = cadenceYears.map((year) => {
+    const articles = publications.filter(
+      (p) => p.date.slice(0, 4) === year,
+    ).length;
+    const yearAwards = prizeBadges.filter((a) => a.year === year).length;
+    return { year, articles, awards: yearAwards, total: articles + yearAwards };
+  });
+  const cadenceMax = niceMax(Math.max(1, ...cadence.map((c) => c.total)));
+  const cadenceUnit = CAD_PLOT_H / cadenceMax;
+  const cadenceBand = (CAD_PLOT_X1 - CAD_PLOT_X0) / Math.max(cadence.length, 1);
+  const cadenceColW = Math.min(74, cadenceBand * 0.52);
+  const cadenceTicks = Array.from(
+    { length: cadenceMax / 2 + 1 },
+    (_, i) => i * 2,
   );
+  const cumulativeTotal = cadence.reduce((sum, c) => sum + c.total, 0);
+  // The most recent year is still in progress (partial / YTD), so mark it —
+  // otherwise a shorter latest column reads as a decline in output pace.
+  const currentYear = String(new Date().getFullYear());
 
   const fadeUp: Variants = reduceMotion
     ? {
@@ -114,7 +139,7 @@ export function ImpactDashboard({
         visible: { transition: { staggerChildren: 0.08 } },
       };
 
-  const totalAwards = recognitions.length;
+  const totalAwards = prizeBadges.length;
   const totalPublications = publications.length;
 
   return (
@@ -138,7 +163,7 @@ export function ImpactDashboard({
       </motion.p>
 
       <div className={styles.grid}>
-        {/* Viz A — Output Cadence Timeline */}
+        {/* Viz A — Output Cadence (per-year stacked columns) */}
         <motion.article
           className={`${styles.tile} ${styles.vizA}`}
           variants={fadeUp}
@@ -146,131 +171,174 @@ export function ImpactDashboard({
           <header className={styles.tileHeader}>
             <h3 className={styles.tileTitle}>制作のペース</h3>
             <p className={styles.tileSubtitle}>
-              年ごとの公開、{yearBuckets.length} 年連続
+              記事と受賞を、{cadence.length} 年連続で積み上げ
             </p>
           </header>
 
-          <div className={styles.timelineWrap}>
+          <div className={styles.cadenceWrap}>
             <svg
-              className={styles.timelineSvg}
-              viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+              className={styles.cadenceSvg}
+              viewBox={`0 0 ${CAD_W} ${CAD_H}`}
               role="img"
-              aria-label={`Timeline of ${totalPublications} publications across ${yearBuckets.length} years`}
+              aria-label={`年別の公開実績。${cadence
+                .map(
+                  (c) => `${c.year}年 記事${c.articles}本・受賞${c.awards}件`,
+                )
+                .join("、")}。累計 ${cumulativeTotal} 件。`}
             >
-              {yearBuckets.map((bucket, rowIdx) => {
-                const y = TIMELINE_TOP + rowIdx * TIMELINE_ROW_HEIGHT + 18;
-                const chevronCount = bucket.awards.length;
-                const chevronStartX = trackEnd + 6;
-
+              {/* horizontal gridlines + y scale */}
+              {cadenceTicks.map((tick) => {
+                const y = CAD_BASELINE - tick * cadenceUnit;
                 return (
-                  <g key={bucket.year}>
-                    <text className={styles.yearLabel} x={12} y={y + 4}>
-                      {bucket.year}
-                    </text>
+                  <g key={`grid-${tick}`}>
                     <line
-                      className={styles.yearRule}
-                      x1={trackStart}
-                      x2={trackEnd}
+                      className={
+                        tick === 0 ? styles.cadenceBaseline : styles.cadenceGrid
+                      }
+                      x1={CAD_PLOT_X0}
+                      x2={CAD_PLOT_X1}
                       y1={y}
                       y2={y}
                     />
-                    {bucket.publications.map((pub, idx) => {
-                      const cx = trackStart + slotStep * (idx + 0.5);
-                      const themeClass = getPublicationThemeClass(pub);
-                      const hasAward = pub.awards.length > 0;
-                      return (
-                        <g key={pub.id}>
-                          {hasAward && (
-                            <circle
-                              className={styles.awardRing}
-                              cx={cx}
-                              cy={y}
-                              r={RING_RADIUS}
-                            />
-                          )}
-                          <circle
-                            className={`${styles.dot} ${dotClassFor(themeClass)}`}
-                            cx={cx}
-                            cy={y}
-                            r={DOT_RADIUS}
-                          >
-                            <title>{`${pub.dateLabel} · ${pub.title}`}</title>
-                          </circle>
-                        </g>
-                      );
-                    })}
-                    {Array.from({ length: chevronCount }).map((_, i) => {
-                      // Chevrons placed in a small cluster to the right of the year track.
-                      const cx = chevronStartX + i * 9;
-                      return (
-                        <polygon
-                          key={`${bucket.year}-chev-${i}`}
-                          className={styles.chevron}
-                          points={`${cx},${y - 4} ${cx + 4},${y + 3} ${cx - 4},${y + 3}`}
-                        />
-                      );
-                    })}
+                    <text
+                      className={styles.cadenceAxisLabel}
+                      x={CAD_PLOT_X0 - 8}
+                      y={y + 3}
+                      textAnchor="end"
+                    >
+                      {tick}
+                    </text>
                   </g>
                 );
               })}
 
-              {annotatedBucket && annotatedBucket.awards.length > 0 && (
-                <g>
-                  {(() => {
-                    const rowIdx = yearBuckets.findIndex(
-                      (b) => b.year === annotatedBucket.year,
-                    );
-                    const y =
-                      TIMELINE_TOP + rowIdx * TIMELINE_ROW_HEIGHT + 18;
-                    const chevronX = trackEnd + 6;
-                    const labelX = trackEnd - 60;
-                    const labelY = y - 16;
-                    return (
-                      <>
-                        <path
-                          className={styles.annotationPointer}
-                          d={`M ${chevronX} ${y - 4} C ${chevronX - 20} ${y - 14}, ${labelX + 90} ${labelY + 4}, ${labelX + 70} ${labelY + 2}`}
+              {/* per-year stacked columns */}
+              {cadence.map((c, i) => {
+                const cx = CAD_PLOT_X0 + cadenceBand * (i + 0.5);
+                const x = cx - cadenceColW / 2;
+                const artH = c.articles * cadenceUnit;
+                const awdH = c.awards * cadenceUnit;
+                const artY = CAD_BASELINE - artH;
+                const awdY = artY - awdH;
+                const totalY = CAD_BASELINE - c.total * cadenceUnit;
+                const r = Math.min(7, cadenceColW / 2);
+                const ytd = c.year === currentYear;
+                const artClass = ytd ? styles.barArticleYtd : styles.barArticle;
+                const awdClass = ytd ? styles.barAwardYtd : styles.barAward;
+
+                return (
+                  <motion.g
+                    key={c.year}
+                    style={{
+                      transformBox: "fill-box",
+                      transformOrigin: "center bottom",
+                    }}
+                    initial={reduceMotion ? { scaleY: 1 } : { scaleY: 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    viewport={{ once: true, amount: 0.4 }}
+                    transition={{
+                      duration: reduceMotion ? 0 : 0.75,
+                      ease: [0.22, 1, 0.36, 1],
+                      delay: reduceMotion ? 0 : 0.1 + i * 0.12,
+                    }}
+                  >
+                    {/* articles (base): square, flush on baseline. Rounded top
+                        only when it is the topmost (no awards above it). */}
+                    {c.articles > 0 &&
+                      (c.awards > 0 ? (
+                        <rect
+                          className={artClass}
+                          x={x}
+                          y={artY}
+                          width={cadenceColW}
+                          height={artH}
                         />
-                        <text
-                          className={styles.annotation}
-                          x={labelX}
-                          y={labelY}
-                          textAnchor="end"
-                        >
-                          {`${annotatedBucket.year}年に受賞 ${annotatedBucket.awards.length} 件`}
-                        </text>
-                      </>
-                    );
-                  })()}
-                </g>
-              )}
+                      ) : (
+                        <path
+                          className={artClass}
+                          d={roundedTopBar(x, artY, cadenceColW, artH, r)}
+                        />
+                      ))}
+                    {/* awards (top): rounded top, flush square bottom */}
+                    {c.awards > 0 && (
+                      <path
+                        className={awdClass}
+                        d={roundedTopBar(x, awdY, cadenceColW, awdH, r)}
+                      />
+                    )}
+                    {/* in-progress year: dashed outline of the full column */}
+                    {ytd && c.total > 0 && (
+                      <path
+                        className={styles.barYtdOutline}
+                        d={roundedTopBar(
+                          x,
+                          totalY,
+                          cadenceColW,
+                          c.total * cadenceUnit,
+                          r,
+                        )}
+                      />
+                    )}
+                    {/* total label above column */}
+                    <text
+                      className={styles.cadenceTotalLabel}
+                      x={cx}
+                      y={totalY - 8}
+                      textAnchor="middle"
+                    >
+                      {c.total}
+                    </text>
+                  </motion.g>
+                );
+              })}
+
+              {/* year labels (+ in-progress tag on the current year) */}
+              {cadence.map((c, i) => {
+                const cx = CAD_PLOT_X0 + cadenceBand * (i + 0.5);
+                return (
+                  <g key={`yl-${c.year}`}>
+                    <text
+                      className={styles.cadenceYearLabel}
+                      x={cx}
+                      y={CAD_BASELINE + 22}
+                      textAnchor="middle"
+                    >
+                      {c.year}
+                    </text>
+                    {c.year === currentYear && (
+                      <text
+                        className={styles.cadenceYtdTag}
+                        x={cx}
+                        y={CAD_BASELINE + 37}
+                        textAnchor="middle"
+                      >
+                        進行中
+                      </text>
+                    )}
+                  </g>
+                );
+              })}
             </svg>
 
-            <div className={styles.legend} aria-hidden>
-              <span className={styles.legendItem}>
-                <span className={`${styles.legendSwatch} ${styles.drone}`} />
-                画像 + IMU
-              </span>
-              <span className={styles.legendItem}>
-                <span className={`${styles.legendSwatch} ${styles.pdm}`} />
-                振動 + 音響
-              </span>
-              <span className={styles.legendItem}>
-                <span className={`${styles.legendSwatch} ${styles.anomaly}`} />
-                画像 + 運用
-              </span>
-              <span className={styles.legendItem}>
-                <span className={`${styles.legendSwatch} ${styles.eltres}`} />
-                CO2 + GPS
-              </span>
-              <span className={styles.legendItem}>
-                <span className={styles.legendRing} />
-                受賞作品
+            <div className={styles.cadenceFooter}>
+              <div className={styles.cadenceLegend} aria-hidden>
+                <span className={styles.cadenceLegendItem}>
+                  <span
+                    className={`${styles.cadenceSwatch} ${styles.swatchArticle}`}
+                  />
+                  記事 {totalPublications}
+                </span>
+                <span className={styles.cadenceLegendItem}>
+                  <span
+                    className={`${styles.cadenceSwatch} ${styles.swatchAward}`}
+                  />
+                  受賞 {totalAwards}
+                </span>
+              </div>
+              <span className={styles.cadenceCumulative}>
+                累計 <strong>{cumulativeTotal}</strong> 件
               </span>
             </div>
-            <p className={styles.vizCaption}>
-              記事 {totalPublications} 本 · 受賞 {totalAwards} 件
-            </p>
           </div>
         </motion.article>
 

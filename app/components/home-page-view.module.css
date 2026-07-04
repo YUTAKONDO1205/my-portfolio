@@ -20,6 +20,82 @@
   padding-top: 96px;
 }
 
+/* ---------- night-panel seat ----------
+   Impact & Contact are dark surfaces floating on porcelain. Without help they
+   "pop in" as hard rectangles. This bleeds a soft cool halo — carrying the
+   hero's cyan/gold signal palette — onto the porcelain around each panel, so
+   the light surface cools toward the panel and the two read as one field. */
+.nightSeat {
+  position: relative;
+}
+
+/* wide cool pool the porcelain sinks into as it approaches the panel */
+.nightSeat::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -128px -12vw;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      56% 58% at 30% 28%,
+      rgba(127, 212, 255, 0.11),
+      transparent 66%
+    ),
+    radial-gradient(
+      54% 56% at 74% 74%,
+      rgba(255, 210, 122, 0.085),
+      transparent 64%
+    ),
+    radial-gradient(
+      72% 74% at 50% 50%,
+      rgba(13, 19, 36, 0.24),
+      transparent 72%
+    );
+  filter: blur(50px);
+}
+
+/* vertical bridge: the porcelain directly above & below the panel darkens
+   toward the panel edge so the dark surface rises out of the light rather than
+   being pasted on. Hidden behind the opaque panel; only the lead-in/out show. */
+.nightSeat::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -12vw;
+  right: -12vw;
+  top: -104px;
+  bottom: -104px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(13, 19, 36, 0.16) 20%,
+    rgba(13, 19, 36, 0.26) 44%,
+    rgba(13, 19, 36, 0.26) 56%,
+    rgba(13, 19, 36, 0.16) 80%,
+    transparent 100%
+  );
+  filter: blur(26px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nightSeat::before {
+    /* very slow ambient breathing so the seat feels alive, not stamped on */
+    animation: seatBreathe 12s ease-in-out infinite;
+  }
+}
+
+@keyframes seatBreathe {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 /* ---------- proof strip ---------- */
 
 .proofSection {
@@ -449,7 +525,9 @@
       transparent 55%
     ),
     linear-gradient(180deg, #121a2c 0%, var(--night) 100%);
-  box-shadow: var(--shadow-strong);
+  box-shadow:
+    var(--shadow-strong),
+    0 60px 150px -70px rgba(11, 16, 28, 0.6);
 }
 
 .contactCopy p {
@@ -566,9 +644,10 @@
   }
 }
 
+/* idle float on feature/work surfaces only — archive is a reading zone, left
+   still so the eye can scan the links without drift */
 .workCard,
-.researchCard,
-.archiveItem {
+.researchCard {
   animation: cardBreathe 7.4s ease-in-out infinite;
 }
 

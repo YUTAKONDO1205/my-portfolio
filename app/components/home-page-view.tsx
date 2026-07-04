@@ -14,7 +14,6 @@ import type {
   PlatformLink,
   Positioning,
   PublicationEntry,
-  Recognition,
   ResearchProject,
   SelectedWork,
   SiteAxis,
@@ -26,7 +25,6 @@ type HomePageViewProps = {
   platformLinks: readonly PlatformLink[];
   positioning: Positioning;
   publicationTimeline: readonly PublicationEntry[];
-  recognitions: readonly Recognition[];
   researchProjects: readonly ResearchProject[];
   selectedWorks: readonly SelectedWork[];
   siteAxis: SiteAxis;
@@ -232,7 +230,6 @@ export function HomePageView({
   platformLinks,
   positioning,
   publicationTimeline,
-  recognitions,
   researchProjects,
   selectedWorks,
   siteAxis,
@@ -267,7 +264,7 @@ export function HomePageView({
           <div className={styles.proofGrid}>
             <div>
               <strong>
-                <AnimatedCount value={recognitions.length} />
+                <AnimatedCount value={awardBadges.length} />
               </strong>
               <span>受賞・採択・発表</span>
             </div>
@@ -479,10 +476,10 @@ export function HomePageView({
         </div>
 
         {/* Data room — restored impact dashboard as a night panel */}
-        <div className={`${styles.shell} ${styles.section}`}>
+        <div className={`${styles.shell} ${styles.section} ${styles.nightSeat}`}>
           <ImpactDashboard
             publications={publicationTimeline}
-            recognitions={recognitions}
+            awards={awardBadges}
             research={researchProjects}
             works={selectedWorks}
           />
@@ -549,7 +546,7 @@ export function HomePageView({
         {/* Contact — night panel finale */}
         <motion.section
           id="contact"
-          className={`${styles.shell} ${styles.contactSection}`}
+          className={`${styles.shell} ${styles.contactSection} ${styles.nightSeat}`}
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
