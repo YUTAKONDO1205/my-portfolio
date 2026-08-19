@@ -300,7 +300,7 @@ export function HomePageView({
           <SectionHeader
             eyebrow="Shipped Work"
             title="動くものとして届いている制作物"
-            body="公開リポジトリだけでなく、Marketplace、拡張機能、運用ワークフローまで届く形にした制作を前面に出しています。"
+            body="公開リポジトリだけでなく、Marketplace、拡張機能、運用ワークフローまで届く形にした制作を中心に据えています。"
           />
 
           <motion.div
@@ -333,6 +333,17 @@ export function HomePageView({
                   <p className={styles.cardSubtitle}>{work.subtitle}</p>
                   <p>{work.summary}</p>
                 </a>
+
+                {work.siteLink && (
+                  <a
+                    className={styles.cardSiteLink}
+                    href={work.siteLink.href}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {work.siteLink.label}
+                  </a>
+                )}
 
                 {work.highlights && (
                   <ul className={styles.highlights}>
@@ -557,7 +568,7 @@ export function HomePageView({
             <h2>{philosophy.title}</h2>
             <span>{philosophy.body}</span>
             <em className={styles.contactHint}>
-              お仕事・研究のご相談は LinkedIn または GitHub からお気軽にどうぞ。
+              お仕事・研究のご相談は GitHub からお気軽にご連絡ください。
             </em>
           </div>
 

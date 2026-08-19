@@ -193,8 +193,8 @@ export function ResearchPageView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.72, ease: easeOutExpo, delay: 0.28 }}
           >
-            公開している研究を一覧で見渡せるページです。役割を短くつかみ、
-            詳しい説明や実装はそれぞれの個別ページで見られます。
+            公開している研究を一覧できるページです。各研究の役割を概観し、
+            詳しい説明や実装はそれぞれの個別ページで確認できます。
           </motion.p>
 
           <motion.div
@@ -245,7 +245,7 @@ export function ResearchPageView({
           <p className="eyebrow">プロジェクト</p>
           <h2>研究から見る</h2>
           <p className="section-intro">
-            それぞれの研究は個別サイトで、背景から構成まで詳しく紹介しています。
+            それぞれの研究は個別ページで、背景から構成まで詳しく紹介しています。
           </p>
         </div>
 

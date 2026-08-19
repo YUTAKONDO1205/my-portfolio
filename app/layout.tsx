@@ -118,7 +118,6 @@ const personJsonLd = {
   sameAs: [
     "https://github.com/YUTAKONDO1205",
     "https://elchika.com/user/kd_yuta/?page=0",
-    "https://www.linkedin.com/in/kondo-yuta-985430317",
   ],
 };
 

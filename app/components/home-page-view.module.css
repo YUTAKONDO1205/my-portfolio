@@ -413,6 +413,38 @@
   outline: none;
 }
 
+/* product's own site — a lead link, deliberately louder than the channel chips */
+.workCard .cardSiteLink {
+  align-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--signal-cyan);
+  font-family: var(--font-mono, inherit);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: color 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.workCard .cardSiteLink::after {
+  content: "↗";
+  font-size: 0.9em;
+  transform: translateY(-1px);
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.workCard .cardSiteLink:hover,
+.workCard .cardSiteLink:focus-visible {
+  color: #ffffff;
+  outline: none;
+}
+
+.workCard .cardSiteLink:hover::after,
+.workCard .cardSiteLink:focus-visible::after {
+  transform: translate(2px, -3px);
+}
+
 .researchCard .tagRow span {
   min-height: 28px;
   display: inline-flex;

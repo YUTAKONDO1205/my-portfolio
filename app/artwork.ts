@@ -38,7 +38,7 @@ export const homeHeroArtwork: ArtworkSpec = {
 };
 
 export const researchHeroArtwork: ArtworkSpec = {
-  src: "/images/ambient/LinkedIn背景画像.png",
+  src: "/images/ambient/research-hero-bg.png",
   position: "84% 48%",
   mobilePosition: "76% 44%",
 };
