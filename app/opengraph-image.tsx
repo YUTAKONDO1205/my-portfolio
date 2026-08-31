@@ -57,7 +57,7 @@ export default function OpenGraphImage() {
           display: "flex",
           position: "relative",
           overflow: "hidden",
-          background: "#000000",
+          background: "#111114",
           color: "#ffffff",
         }}
       >
