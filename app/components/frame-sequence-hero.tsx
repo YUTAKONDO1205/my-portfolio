@@ -33,13 +33,27 @@ type ConstellationHandle = {
   destroy: () => void;
 };
 
+type LetterDraw = { x: number; y: number; size: number; char: string };
+
 const SPECTRUM = [
   "128, 82, 255", // Electric Iris
   "255, 184, 41", // Saffron Spark
-  "47, 191, 163", // Deep Verdant, lifted for legibility on black
+  "47, 191, 163", // Deep Verdant, lifted for legibility on the dark ground
   "208, 92, 255", // magenta
   "90, 140, 255", // blue
 ] as const;
+
+/* The owner's name seeded through the cloud in reading order, so fragments of
+   it surface out of the constellation. Letters stay upright while triangles
+   tumble — a rotating letter reads as noise, an upright one as a signature. */
+const NAME = "KondoYuta";
+const LETTER_EVERY = 11;
+
+const LETTER_FONT =
+  '"Meiryo UI", "MeiryoUI", Meiryo, "Hiragino Kaku Gothic ProN", system-ui, sans-serif';
+
+/* Must match --color-void; the canvas is opaque, so it paints the ground. */
+const GROUND = "#111114";
 
 /* Organic silhouette in unit space: a radial harmonic sum gives the lobed,
    slightly asymmetric outline; the fissure below carves the two hemispheres. */
@@ -68,6 +82,8 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
     drift: number;
     colorIndex: number;
     ambient: boolean;
+    /** null = triangle */
+    char: string | null;
   };
 
   let raf = 0;
@@ -119,18 +135,32 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
       Math.round((width * height) / (isMobile ? 900 : 620)),
     );
 
+    let letterCursor = 0;
+
     glyphs = Array.from({ length: count }, (_, i) => {
       const ambient = i % 5 === 0;
+      const isLetter = i % LETTER_EVERY === 3;
+      let char: string | null = null;
+      if (isLetter) {
+        char = NAME[letterCursor % NAME.length];
+        letterCursor += 1;
+      }
+
       const g: Glyph = {
         hx: 0,
         hy: 0,
-        size: ambient ? 2 + Math.random() * 3 : 1.6 + Math.random() * 2.8,
+        size: isLetter
+          ? (ambient ? 11 : 9) + Math.random() * 7
+          : ambient
+            ? 2 + Math.random() * 3
+            : 1.6 + Math.random() * 2.8,
         angle: Math.random() * Math.PI * 2,
         spin: (Math.random() - 0.5) * 0.006,
         phase: Math.random() * Math.PI * 2,
         drift: 0.006 + Math.random() * 0.02,
         colorIndex: Math.floor(Math.random() * SPECTRUM.length),
         ambient,
+        char,
       };
       if (ambient) seedAmbient(g);
       else seedInShape(g);
@@ -173,7 +203,7 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
     mx += (targetMx - mx) * (1 - Math.pow(0.92, dt));
     my += (targetMy - my) * (1 - Math.pow(0.92, dt));
 
-    ctx.fillStyle = "#000000";
+    ctx.fillStyle = GROUND;
     ctx.fillRect(0, 0, width, height);
 
     const s = Math.max(0, Math.min(1, progress));
@@ -194,6 +224,12 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
     // Two batches per colour — dense cloud and dim ambient scatter — so the
     // depth separation survives the Path2D batching.
     paths = Array.from({ length: SPECTRUM.length * 2 }, () => new Path2D());
+    // Letters cannot go into a Path2D, so they are collected per colour and
+    // drawn in a second pass with one fillStyle change each.
+    const letters: LetterDraw[][] = Array.from(
+      { length: SPECTRUM.length * 2 },
+      () => [],
+    );
 
     for (const g of glyphs) {
       g.angle += g.spin * dt;
@@ -224,11 +260,18 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
         y += (pdy / pd) * push;
       }
 
-      if (x < -20 || x > width + 20 || y < -20 || y > height + 20) continue;
+      if (x < -30 || x > width + 30 || y < -30 || y > height + 30) continue;
+
+      const batch = g.colorIndex + (g.ambient ? SPECTRUM.length : 0);
+
+      if (g.char) {
+        letters[batch].push({ x, y, size: g.size, char: g.char });
+        continue;
+      }
 
       const cos = Math.cos(g.angle);
       const sin = Math.sin(g.angle);
-      const path = paths[g.colorIndex + (g.ambient ? SPECTRUM.length : 0)];
+      const path = paths[batch];
       for (let i = 0; i < 3; i += 1) {
         const a = (i * Math.PI * 2) / 3 - Math.PI / 2;
         const px = Math.cos(a) * g.size;
@@ -249,6 +292,20 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
       const alpha = ambient ? 0.2 : 0.46 + s * 0.14;
       ctx.strokeStyle = `rgba(${SPECTRUM[i % SPECTRUM.length]}, ${alpha})`;
       ctx.stroke(paths[i]);
+    }
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    for (let i = 0; i < letters.length; i += 1) {
+      const batch = letters[i];
+      if (batch.length === 0) continue;
+      const ambient = i >= SPECTRUM.length;
+      const alpha = ambient ? 0.28 : 0.54 + s * 0.14;
+      ctx.fillStyle = `rgba(${SPECTRUM[i % SPECTRUM.length]}, ${alpha})`;
+      for (const letter of batch) {
+        ctx.font = `${letter.size.toFixed(1)}px ${LETTER_FONT}`;
+        ctx.fillText(letter.char, letter.x, letter.y);
+      }
     }
 
     raf = requestAnimationFrame(tick);

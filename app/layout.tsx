@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Sans_JP } from "next/font/google";
 import { LenisProvider } from "./components/lenis-provider";
 import { SiteMotionChrome } from "./components/site-motion";
 import {
@@ -10,24 +9,6 @@ import {
   siteUrl,
 } from "./site-metadata";
 import "./globals.css";
-
-/* Dala runs a single typeface across every UI context. PPNeueMontreal is
-   substituted by Inter; Noto Sans JP carries the Japanese glyphs at the same
-   weights, so the signature ultra-light (200) body survives in 和文 too.
-   200 = body · 400 = display AND body latin · 600 = 14px uppercase labels. */
-const bodyFont = Inter({
-  variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["200", "400", "600", "700"],
-  display: "swap",
-});
-
-const jpFont = Noto_Sans_JP({
-  variable: "--font-jp",
-  subsets: ["latin"],
-  weight: ["200", "400", "600", "700"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -110,7 +91,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${bodyFont.variable} ${jpFont.variable} h-full antialiased`}
+      className="h-full antialiased"
     >
       <body className="site-body">
         <script

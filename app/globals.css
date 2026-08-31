@@ -10,11 +10,13 @@
    ========================================================================== */
 
 :root {
-  /* ---- Colors ---- */
-  --color-void: #000000;
+  /* ---- Colors ----
+     The canvas is lifted off pure #000 to a near-black; the greys are lifted
+     with it so the contrast steps stay proportional rather than flattening. */
+  --color-void: #111114;
   --color-bone-white: #ffffff;
-  --color-ash-gray: #9a9a9a;
-  --color-silver-mist: #bdbdbd;
+  --color-ash-gray: #a6a6ac;
+  --color-silver-mist: #c8c8ce;
   --color-electric-iris: #8052ff;
   --color-saffron-spark: #ffb829;
   --color-deep-verdant: #15846e;
@@ -35,14 +37,13 @@
   --accent: var(--color-saffron-spark);
   --action: var(--color-electric-iris);
 
-  /* ---- Typography ---- */
-  /* Single typeface across every UI context. Inter substitutes for
-     PPNeueMontreal; Noto Sans JP carries the Japanese glyphs at the same
-     weights so the ultra-light body convention survives in 和文. */
+  /* ---- Typography ----
+     Single typeface across every UI context: Meiryo UI, with a fallback chain
+     for platforms that do not ship it. */
   --font-ppneuemontreal:
-    var(--font-body), var(--font-jp), ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN",
-    "Hiragino Sans", "Yu Gothic", "YuGothic", sans-serif;
+    "Meiryo UI", "MeiryoUI", Meiryo, "メイリオ", "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans", "Yu Gothic UI", "YuGothic", system-ui, -apple-system,
+    "Segoe UI", sans-serif;
   --font-jp-sans: var(--font-ppneuemontreal);
   --font-heading: var(--font-ppneuemontreal);
   --font-mono-stack: var(--font-ppneuemontreal);
@@ -75,11 +76,14 @@
   --leading-display: 1.1;
   --tracking-display: -4.52px;
 
-  /* Weights — 400 does both 113px display and 15px body; 200 is the
-     signature body weight; 600 is reserved for 14px uppercase labels. */
-  --font-weight-extralight: 200;
+  /* Weights — Meiryo UI ships only Regular and Bold, so the 200 / 600 steps
+     collapse onto 400 / 700. Synthesised weights would smear the glyphs, so
+     the token values are mapped rather than left to the browser. Hierarchy
+     therefore rests entirely on scale and whitespace, which is what the
+     design intends anyway. */
+  --font-weight-extralight: 400;
   --font-weight-regular: 400;
-  --font-weight-semibold: 600;
+  --font-weight-semibold: 700;
   --font-weight-bold: 700;
 
   /* ---- Spacing (6px base) ---- */
@@ -110,10 +114,10 @@
 }
 
 @theme inline {
-  --color-void: #000000;
+  --color-void: #111114;
   --color-bone-white: #ffffff;
-  --color-ash-gray: #9a9a9a;
-  --color-silver-mist: #bdbdbd;
+  --color-ash-gray: #a6a6ac;
+  --color-silver-mist: #c8c8ce;
   --color-electric-iris: #8052ff;
   --color-saffron-spark: #ffb829;
   --color-deep-verdant: #15846e;
@@ -152,7 +156,6 @@ body {
   font-size: var(--text-body);
   font-weight: var(--font-weight-extralight);
   line-height: var(--leading-body);
-  font-feature-settings: "ss01" on;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
