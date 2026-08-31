@@ -43,15 +43,15 @@ function softBreakTitle(title: string) {
 const sectionVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 52,
-    filter: "blur(15px)",
+    y: 106,
+    filter: "blur(26px)",
   },
   show: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
     transition: {
-      duration: 0.76,
+      duration: 1.0,
       ease: easeOutExpo,
     },
   },
@@ -62,7 +62,7 @@ const groupVariants: Variants = {
   show: {
     transition: {
       delayChildren: 0.08,
-      staggerChildren: 0.08,
+      staggerChildren: 0.12,
     },
   },
 };
@@ -70,9 +70,9 @@ const groupVariants: Variants = {
 const itemVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 32,
-    scale: 0.965,
-    filter: "blur(10px)",
+    y: 66,
+    scale: 0.9,
+    filter: "blur(18px)",
   },
   show: {
     opacity: 1,
@@ -80,7 +80,7 @@ const itemVariants: Variants = {
     scale: 1,
     filter: "blur(0px)",
     transition: {
-      duration: 0.66,
+      duration: 0.9,
       ease: easeOutExpo,
     },
   },

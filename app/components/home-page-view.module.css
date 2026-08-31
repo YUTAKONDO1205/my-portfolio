@@ -38,7 +38,7 @@
   grid-row: 1 / span 2;
   margin: 0;
   font-size: clamp(34px, 5vw, var(--text-heading-lg));
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-lg);
   letter-spacing: -0.04em;
 }
@@ -49,7 +49,7 @@
   margin: 0 0 var(--spacing-18);
   color: var(--color-saffron-spark);
   font-size: var(--text-nav-label);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   line-height: var(--leading-nav-label);
   letter-spacing: var(--tracking-nav-label);
   text-transform: uppercase;
@@ -62,7 +62,7 @@
   max-width: 520px;
   color: var(--color-silver-mist);
   font-size: var(--text-body);
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: var(--leading-body);
 }
 
@@ -80,7 +80,7 @@
   margin: 0 0 var(--spacing-18);
   color: var(--color-saffron-spark);
   font-size: var(--text-nav-label);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: var(--tracking-nav-label);
   text-transform: uppercase;
 }
@@ -88,7 +88,7 @@
 .proofLead h2 {
   margin: 0;
   font-size: clamp(34px, 4.4vw, var(--text-heading-sm));
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-sm);
   letter-spacing: -0.04em;
 }
@@ -107,7 +107,7 @@
 
 .proofGrid strong {
   font-size: var(--text-heading-sm);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: 1;
   letter-spacing: var(--tracking-heading-sm);
   color: var(--color-bone-white);
@@ -159,7 +159,7 @@
 .cardMeta {
   color: var(--theme-color, var(--color-saffron-spark));
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -169,7 +169,7 @@
 .archiveColumn h3 {
   margin: 0;
   font-size: var(--text-heading-2xs);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-2xs);
   letter-spacing: var(--tracking-heading-2xs);
 }
@@ -186,13 +186,13 @@
   margin: 0;
   color: var(--color-silver-mist);
   font-size: 15px;
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: 1.7;
 }
 
 .cardSubtitle {
   color: var(--color-bone-white) !important;
-  font-weight: var(--font-weight-regular) !important;
+  font-weight: var(--font-weight-display) !important;
 }
 
 .highlights {
@@ -209,7 +209,7 @@
   gap: var(--spacing-12);
   color: var(--color-silver-mist);
   font-size: 14px;
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: 1.7;
 }
 
@@ -283,7 +283,7 @@
   gap: var(--spacing-6);
   color: var(--color-saffron-spark);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   transition: color 240ms var(--ease-out);
@@ -361,7 +361,7 @@
 .archiveColumn h3 {
   color: var(--color-ash-gray);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -374,13 +374,13 @@
 .archiveItem span {
   color: var(--color-saffron-spark);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
 }
 
 .archiveItem strong {
   font-size: var(--text-heading-2xs);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-2xs);
   letter-spacing: var(--tracking-heading-2xs);
   color: var(--color-bone-white);
@@ -407,7 +407,7 @@
   margin: 0 0 var(--spacing-18);
   color: var(--color-saffron-spark);
   font-size: var(--text-nav-label);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: var(--tracking-nav-label);
   text-transform: uppercase;
 }
@@ -415,7 +415,7 @@
 .contactCopy h2 {
   margin: 0;
   font-size: clamp(34px, 5vw, var(--text-heading-lg));
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-lg);
   letter-spacing: -0.04em;
 }
@@ -426,7 +426,7 @@
   margin-top: var(--spacing-30);
   color: var(--color-silver-mist);
   font-size: var(--text-body);
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: var(--leading-body);
 }
 
@@ -437,7 +437,7 @@
   color: var(--color-ash-gray);
   font-style: normal;
   font-size: 15px;
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: 1.7;
 }
 
@@ -456,14 +456,14 @@
 .platformGrid span {
   color: var(--color-electric-iris);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .platformGrid strong {
   font-size: var(--text-heading-2xs);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-2xs);
   letter-spacing: var(--tracking-heading-2xs);
   transition: color 240ms var(--ease-out);
@@ -478,7 +478,7 @@
   max-width: 42ch;
   color: var(--color-silver-mist);
   font-size: 15px;
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: 1.7;
 }
 
@@ -495,7 +495,7 @@
 .footerNote span {
   color: var(--color-ash-gray);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -503,7 +503,7 @@
 .footerNote strong {
   color: var(--color-bone-white);
   font-size: 15px;
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   text-align: right;
 }
 

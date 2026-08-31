@@ -40,7 +40,7 @@
   margin-bottom: var(--spacing-18);
   color: var(--color-saffron-spark);
   font-size: var(--text-nav-label);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   line-height: var(--leading-nav-label);
   letter-spacing: var(--tracking-nav-label);
   text-transform: uppercase;
@@ -49,7 +49,7 @@
 .title {
   margin: 0 0 var(--spacing-24);
   font-size: clamp(34px, 5vw, var(--text-heading-lg));
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-lg);
   letter-spacing: -0.04em;
   color: var(--color-bone-white);
@@ -60,7 +60,7 @@
   max-width: 520px;
   color: var(--color-silver-mist);
   font-size: var(--text-body);
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: var(--leading-body);
 }
 
@@ -85,7 +85,7 @@
 .tileTitle {
   margin: 0;
   font-size: var(--text-heading-2xs);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-2xs);
   letter-spacing: var(--tracking-heading-2xs);
   color: var(--color-bone-white);
@@ -95,7 +95,7 @@
   margin: 0;
   color: var(--color-ash-gray);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   letter-spacing: 0.04em;
 }
 
@@ -149,7 +149,7 @@
   fill: var(--color-bone-white);
   font-family: var(--font-ppneuemontreal);
   font-size: 15px;
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   font-variant-numeric: tabular-nums;
 }
 
@@ -235,7 +235,7 @@
   margin: 0 3px;
   color: var(--color-bone-white);
   font-size: 15px;
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
 }
 
 /* ---------- Viz B: Modality Coverage ---------- */
@@ -265,7 +265,7 @@
 .lollipopLabelJa {
   color: var(--color-bone-white);
   font-size: 13px;
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   letter-spacing: 0.02em;
 }
 
@@ -317,7 +317,7 @@
 .lollipopCount {
   color: var(--color-bone-white);
   font-size: 14px;
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -347,7 +347,7 @@
   gap: var(--spacing-6);
   color: var(--color-silver-mist);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   letter-spacing: 0.04em;
 }
 
@@ -375,7 +375,7 @@
 
 .ban {
   font-size: clamp(78px, 9vw, var(--text-display));
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: 0.9;
   color: var(--color-bone-white);
   letter-spacing: var(--tracking-display);
@@ -385,7 +385,7 @@
 .banCaption {
   color: var(--color-ash-gray);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   letter-spacing: 0.04em;
   line-height: 1.6;
 }
@@ -395,7 +395,7 @@
   margin-bottom: 2px;
   color: var(--color-bone-white);
   font-size: 13px;
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
 }
 
 /* ---------- Responsive ---------- */

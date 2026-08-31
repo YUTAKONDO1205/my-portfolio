@@ -39,40 +39,40 @@ const easeOut = [0.22, 1, 0.36, 1] as const;
 const revealViewport = { once: true, margin: "0px 0px -90px 0px" } as const;
 
 const sectionVariants: Variants = {
-  hidden: { opacity: 0, y: 44, filter: "blur(14px)" },
+  hidden: { opacity: 0, y: 92, filter: "blur(24px)" },
   show: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.8, ease: easeOut },
+    transition: { duration: 1.05, ease: easeOut },
   },
 };
 
 const groupVariants: Variants = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.08 },
+    transition: { staggerChildren: 0.11, delayChildren: 0.1 },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 28, scale: 0.97, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 62, scale: 0.9, filter: "blur(16px)" },
   show: {
     opacity: 1,
     y: 0,
     scale: 1,
     filter: "blur(0px)",
-    transition: { duration: 0.68, ease: easeOut },
+    transition: { duration: 0.9, ease: easeOut },
   },
 };
 
 const charVariants: Variants = {
-  hidden: { opacity: 0, y: "0.42em", filter: "blur(8px)" },
+  hidden: { opacity: 0, y: "0.95em", filter: "blur(16px)" },
   show: {
     opacity: 1,
     y: "0em",
     filter: "blur(0px)",
-    transition: { duration: 0.56, ease: easeOut },
+    transition: { duration: 0.72, ease: easeOut },
   },
 };
 
@@ -91,39 +91,71 @@ function themeClassName(themeClass: ResearchProject["themeClass"]) {
 
 /* Per-character heading reveal.
    Every character is its own inline-block span, which creates a line-break
-   opportunity between each pair. Japanese wants exactly that, but Latin does
-   not — an 78px headline would split as "De / cide". So runs of Latin
-   letters/digits are grouped inside a nowrap wrapper, while CJK characters
-   stay individually breakable. */
+   opportunity between each pair. Japanese wants most of those, but not all:
+   because the characters are separate inline-block boxes rather than one text
+   run, the browser's kinsoku (禁則処理) cannot apply, and a line happily starts
+   with 、 or ends with 「. Latin has the opposite problem — an 78px headline
+   would split as "De / cide".
+
+   So the text is tokenized into units that must not be broken apart, and only
+   the gaps between units stay breakable. */
 type HeadingToken =
   | { kind: "space" }
-  | { kind: "latin"; text: string }
-  | { kind: "char"; text: string };
+  | { kind: "unit"; text: string };
+
+/* must not begin a line */
+const NO_BREAK_BEFORE = new Set(
+  Array.from(
+    "、。，．・：；？！）〕］｝〉》」』】’”ゝゞヽヾーぁぃぅぇぉっゃゅょゎァィゥェォッャュョヮヵヶ々),.;:?!]}",
+  ),
+);
+
+/* must not end a line */
+const NO_BREAK_AFTER = new Set(Array.from("「（〔［｛〈《『【‘“([{"));
 
 function tokenizeHeading(text: string): HeadingToken[] {
+  const chars = Array.from(text);
   const tokens: HeadingToken[] = [];
   let latin = "";
 
-  const flush = () => {
+  const flushLatin = () => {
     if (latin) {
-      tokens.push({ kind: "latin", text: latin });
+      tokens.push({ kind: "unit", text: latin });
       latin = "";
     }
   };
 
-  for (const char of Array.from(text)) {
+  for (let i = 0; i < chars.length; i += 1) {
+    const char = chars[i];
+
     if (/[A-Za-z0-9]/.test(char)) {
       latin += char;
       continue;
     }
-    flush();
-    tokens.push(
-      char === " " || char === "　"
-        ? { kind: "space" }
-        : { kind: "char", text: char },
-    );
+
+    flushLatin();
+
+    if (char === " " || char === "　") {
+      tokens.push({ kind: "space" });
+      continue;
+    }
+
+    let unit = char;
+    // an opening bracket drags the character after it onto the same line
+    while (NO_BREAK_AFTER.has(chars[i]) && i + 1 < chars.length) {
+      i += 1;
+      unit += chars[i];
+    }
+    // trailing punctuation stays with the character it follows
+    while (i + 1 < chars.length && NO_BREAK_BEFORE.has(chars[i + 1])) {
+      i += 1;
+      unit += chars[i];
+    }
+
+    tokens.push({ kind: "unit", text: unit });
   }
-  flush();
+
+  flushLatin();
 
   return tokens;
 }
@@ -135,8 +167,6 @@ function SplitHeading({ text }: { text: string }) {
     return <h2>{text}</h2>;
   }
 
-  let charKey = 0;
-
   return (
     <motion.h2
       aria-label={text}
@@ -145,7 +175,7 @@ function SplitHeading({ text }: { text: string }) {
       viewport={{ once: true, margin: "-80px" }}
       variants={{
         hidden: {},
-        show: { transition: { staggerChildren: 0.024 } },
+        show: { transition: { staggerChildren: 0.034 } },
       }}
     >
       {tokenizeHeading(text).map((token, index) => {
@@ -159,31 +189,20 @@ function SplitHeading({ text }: { text: string }) {
           );
         }
 
-        if (token.kind === "char") {
-          return (
-            <motion.span
-              key={`char-${index}-${charKey++}`}
-              className="heading-char"
-              aria-hidden="true"
-              variants={charVariants}
-            >
-              {token.text}
-            </motion.span>
-          );
-        }
-
+        // The animated element is the unit itself, not each character inside
+        // it. A unit is a single CJK character (plus any punctuation that must
+        // not be split from it) or one Latin word, so the reveal still reads
+        // as per-character in 和文 — and every animated element stays a direct
+        // child of the motion heading, which is what the stagger needs.
         return (
-          <span key={`word-${index}`} className="heading-word" aria-hidden="true">
-            {Array.from(token.text).map((char) => (
-              <motion.span
-                key={`${char}-${charKey++}`}
-                className="heading-char"
-                variants={charVariants}
-              >
-                {char}
-              </motion.span>
-            ))}
-          </span>
+          <motion.span
+            key={`unit-${index}-${token.text}`}
+            className="heading-word heading-char"
+            aria-hidden="true"
+            variants={charVariants}
+          >
+            {token.text}
+          </motion.span>
         );
       })}
     </motion.h2>

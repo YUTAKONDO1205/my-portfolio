@@ -23,15 +23,15 @@ const viewport = { once: true, amount: 0.2 } as const;
 const sectionVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 56,
-    filter: "blur(16px)",
+    y: 112,
+    filter: "blur(26px)",
   },
   show: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
     transition: {
-      duration: 0.8,
+      duration: 1.05,
       ease: easeOutExpo,
     },
   },
@@ -42,7 +42,7 @@ const groupVariants: Variants = {
   show: {
     transition: {
       delayChildren: 0.08,
-      staggerChildren: 0.08,
+      staggerChildren: 0.12,
     },
   },
 };
@@ -50,9 +50,9 @@ const groupVariants: Variants = {
 const itemVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 34,
-    scale: 0.965,
-    filter: "blur(10px)",
+    y: 68,
+    scale: 0.9,
+    filter: "blur(18px)",
   },
   show: {
     opacity: 1,
@@ -60,7 +60,7 @@ const itemVariants: Variants = {
     scale: 1,
     filter: "blur(0px)",
     transition: {
-      duration: 0.68,
+      duration: 0.9,
       ease: easeOutExpo,
     },
   },
@@ -143,7 +143,7 @@ export function ResearchDetailView({
             <motion.h1
               initial={{
                 opacity: 0,
-                y: 56,
+                y: 112,
                 rotateX: reduceMotion ? 0 : -56,
               }}
               animate={{ opacity: 1, y: 0, rotateX: 0 }}
@@ -181,7 +181,7 @@ export function ResearchDetailView({
               className="hero-actions"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.66, ease: easeOutExpo, delay: 0.52 }}
+              transition={{ duration: 0.9, ease: easeOutExpo, delay: 0.52 }}
             >
               <Link
                 href="/research"

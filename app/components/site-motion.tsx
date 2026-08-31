@@ -21,8 +21,10 @@ const easeOutQuart = [0.22, 1, 0.36, 1] as const;
    cloud as you scroll. Letters stay upright while triangles tumble — a
    rotating letter reads as noise, an upright one reads as a signature.
 
-   Clusters travel at 0.9x scroll: slow enough to read as depth behind the
-   content, fast enough that they never feel pinned to the viewport.
+   Clusters travel at 0.68x scroll, so they slide a long way against the
+   content as you move — the field reads as a separate, deeper plane rather
+   than as wallpaper stuck to the page. They also rotate and breathe on their
+   own clock, so the motion never stops when the scroll does.
    ========================================================================== */
 
 const SPECTRUM = [
@@ -39,7 +41,7 @@ const NAME = "KondoYuta";
    discovery rather than as a pattern */
 const LETTER_EVERY = 9;
 
-const PARALLAX = 0.9;
+const PARALLAX = 0.68;
 
 const LETTER_FONT =
   '"Meiryo UI", "MeiryoUI", Meiryo, "Hiragino Kaku Gothic ProN", system-ui, sans-serif';
@@ -86,6 +88,10 @@ type Cluster = {
   xFrac: number;
   radius: number;
   tilt: number;
+  /** radians per frame — each cluster turns at its own rate and direction */
+  tiltRate: number;
+  /** phase offset for the breathing pulse, so no two clusters pulse together */
+  breathPhase: number;
   glyphs: ClusterGlyph[];
 };
 
@@ -164,9 +170,9 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
         hy,
         size: isLetter ? 8 + rand() * 7 : 1.5 + rand() * 2.6,
         angle: rand() * Math.PI * 2,
-        spin: (rand() - 0.5) * 0.006,
+        spin: (rand() - 0.5) * 0.018,
         phase: rand() * Math.PI * 2,
-        drift: 0.006 + rand() * 0.02,
+        drift: 0.024 + rand() * 0.06,
         colorIndex: Math.floor(rand() * SPECTRUM.length),
         char,
       });
@@ -177,6 +183,8 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
       xFrac,
       radius,
       tilt: (rand() - 0.5) * 0.5,
+      tiltRate: (rand() - 0.5) * 0.0022,
+      breathPhase: rand() * Math.PI * 2,
       glyphs,
     };
   };
@@ -188,9 +196,9 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
     g.y = anywhere ? Math.random() * height : height + 20;
     g.size = isLetter ? 11 + Math.random() * 9 : 2.5 + Math.random() * 4;
     g.angle = Math.random() * Math.PI * 2;
-    g.spin = (Math.random() - 0.5) * 0.004;
-    g.vx = (Math.random() - 0.5) * 0.12;
-    g.vy = -(0.05 + Math.random() * 0.14);
+    g.spin = (Math.random() - 0.5) * 0.014;
+    g.vx = (Math.random() - 0.5) * 0.5;
+    g.vy = -(0.18 + Math.random() * 0.45);
     g.colorIndex = Math.floor(Math.random() * SPECTRUM.length);
     g.char = isLetter
       ? NAME[Math.floor(Math.random() * NAME.length)]
@@ -287,21 +295,26 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
         clusters.set(index, cluster);
       }
 
+      cluster.tilt += cluster.tiltRate * dt;
+
       const cx = width * cluster.xFrac;
       const cy = cluster.docY - anchor;
       const cos = Math.cos(cluster.tilt);
       const sin = Math.sin(cluster.tilt);
+      // slow expansion and contraction, ±14% of the cluster radius
+      const radius =
+        cluster.radius * (1 + Math.sin(time * 0.45 + cluster.breathPhase) * 0.14);
 
       for (const g of cluster.glyphs) {
         g.angle += g.spin * dt;
 
-        const wobbleX = Math.sin(time * 0.6 + g.phase) * g.drift;
-        const wobbleY = Math.cos(time * 0.52 + g.phase * 1.4) * g.drift;
+        const wobbleX = Math.sin(time * 1.05 + g.phase) * g.drift;
+        const wobbleY = Math.cos(time * 0.92 + g.phase * 1.4) * g.drift;
         const ux = g.hx + wobbleX;
         const uy = g.hy + wobbleY;
 
-        const x = cx + (ux * cos - uy * sin) * cluster.radius;
-        const y = cy + (ux * sin + uy * cos) * cluster.radius;
+        const x = cx + (ux * cos - uy * sin) * radius;
+        const y = cy + (ux * sin + uy * cos) * radius;
         if (x < -30 || x > width + 30 || y < -30 || y > height + 30) continue;
 
         if (g.char) {
@@ -361,7 +374,7 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
     for (let i = 0; i < paths.length; i += 1) {
       const isLoose = i >= SPECTRUM.length;
       ctx.strokeStyle = `rgba(${SPECTRUM[i % SPECTRUM.length]}, ${
-        isLoose ? 0.17 : 0.27
+        isLoose ? 0.26 : 0.4
       })`;
       ctx.stroke(paths[i]);
     }
@@ -375,7 +388,7 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
       // letters carry a touch more weight than the triangles so the name is
       // legible, but still sit under the body copy they pass behind
       ctx.fillStyle = `rgba(${SPECTRUM[i % SPECTRUM.length]}, ${
-        isLoose ? 0.22 : 0.33
+        isLoose ? 0.3 : 0.46
       })`;
       for (const letter of batch) {
         ctx.font = `${letter.size.toFixed(1)}px ${LETTER_FONT}`;
