@@ -51,7 +51,7 @@
   gap: var(--spacing-12);
   color: var(--color-bone-white);
   font-size: 15px;
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   letter-spacing: -0.01em;
 }
 
@@ -77,7 +77,7 @@
 .navLinks a {
   color: var(--color-ash-gray);
   font-size: var(--text-nav-label);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   line-height: var(--leading-nav-label);
   letter-spacing: 0.025em;
   text-transform: uppercase;
@@ -99,7 +99,7 @@
   background: var(--color-electric-iris);
   color: var(--color-bone-white);
   font-size: var(--text-nav-label);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   line-height: 1;
   letter-spacing: 0.025em;
   text-transform: uppercase;
@@ -140,7 +140,7 @@
   margin: 0 0 var(--spacing-24);
   color: var(--color-saffron-spark);
   font-size: var(--text-nav-label);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   line-height: var(--leading-nav-label);
   letter-spacing: var(--tracking-nav-label);
   text-transform: uppercase;
@@ -151,7 +151,7 @@
   display: flex;
   flex-direction: column;
   font-size: clamp(48px, 6.6vw, var(--text-heading-lg));
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-lg);
   letter-spacing: -0.04em;
 }
@@ -169,7 +169,7 @@
   max-width: 480px;
   color: var(--color-bone-white);
   font-size: var(--text-body);
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: var(--leading-body);
 }
 
@@ -177,7 +177,7 @@
   margin: 0;
   max-width: 16ch;
   font-size: clamp(34px, 4.6vw, var(--text-heading-sm));
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-sm);
   letter-spacing: -0.04em;
   text-wrap: balance;
@@ -188,7 +188,7 @@
   max-width: 480px;
   color: var(--color-silver-mist);
   font-size: var(--text-body);
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: var(--leading-body);
 }
 
@@ -208,7 +208,7 @@
 
 .figure strong {
   font-size: var(--text-heading-sm);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: 1;
   letter-spacing: var(--tracking-heading-sm);
   color: var(--color-bone-white);
@@ -237,7 +237,7 @@
   gap: var(--spacing-6);
   color: var(--color-bone-white);
   font-size: var(--text-nav-label);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: 0.025em;
   text-transform: uppercase;
   transition: color 240ms var(--ease-out);
@@ -268,14 +268,14 @@
 .latestSignal span {
   color: var(--color-saffron-spark);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .latestSignal strong {
   font-size: var(--text-heading-2xs);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-2xs);
   letter-spacing: var(--tracking-heading-2xs);
   transition: color 240ms var(--ease-out);
@@ -304,7 +304,7 @@
 .cue span {
   color: var(--color-ash-gray);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: 0.28em;
   text-transform: uppercase;
 }

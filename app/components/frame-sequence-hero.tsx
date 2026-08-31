@@ -53,7 +53,7 @@ const LETTER_FONT =
   '"Meiryo UI", "MeiryoUI", Meiryo, "Hiragino Kaku Gothic ProN", system-ui, sans-serif';
 
 /* Must match --color-void; the canvas is opaque, so it paints the ground. */
-const GROUND = "#111114";
+const GROUND = "#1c1c22";
 
 /* Organic silhouette in unit space: a radial harmonic sum gives the lobed,
    slightly asymmetric outline; the fissure below carves the two hemispheres. */
@@ -155,9 +155,9 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
             ? 2 + Math.random() * 3
             : 1.6 + Math.random() * 2.8,
         angle: Math.random() * Math.PI * 2,
-        spin: (Math.random() - 0.5) * 0.006,
+        spin: (Math.random() - 0.5) * 0.018,
         phase: Math.random() * Math.PI * 2,
-        drift: 0.006 + Math.random() * 0.02,
+        drift: 0.024 + Math.random() * 0.06,
         colorIndex: Math.floor(Math.random() * SPECTRUM.length),
         ambient,
         char,
@@ -215,9 +215,9 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
     const cy = height * (isMobile ? 0.42 : 0.5);
     const scale = Math.min(width, height) * (isMobile ? 0.4 : 0.42);
 
-    // Act 1 gathered → Act 2 opened out → Act 3 re-gathered, tighter.
-    const spread = 1 + Math.sin(s * Math.PI) * 0.34 + s * 0.12;
-    const swirl = s * 0.5;
+    // Act 1 gathered → Act 2 thrown wide open → Act 3 re-gathered.
+    const spread = 1 + Math.sin(s * Math.PI) * 0.72 + s * 0.2;
+    const swirl = s * 1.25;
     const cosS = Math.cos(swirl);
     const sinS = Math.sin(swirl);
 
@@ -235,8 +235,8 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
       g.angle += g.spin * dt;
 
       // per-glyph wander keeps the cloud alive when the page is still
-      const wobbleX = Math.sin(time * 0.6 + g.phase) * g.drift;
-      const wobbleY = Math.cos(time * 0.52 + g.phase * 1.4) * g.drift;
+      const wobbleX = Math.sin(time * 1.05 + g.phase) * g.drift;
+      const wobbleY = Math.cos(time * 0.92 + g.phase * 1.4) * g.drift;
 
       let ux = (g.hx + wobbleX) * spread;
       let uy = (g.hy + wobbleY) * spread;
@@ -252,10 +252,10 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
       const pdx = x - mx * width;
       const pdy = y - my * height;
       const pd2 = pdx * pdx + pdy * pdy;
-      const radius = Math.min(width, height) * 0.22;
+      const radius = Math.min(width, height) * 0.3;
       if (pd2 < radius * radius) {
         const pd = Math.sqrt(pd2) || 1;
-        const push = (1 - pd / radius) * 26;
+        const push = (1 - pd / radius) * 62;
         x += (pdx / pd) * push;
         y += (pdy / pd) * push;
       }
@@ -289,7 +289,7 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
     ctx.lineJoin = "round";
     for (let i = 0; i < paths.length; i += 1) {
       const ambient = i >= SPECTRUM.length;
-      const alpha = ambient ? 0.2 : 0.46 + s * 0.14;
+      const alpha = ambient ? 0.3 : 0.58 + s * 0.16;
       ctx.strokeStyle = `rgba(${SPECTRUM[i % SPECTRUM.length]}, ${alpha})`;
       ctx.stroke(paths[i]);
     }
@@ -300,7 +300,7 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
       const batch = letters[i];
       if (batch.length === 0) continue;
       const ambient = i >= SPECTRUM.length;
-      const alpha = ambient ? 0.28 : 0.54 + s * 0.14;
+      const alpha = ambient ? 0.38 : 0.66 + s * 0.16;
       ctx.fillStyle = `rgba(${SPECTRUM[i % SPECTRUM.length]}, ${alpha})`;
       for (const letter of batch) {
         ctx.font = `${letter.size.toFixed(1)}px ${LETTER_FONT}`;
@@ -371,11 +371,11 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
 
 function useActStyles(progress: MotionValue<number>) {
   const act1Opacity = useTransform(progress, [0, 0.16, 0.26], [1, 1, 0]);
-  const act1Y = useTransform(progress, [0, 0.26], [0, -72]);
+  const act1Y = useTransform(progress, [0, 0.26], [0, -150]);
   const act1Blur = useTransform(
     progress,
     [0, 0.16, 0.26],
-    ["blur(0px)", "blur(0px)", "blur(10px)"],
+    ["blur(0px)", "blur(0px)", "blur(18px)"],
   );
 
   const act2Opacity = useTransform(
@@ -383,19 +383,19 @@ function useActStyles(progress: MotionValue<number>) {
     [0.3, 0.4, 0.56, 0.66],
     [0, 1, 1, 0],
   );
-  const act2Y = useTransform(progress, [0.3, 0.4, 0.66], [56, 0, -64]);
+  const act2Y = useTransform(progress, [0.3, 0.4, 0.66], [120, 0, -134]);
   const act2Blur = useTransform(
     progress,
     [0.3, 0.4, 0.56, 0.66],
-    ["blur(10px)", "blur(0px)", "blur(0px)", "blur(10px)"],
+    ["blur(18px)", "blur(0px)", "blur(0px)", "blur(18px)"],
   );
 
   const act3Opacity = useTransform(progress, [0.7, 0.82], [0, 1]);
-  const act3Y = useTransform(progress, [0.7, 0.84], [56, 0]);
+  const act3Y = useTransform(progress, [0.7, 0.84], [120, 0]);
   const act3Blur = useTransform(
     progress,
     [0.7, 0.82],
-    ["blur(10px)", "blur(0px)"],
+    ["blur(18px)", "blur(0px)"],
   );
 
   const cueOpacity = useTransform(progress, [0, 0.06], [1, 0]);
@@ -560,7 +560,7 @@ function SignalHero() {
             {HEADLINE_WORDS.map((word, i) => (
               <motion.span
                 key={word}
-                initial={{ opacity: 0, y: "0.6em", filter: "blur(12px)" }}
+                initial={{ opacity: 0, y: "1.1em", filter: "blur(20px)" }}
                 animate={{ opacity: 1, y: "0em", filter: "blur(0px)" }}
                 transition={{
                   duration: 0.92,

@@ -26,7 +26,7 @@
 .eyebrow {
   color: var(--color-saffron-spark);
   font-size: var(--text-nav-label);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   line-height: var(--leading-nav-label);
   letter-spacing: var(--tracking-nav-label);
   text-transform: uppercase;
@@ -90,7 +90,7 @@
   overflow: hidden;
   color: var(--color-bone-white);
   font-size: var(--text-heading-2xs);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-2xs);
   letter-spacing: var(--tracking-heading-2xs);
   transition: color 240ms var(--ease-out);
@@ -104,7 +104,7 @@
 .organization {
   color: var(--color-silver-mist);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-extralight);
+  font-weight: var(--font-weight-body);
   line-height: var(--leading-caption);
   letter-spacing: 0.04em;
 }
@@ -114,7 +114,7 @@
   margin-top: auto;
   color: var(--color-saffron-spark);
   font-size: var(--text-caption);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
   font-feature-settings: "tnum" 1;
 }
