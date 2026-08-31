@@ -1,10 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Inter,
-  JetBrains_Mono,
-  Noto_Sans_JP,
-  Space_Grotesk,
-} from "next/font/google";
+import { Inter, Noto_Sans_JP } from "next/font/google";
 import { LenisProvider } from "./components/lenis-provider";
 import { SiteMotionChrome } from "./components/site-motion";
 import {
@@ -16,35 +11,21 @@ import {
 } from "./site-metadata";
 import "./globals.css";
 
-// Display / heading — geometric, classic-meets-future feel
-const displayFont = Space_Grotesk({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-// Body / UI — neutral, highly legible, harmonizes with Space Grotesk
+/* Dala runs a single typeface across every UI context. PPNeueMontreal is
+   substituted by Inter; Noto Sans JP carries the Japanese glyphs at the same
+   weights, so the signature ultra-light (200) body survives in 和文 too.
+   200 = body · 400 = display AND body latin · 600 = 14px uppercase labels. */
 const bodyFont = Inter({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["200", "400", "600", "700"],
   display: "swap",
 });
 
-// Japanese — modern sans with multiple weights, pairs with Latin fonts above
 const jpFont = Noto_Sans_JP({
   variable: "--font-jp",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  display: "swap",
-});
-
-// Mono — technical labels, eyebrows, mono numerics
-const monoFont = JetBrains_Mono({
-  variable: "--font-mono-source",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["200", "400", "600", "700"],
   display: "swap",
 });
 
@@ -129,7 +110,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${displayFont.variable} ${bodyFont.variable} ${jpFont.variable} ${monoFont.variable} h-full antialiased`}
+      className={`${bodyFont.variable} ${jpFont.variable} h-full antialiased`}
     >
       <body className="site-body">
         <script

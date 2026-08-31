@@ -1,348 +1,176 @@
-/* ============================================================
- * Awards Strip — social proof band under the dark hero
- * Light "porcelain" band · white cards · brass gold accents
- * ============================================================ */
+/* ==========================================================================
+   Awards strip — social proof directly under the hero.
+   The dawn seam that used to melt the dark hero into a light band is gone:
+   hero and page are the same void, so the two surfaces are already one field.
+   ========================================================================== */
 
 .section {
-  --dawn-h: clamp(190px, 24vh, 320px);
   position: relative;
-  /* top padding clears the dawn seam so content lands on porcelain */
-  padding: calc(var(--dawn-h) + 30px) 32px 76px;
-  background:
-    radial-gradient(
-      120% 70% at 50% 30%,
-      rgba(217, 168, 63, 0.06) 0%,
-      rgba(217, 168, 63, 0) 60%
-    ),
-    var(--background);
-  overflow: hidden;
-}
-
-/* ---- dawn: night → porcelain melt that continues the hero field ---- */
-.dawn {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--dawn-h);
-  z-index: 0;
-  pointer-events: none;
-  /* luminance ramp kept slightly blue so the melt never turns muddy gray;
-     top is pure --night to seam invisibly with the hero's dark bottom */
-  background:
-    radial-gradient(
-      72% 128% at 26% -8%,
-      rgba(127, 212, 255, 0.16),
-      transparent 60%
-    ),
-    radial-gradient(
-      60% 120% at 78% -6%,
-      rgba(255, 210, 122, 0.12),
-      transparent 58%
-    ),
-    linear-gradient(
-      180deg,
-      var(--night) 0%,
-      #0d1524 12%,
-      #182234 34%,
-      #303b52 54%,
-      #5c6578 70%,
-      #9aa2b2 84%,
-      #c7cdd6 93%,
-      var(--background) 100%
-    );
-}
-
-/* faint luminous horizon line — an echo of the hero's signal streams
-   depositing into the light */
-.horizon {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 60%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(127, 212, 255, 0.55) 28%,
-    rgba(238, 242, 248, 0.7) 50%,
-    rgba(255, 210, 122, 0.55) 72%,
-    transparent 100%
-  );
-  height: 1.5px;
-  opacity: 0.72;
-  filter: blur(0.3px);
-  box-shadow:
-    0 0 10px rgba(238, 242, 248, 0.35),
-    0 0 30px rgba(127, 212, 255, 0.4);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .horizon {
-    animation: horizonPulse 9s ease-in-out infinite;
-  }
-}
-
-@keyframes horizonPulse {
-  0%,
-  100% {
-    opacity: 0.58;
-    transform: translateY(0.5px);
-  }
-  50% {
-    opacity: 0.82;
-    transform: translateY(-1.5px);
-  }
+  z-index: 2;
+  padding: var(--spacing-120) 0 0;
+  /* transparent so the ambient field runs through, unbroken, from the hero */
+  background: transparent;
 }
 
 .header {
   position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto 32px;
+  width: min(var(--page-max-width), calc(100% - 48px));
+  margin: 0 auto var(--spacing-60);
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 20px;
+  gap: var(--spacing-24);
   flex-wrap: wrap;
 }
 
 .eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.22em;
+  color: var(--color-saffron-spark);
+  font-size: var(--text-nav-label);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-nav-label);
+  letter-spacing: var(--tracking-nav-label);
   text-transform: uppercase;
-  /* brass, darkened toward ink for AA at small sizes (fallback first) */
-  color: var(--accent);
-  color: color-mix(in srgb, var(--accent) 72%, var(--foreground));
-  font-weight: 600;
 }
 
 .count {
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: 0.08em;
+  color: var(--color-ash-gray);
+  font-size: var(--text-caption);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .row {
   position: relative;
-  z-index: 1;
-  max-width: 1200px;
+  width: min(var(--page-max-width), calc(100% - 48px));
   margin: 0 auto;
   display: flex;
-  flex-direction: row;
-  gap: 16px;
+  gap: var(--spacing-60);
   overflow-x: auto;
-  padding: 6px 2px 22px;
+  padding-bottom: var(--spacing-30);
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
-  scrollbar-color: rgba(217, 168, 63, 0.75) rgba(20, 25, 38, 0.08);
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
   -webkit-overflow-scrolling: touch;
 }
 
 .row::-webkit-scrollbar {
-  height: 6px;
-}
-.row::-webkit-scrollbar-track {
-  background: rgba(20, 25, 38, 0.08);
-  border-radius: 3px;
-}
-.row::-webkit-scrollbar-thumb {
-  background: rgba(217, 168, 63, 0.75);
-  border-radius: 3px;
-}
-.row::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-bright);
+  height: 2px;
 }
 
+.row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.row::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.row:hover::-webkit-scrollbar-thumb {
+  background: var(--color-electric-iris);
+}
+
+/* No background, no border, no shadow — the entries float on the void,
+   separated by whitespace alone. */
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  min-width: 240px;
-  flex: 0 0 240px;
-  padding: 22px 22px 22px;
-  border-radius: 14px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-soft);
-  text-decoration: none;
+  gap: var(--spacing-12);
+  min-width: 260px;
+  flex: 0 0 260px;
   color: inherit;
   scroll-snap-align: start;
-  transition:
-    border-color 320ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1);
-  isolation: isolate;
-  overflow: hidden;
 }
 
-/* brass top edge */
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    rgba(217, 168, 63, 0) 0%,
-    rgba(217, 168, 63, 0.55) 30%,
-    rgba(217, 168, 63, 0.9) 50%,
-    rgba(217, 168, 63, 0.55) 70%,
-    rgba(217, 168, 63, 0) 100%
-  );
-  opacity: 0.65;
-  transition: opacity 320ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* very subtle brass tint on hover */
-.card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(
-    120% 60% at 50% -10%,
-    rgba(217, 168, 63, 0.07) 0%,
-    rgba(217, 168, 63, 0) 70%
-  );
-  opacity: 0;
-  transition: opacity 320ms cubic-bezier(0.22, 1, 0.36, 1);
-  z-index: -1;
-}
-
-.card:hover,
-.card:focus-visible {
-  border-color: rgba(168, 123, 30, 0.45);
-  box-shadow:
-    var(--shadow-strong),
-    0 0 0 1px rgba(217, 168, 63, 0.2);
-}
-
-.card:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
-
-.card:hover::before,
-.card:focus-visible::before {
-  opacity: 1;
-}
-
-.card:hover::after,
-.card:focus-visible::after {
-  opacity: 1;
-}
-
-/* MAIN — the award name, promoted to the headline of the card */
+/* MAIN — the award name carries the block */
 .award {
-  display: block;
-  font-size: 19px;
-  line-height: 1.32;
-  color: var(--foreground);
-  font-weight: 600;
-  letter-spacing: 0.005em;
-  /* keep long names to a tidy block; ellipsis the overflow */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  padding-right: 20px;
+  color: var(--color-bone-white);
+  font-size: var(--text-heading-2xs);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-heading-2xs);
+  letter-spacing: var(--tracking-heading-2xs);
+  transition: color 240ms var(--ease-out);
+}
+
+.card:hover .award,
+.card:focus-visible .award {
+  color: var(--color-electric-iris);
 }
 
 .organization {
-  display: block;
-  margin-top: 10px;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
+  color: var(--color-silver-mist);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-extralight);
+  line-height: var(--leading-caption);
+  letter-spacing: 0.04em;
 }
 
-/* SECONDARY — the year, demoted to a small brass label at the card foot */
+/* SECONDARY — the year, a small amber label at the foot */
 .year {
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
   margin-top: auto;
-  padding: 3px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(168, 123, 30, 0.28);
-  background: rgba(217, 168, 63, 0.09);
-  font-size: 12px;
-  line-height: 1;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  color: var(--color-saffron-spark);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.14em;
   font-feature-settings: "tnum" 1;
-  /* fallback for non-clip browsers */
-  color: var(--accent);
-  background-clip: padding-box;
 }
 
 .arrow {
   position: absolute;
-  right: 16px;
-  bottom: 16px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: rgba(217, 168, 63, 0.12);
-  border: 1px solid rgba(168, 123, 30, 0.35);
-  color: var(--accent);
-  font-size: 11px;
+  right: 0;
+  top: 2px;
+  color: var(--color-ash-gray);
+  font-size: var(--text-caption);
   line-height: 1;
   transition:
-    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
-    background 320ms cubic-bezier(0.22, 1, 0.36, 1);
-  opacity: 0.75;
+    transform 240ms var(--ease-out),
+    color 240ms var(--ease-out);
 }
 
 .card:hover .arrow {
   transform: translate(2px, -2px);
-  opacity: 1;
-  background: rgba(217, 168, 63, 0.22);
+  color: var(--color-bone-white);
 }
 
-/* Mobile: wraps to grid */
+@media (max-width: 1024px) {
+  .header,
+  .row {
+    width: min(var(--page-max-width), calc(100% - 40px));
+  }
+}
+
 @media (max-width: 768px) {
   .section {
-    --dawn-h: clamp(150px, 30vh, 240px);
-    padding: calc(var(--dawn-h) + 24px) 20px 56px;
+    padding-top: var(--spacing-96);
+  }
+
+  .header,
+  .row {
+    width: calc(100% - 32px);
+  }
+
+  .header {
+    margin-bottom: var(--spacing-36);
   }
 
   .row {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-36);
     overflow-x: visible;
-    padding: 0;
+    padding-bottom: 0;
   }
 
   .card {
     min-width: 0;
     flex: initial;
-    padding: 16px 16px 18px;
   }
 
   .award {
-    font-size: 16px;
-  }
-
-  .year {
-    font-size: 11px;
-    margin-top: 12px;
-  }
-
-  .organization {
-    font-size: 10px;
-  }
-}
-
-@media (max-width: 420px) {
-  .row {
-    grid-template-columns: 1fr;
+    font-size: 20px;
   }
 }

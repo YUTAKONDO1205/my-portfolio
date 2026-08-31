@@ -1,135 +1,107 @@
 /*
- * Impact Dashboard — "data room" night panel
+ * Impact Dashboard — data on the void.
  * --------------------------------------------------------------------
- * One of only three dark surfaces on the light porcelain site.
- * The section itself is a full-bleed rounded panel: var(--night) base,
- * subtle indigo gradient, faint --signal-cyan / --signal-gold auras.
+ * The "data room" panel is gone: no rounded surface, no border, no shadow,
+ * no gradient. The charts sit directly on #000, separated from each other by
+ * whitespace alone.
  *
- * Modality pastels (dark-surface convention from the design brief):
- *  theme-drone    #75a9ff   Image + IMU
- *  theme-pdm      #f0c15d   Vibration + Audio
- *  theme-anomaly  #ff7b7b   Image + Ops
- *  theme-eltres   #8fd7cb   CO2 + GPS
- * Recognition encoding uses --signal-gold (rings / chevrons / annotation).
- * Luminous cyan (--signal-cyan) is reserved for "live" status + the giant 0.
+ * Modality hues come from the constellation spectrum:
+ *   theme-drone    #5a8cff   Image + IMU
+ *   theme-pdm      #ffb829   Vibration + Audio
+ *   theme-anomaly  #d05cff   Image + Ops
+ *   theme-eltres   #2fbfa3   CO2 + GPS
+ * Electric Iris never appears here — it belongs to the single filled action.
  *
- * Text      → --night-text / --night-muted / --night-muted-soft
- * Hairlines → --night-line / --night-line-strong
- * Tiles     → --night-card on the opaque panel (no backdrop-filter needed)
+ * The only hairlines on the whole site live in this file: a chart cannot
+ * state a scale without an axis. They are held at 8–14% white so they read as
+ * measurement, not as chrome.
  * --------------------------------------------------------------------
  */
 
 .section {
-  --c-drone: #75a9ff;
-  --c-pdm: #f0c15d;
-  --c-anomaly: #ff7b7b;
-  --c-eltres: #8fd7cb;
-  /* dedicated 'articles' hue for the cadence chart — a desaturated steel kept
-     distinct from --c-drone so it never reads as the Image+IMU modality */
-  --c-article: #8ea3c4;
+  --c-drone: var(--spectrum-blue);
+  --c-pdm: var(--spectrum-amber);
+  --c-anomaly: var(--spectrum-magenta);
+  --c-eltres: var(--spectrum-teal);
+  /* dedicated 'articles' hue — a neutral ash kept distinct from every
+     modality colour so it never reads as one of them */
+  --c-article: var(--color-ash-gray);
+  --chart-line: rgba(255, 255, 255, 0.09);
+  --chart-line-strong: rgba(255, 255, 255, 0.16);
 
   position: relative;
   width: 100%;
-  border-radius: 28px;
-  border: 1px solid var(--night-line);
-  background-color: var(--night);
-  background-image:
-    radial-gradient(
-      120% 90% at 14% -8%,
-      rgba(127, 212, 255, 0.07),
-      transparent 55%
-    ),
-    radial-gradient(
-      110% 85% at 88% 112%,
-      rgba(255, 210, 122, 0.055),
-      transparent 55%
-    ),
-    linear-gradient(158deg, #131b31 0%, var(--night) 52%, #080c15 100%);
-  box-shadow:
-    var(--shadow-strong),
-    0 60px 150px -70px rgba(11, 16, 28, 0.6),
-    inset 0 1px 0 rgba(238, 242, 248, 0.06);
-  padding: clamp(44px, 6vw, 84px) clamp(24px, 5vw, 64px);
-  color: var(--night-text);
+  color: var(--color-bone-white);
   font-variant-numeric: tabular-nums;
 }
 
 .eyebrow {
   display: inline-block;
-  font-family: var(--font-mono-stack);
-  font-size: 11px;
-  letter-spacing: 0.24em;
+  margin-bottom: var(--spacing-18);
+  color: var(--color-saffron-spark);
+  font-size: var(--text-nav-label);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-nav-label);
+  letter-spacing: var(--tracking-nav-label);
   text-transform: uppercase;
-  color: var(--night-muted);
-  margin-bottom: 14px;
 }
 
 .title {
-  font-family: var(--font-heading);
-  font-size: clamp(28px, 3.4vw, 44px);
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  margin: 0 0 14px;
-  line-height: 1.2;
-  color: var(--night-text);
+  margin: 0 0 var(--spacing-24);
+  font-size: clamp(34px, 5vw, var(--text-heading-lg));
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-heading-lg);
+  letter-spacing: -0.04em;
+  color: var(--color-bone-white);
 }
 
 .lead {
-  font-size: clamp(13px, 1.2vw, 15px);
-  color: var(--night-muted);
-  margin: 0 0 36px;
-  line-height: 1.7;
-  max-width: 720px;
+  margin: 0 0 var(--spacing-96);
+  max-width: 520px;
+  color: var(--color-silver-mist);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-extralight);
+  line-height: var(--leading-body);
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 20px;
+  gap: var(--spacing-96) var(--spacing-60);
 }
 
 .tile {
-  background: var(--night-card);
-  border: 1px solid var(--night-line);
-  border-radius: 16px;
-  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  box-shadow: inset 0 1px 0 rgba(238, 242, 248, 0.05);
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .tile {
-    background: var(--night-soft);
-  }
+  gap: var(--spacing-30);
 }
 
 .tileHeader {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--spacing-6);
 }
 
 .tileTitle {
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
   margin: 0;
-  color: var(--night-text);
+  font-size: var(--text-heading-2xs);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-heading-2xs);
+  letter-spacing: var(--tracking-heading-2xs);
+  color: var(--color-bone-white);
 }
 
 .tileSubtitle {
-  font-size: 11px;
-  color: var(--night-muted);
-  letter-spacing: 0.04em;
   margin: 0;
+  color: var(--color-ash-gray);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-extralight);
+  letter-spacing: 0.04em;
 }
 
 /* ---------- Viz A: Output Cadence (stacked columns) ---------- */
 .vizA {
   grid-column: span 7;
-  min-height: 280px;
 }
 
 .cadenceWrap {
@@ -137,7 +109,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: var(--spacing-18);
 }
 
 .cadenceSvg {
@@ -148,36 +120,36 @@
 }
 
 .cadenceGrid {
-  stroke: var(--night-line);
+  stroke: var(--chart-line);
   stroke-width: 1;
   stroke-dasharray: 2 5;
 }
 
 .cadenceBaseline {
-  stroke: var(--night-line-strong);
-  stroke-width: 1.5;
+  stroke: var(--chart-line-strong);
+  stroke-width: 1;
 }
 
 .cadenceAxisLabel {
-  fill: var(--night-muted-soft);
-  font-family: var(--font-mono-stack);
+  fill: var(--color-ash-gray);
+  font-family: var(--font-ppneuemontreal);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
 }
 
 .cadenceYearLabel {
-  fill: var(--night-muted);
-  font-family: var(--font-mono-stack);
-  font-size: 13px;
-  letter-spacing: 0.08em;
+  fill: var(--color-ash-gray);
+  font-family: var(--font-ppneuemontreal);
+  font-size: 12px;
+  letter-spacing: 0.14em;
   font-variant-numeric: tabular-nums;
 }
 
 .cadenceTotalLabel {
-  fill: var(--night-text);
-  font-family: var(--font-heading);
+  fill: var(--color-bone-white);
+  font-family: var(--font-ppneuemontreal);
   font-size: 15px;
-  font-weight: 600;
+  font-weight: var(--font-weight-regular);
   font-variant-numeric: tabular-nums;
 }
 
@@ -186,31 +158,31 @@
 }
 
 .barAward {
-  fill: var(--signal-gold);
+  fill: var(--color-saffron-spark);
 }
 
-/* in-progress (YTD) year — lighter, hatched so a partial year does not read
+/* in-progress (YTD) year — dimmed and dashed so a partial year does not read
    as a decline against completed years */
 .barArticleYtd {
   fill: var(--c-article);
-  opacity: 0.4;
+  opacity: 0.34;
 }
 
 .barAwardYtd {
-  fill: var(--signal-gold);
-  opacity: 0.42;
+  fill: var(--color-saffron-spark);
+  opacity: 0.36;
 }
 
 .barYtdOutline {
   fill: none;
-  stroke: var(--night-line-strong);
+  stroke: var(--chart-line-strong);
   stroke-width: 1;
   stroke-dasharray: 3 3;
 }
 
 .cadenceYtdTag {
-  fill: var(--night-muted-soft);
-  font-family: var(--font-mono-stack);
+  fill: var(--color-ash-gray);
+  font-family: var(--font-ppneuemontreal);
   font-size: 9.5px;
   letter-spacing: 0.06em;
 }
@@ -220,29 +192,28 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 10px 18px;
+  gap: var(--spacing-12) var(--spacing-24);
 }
 
 .cadenceLegend {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  gap: var(--spacing-12) var(--spacing-24);
 }
 
 .cadenceLegendItem {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  color: var(--night-muted);
-  letter-spacing: 0.03em;
+  gap: var(--spacing-6);
+  color: var(--color-ash-gray);
+  font-size: var(--text-caption);
+  letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
 }
 
 .cadenceSwatch {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
+  width: 8px;
+  height: 8px;
 }
 
 .swatchArticle {
@@ -250,22 +221,21 @@
 }
 
 .swatchAward {
-  background: var(--signal-gold);
+  background: var(--color-saffron-spark);
 }
 
 .cadenceCumulative {
-  font-size: 12px;
-  color: var(--night-muted-soft);
+  color: var(--color-ash-gray);
+  font-size: var(--text-caption);
   letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
 }
 
 .cadenceCumulative strong {
-  font-family: var(--font-heading);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--signal-cyan);
-  margin: 0 2px;
+  margin: 0 3px;
+  color: var(--color-bone-white);
+  font-size: 15px;
+  font-weight: var(--font-weight-regular);
 }
 
 /* ---------- Viz B: Modality Coverage ---------- */
@@ -276,14 +246,14 @@
 .lollipopList {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: var(--spacing-24);
 }
 
 .lollipopRow {
   display: grid;
-  grid-template-columns: 100px 1fr 32px;
+  grid-template-columns: 104px 1fr 32px;
   align-items: center;
-  gap: 12px;
+  gap: var(--spacing-12);
 }
 
 .lollipopLabel {
@@ -293,15 +263,17 @@
 }
 
 .lollipopLabelJa {
+  color: var(--color-bone-white);
   font-size: 13px;
-  color: var(--night-text);
+  font-weight: var(--font-weight-extralight);
   letter-spacing: 0.02em;
 }
 
 .lollipopLabelEn {
+  color: var(--color-ash-gray);
   font-size: 10px;
-  color: var(--night-muted-soft);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .lollipopTrack {
@@ -312,41 +284,50 @@
 }
 
 .lollipopBar {
-  height: 3px;
-  border-radius: 999px;
+  height: 1px;
   transform-origin: left center;
 }
 
 .lollipopDot {
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
 
-.lollipopBar.drone, .lollipopDot.drone { background: var(--c-drone); }
-.lollipopBar.pdm, .lollipopDot.pdm { background: var(--c-pdm); }
-.lollipopBar.anomaly, .lollipopDot.anomaly { background: var(--c-anomaly); }
-.lollipopBar.eltres, .lollipopDot.eltres { background: var(--c-eltres); }
+.lollipopBar.drone,
+.lollipopDot.drone {
+  background: var(--c-drone);
+}
+.lollipopBar.pdm,
+.lollipopDot.pdm {
+  background: var(--c-pdm);
+}
+.lollipopBar.anomaly,
+.lollipopDot.anomaly {
+  background: var(--c-anomaly);
+}
+.lollipopBar.eltres,
+.lollipopDot.eltres {
+  background: var(--c-eltres);
+}
 
 .lollipopCount {
-  font-family: var(--font-mono-stack);
+  color: var(--color-bone-white);
   font-size: 14px;
-  color: var(--night-text);
+  font-weight: var(--font-weight-regular);
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
 /* ---------- Viz C: Distribution Reach ---------- */
-/* Full-width tile; content splits internally: channels 7fr / BAN 5fr. */
 .vizC {
   grid-column: span 12;
-  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: 16px 40px;
+  gap: var(--spacing-30) var(--spacing-96);
   align-items: center;
 }
 
@@ -356,95 +337,85 @@
 
 .channelGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--spacing-18) var(--spacing-24);
 }
 
 .channelTile {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  background: rgba(238, 242, 248, 0.03);
-  border: 1px solid var(--night-line);
-  border-radius: 10px;
-  font-size: 11px;
-  color: var(--night-text);
-  letter-spacing: 0.02em;
+  gap: var(--spacing-6);
+  color: var(--color-silver-mist);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-extralight);
+  letter-spacing: 0.04em;
 }
 
 .statusDot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .statusDot.live {
-  background: var(--signal-cyan);
-  box-shadow: 0 0 0 3px rgba(127, 212, 255, 0.14);
+  background: var(--spectrum-teal);
 }
-.statusDot.pending { background: var(--night-muted-soft); }
 
+.statusDot.pending {
+  background: var(--color-ash-gray);
+}
+
+/* The single biggest numeral on the page — scale alone, no colour trick. */
 .banWrap {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 4px;
-  padding-left: 14px;
-  border-left: 1px solid var(--night-line);
-  position: relative;
-}
-
-.banWrap::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 14%;
-  bottom: 14%;
-  width: 2px;
-  background: var(--night-line-strong);
-  border-radius: 2px;
+  gap: var(--spacing-24);
 }
 
 .ban {
-  font-size: clamp(72px, 9vw, 108px);
-  font-weight: 200;
+  font-size: clamp(78px, 9vw, var(--text-display));
+  font-weight: var(--font-weight-extralight);
   line-height: 0.9;
-  color: var(--signal-cyan);
-  letter-spacing: -0.04em;
+  color: var(--color-bone-white);
+  letter-spacing: var(--tracking-display);
   font-variant-numeric: tabular-nums;
 }
 
 .banCaption {
-  font-size: 11px;
-  color: var(--night-muted);
+  color: var(--color-ash-gray);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-extralight);
   letter-spacing: 0.04em;
   line-height: 1.6;
 }
 
 .banCaptionStrong {
-  color: var(--night-text);
   display: block;
   margin-bottom: 2px;
-  font-size: 12px;
+  color: var(--color-bone-white);
+  font-size: 13px;
+  font-weight: var(--font-weight-regular);
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 768px) {
-  .section {
-    border-radius: 24px;
+@media (max-width: 1024px) {
+  .grid {
+    gap: var(--spacing-60);
   }
 
-  .tile {
-    padding: 18px;
-  }
-
-  .vizA, .vizB, .vizC {
+  .vizA,
+  .vizB,
+  .vizC {
     grid-column: span 12;
   }
+}
 
-  /* Stack Viz C's internal split: channels above, BAN stat below. */
+@media (max-width: 768px) {
+  .lead {
+    margin-bottom: var(--spacing-60);
+  }
+
   .vizC {
     grid-template-columns: minmax(0, 1fr);
     align-items: stretch;
@@ -452,10 +423,9 @@
 
   .lollipopRow {
     grid-template-columns: 90px 1fr 28px;
-    gap: 10px;
   }
 
   .ban {
-    font-size: 72px;
+    font-size: 78px;
   }
 }

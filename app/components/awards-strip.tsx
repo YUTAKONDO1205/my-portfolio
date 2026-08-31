@@ -10,11 +10,6 @@ type AwardsStripProps = {
 
 const easeOutQuart = [0.22, 1, 0.36, 1] as const;
 
-const hoverLift = {
-  y: -6,
-  transition: { type: "spring", stiffness: 240, damping: 20 },
-} as const;
-
 export function AwardsStrip({ awards }: AwardsStripProps) {
   const reduceMotion = useReducedMotion();
 
@@ -46,12 +41,6 @@ export function AwardsStrip({ awards }: AwardsStripProps) {
 
   return (
     <section className={styles.section} aria-labelledby="awards-strip-heading">
-      {/* Dawn seam — the night hero dissolves into the porcelain band so the
-          two surfaces read as one continuous field rather than a hard cut. */}
-      <div className={styles.dawn} aria-hidden="true">
-        <span className={styles.horizon} />
-      </div>
-
       <div className={styles.header}>
         <span id="awards-strip-heading" className={styles.eyebrow}>
           Recognition · 実績
@@ -76,8 +65,6 @@ export function AwardsStrip({ awards }: AwardsStripProps) {
             target="_blank"
             rel="noreferrer"
             variants={itemVariants}
-            whileHover={reduceMotion ? undefined : hoverLift}
-            whileFocus={reduceMotion ? undefined : hoverLift}
             aria-label={`${award.year} ${award.organization} ${award.award}`}
           >
             <span className={styles.award}>{award.award}</span>

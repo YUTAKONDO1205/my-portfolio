@@ -76,12 +76,6 @@ const charVariants: Variants = {
   },
 };
 
-const hoverLift = {
-  y: -8,
-  scale: 1.012,
-  transition: { type: "spring", stiffness: 240, damping: 20 },
-} as const;
-
 function themeClassName(themeClass: ResearchProject["themeClass"]) {
   switch (themeClass) {
     case "theme-drone":
@@ -95,13 +89,53 @@ function themeClassName(themeClass: ResearchProject["themeClass"]) {
   }
 }
 
-/* Per-character heading reveal — restored from the pre-rewrite design. */
+/* Per-character heading reveal.
+   Every character is its own inline-block span, which creates a line-break
+   opportunity between each pair. Japanese wants exactly that, but Latin does
+   not — an 78px headline would split as "De / cide". So runs of Latin
+   letters/digits are grouped inside a nowrap wrapper, while CJK characters
+   stay individually breakable. */
+type HeadingToken =
+  | { kind: "space" }
+  | { kind: "latin"; text: string }
+  | { kind: "char"; text: string };
+
+function tokenizeHeading(text: string): HeadingToken[] {
+  const tokens: HeadingToken[] = [];
+  let latin = "";
+
+  const flush = () => {
+    if (latin) {
+      tokens.push({ kind: "latin", text: latin });
+      latin = "";
+    }
+  };
+
+  for (const char of Array.from(text)) {
+    if (/[A-Za-z0-9]/.test(char)) {
+      latin += char;
+      continue;
+    }
+    flush();
+    tokens.push(
+      char === " " || char === "　"
+        ? { kind: "space" }
+        : { kind: "char", text: char },
+    );
+  }
+  flush();
+
+  return tokens;
+}
+
 function SplitHeading({ text }: { text: string }) {
   const reduceMotion = useReducedMotion();
 
   if (reduceMotion) {
     return <h2>{text}</h2>;
   }
+
+  let charKey = 0;
 
   return (
     <motion.h2
@@ -114,24 +148,44 @@ function SplitHeading({ text }: { text: string }) {
         show: { transition: { staggerChildren: 0.024 } },
       }}
     >
-      {Array.from(text).map((char, index) =>
-        char === " " || char === "　" ? (
-          <span
-            key={`${char}-${index}`}
-            className="heading-char-space"
-            aria-hidden="true"
-          />
-        ) : (
-          <motion.span
-            key={`${char}-${index}`}
-            className="heading-char"
-            aria-hidden="true"
-            variants={charVariants}
-          >
-            {char}
-          </motion.span>
-        ),
-      )}
+      {tokenizeHeading(text).map((token, index) => {
+        if (token.kind === "space") {
+          return (
+            <span
+              key={`space-${index}`}
+              className="heading-char-space"
+              aria-hidden="true"
+            />
+          );
+        }
+
+        if (token.kind === "char") {
+          return (
+            <motion.span
+              key={`char-${index}-${charKey++}`}
+              className="heading-char"
+              aria-hidden="true"
+              variants={charVariants}
+            >
+              {token.text}
+            </motion.span>
+          );
+        }
+
+        return (
+          <span key={`word-${index}`} className="heading-word" aria-hidden="true">
+            {Array.from(token.text).map((char) => (
+              <motion.span
+                key={`${char}-${charKey++}`}
+                className="heading-char"
+                variants={charVariants}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </span>
+        );
+      })}
     </motion.h2>
   );
 }
@@ -239,8 +293,6 @@ export function HomePageView({
   const liveChannels = selectedWorks.flatMap((work) => work.distribution ?? []);
   const featuredWorks = selectedWorks.filter((work) => work.feature);
 
-  const cardHover = reduceMotion ? undefined : hoverLift;
-
   return (
     <>
       <div id="top" />
@@ -317,7 +369,6 @@ export function HomePageView({
                   work.feature ? styles.workCardFeature : ""
                 } ${themeClassName(work.themeClass)}`}
                 variants={itemVariants}
-                whileHover={cardHover}
               >
                 <a href={work.href} target="_blank" rel="noreferrer">
                   <span className={styles.cardMeta}>{work.category}</span>
@@ -416,8 +467,7 @@ export function HomePageView({
                     project.themeClass,
                   )}`}
                   variants={itemVariants}
-                  whileHover={cardHover}
-                >
+                  >
                   <Link href={`/research/${project.slug}`}>
                     <div className={styles.researchImageWrap} aria-hidden="true">
                       <div
@@ -466,7 +516,6 @@ export function HomePageView({
                 key={step.en}
                 className="axis-step"
                 variants={itemVariants}
-                whileHover={cardHover}
               >
                 <span className="axis-step-index">
                   {String(index + 1).padStart(2, "0")}
@@ -487,7 +536,7 @@ export function HomePageView({
         </div>
 
         {/* Data room — restored impact dashboard as a night panel */}
-        <div className={`${styles.shell} ${styles.section} ${styles.nightSeat}`}>
+        <div className={`${styles.shell} ${styles.section}`}>
           <ImpactDashboard
             publications={publicationTimeline}
             awards={awardBadges}
@@ -557,7 +606,7 @@ export function HomePageView({
         {/* Contact — night panel finale */}
         <motion.section
           id="contact"
-          className={`${styles.shell} ${styles.contactSection} ${styles.nightSeat}`}
+          className={`${styles.shell} ${styles.contactSection}`}
           variants={sectionVariants}
           initial="hidden"
           whileInView="show"
@@ -579,7 +628,6 @@ export function HomePageView({
                 href={platform.href}
                 target="_blank"
                 rel="noreferrer"
-                whileHover={cardHover}
               >
                 <span>{platform.label}</span>
                 <strong>{platform.description}</strong>

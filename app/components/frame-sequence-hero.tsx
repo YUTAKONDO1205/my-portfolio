@@ -16,43 +16,58 @@ import styles from "./frame-sequence-hero.module.css";
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
 /* ==========================================================================
-   Signal Field — procedural flow-field particle canvas.
+   Constellation — the signature brand visual.
 
-   Replaces the old 192-frame JPEG scrub (blurry, watermarked, quantized to
-   frame steps). Everything here is drawn at device resolution every RAF
-   tick, and every externally-driven value (scroll progress, pointer) is
-   lerped inside the loop, so motion stays butter-smooth no matter how
-   choppy the scroll input is.
+   Thousands of tiny outlined triangles in the full brand spectrum, gathered
+   into an organic two-lobed cloud: knowledge as distributed intelligence
+   rather than hierarchical data. Ambient glyphs scatter through the space
+   around it. Scroll progress breathes the cloud open and closed.
+
+   Everything is stroked at 1px on pure black; triangles are batched into a
+   Path2D per colour and depth tier, so ~1400 glyphs cost ten stroke calls
+   a frame.
    ========================================================================== */
 
-type SignalFieldHandle = {
+type ConstellationHandle = {
   setProgress: (p: number) => void;
   destroy: () => void;
 };
 
-function createSignalField(canvas: HTMLCanvasElement): SignalFieldHandle {
+const SPECTRUM = [
+  "128, 82, 255", // Electric Iris
+  "255, 184, 41", // Saffron Spark
+  "47, 191, 163", // Deep Verdant, lifted for legibility on black
+  "208, 92, 255", // magenta
+  "90, 140, 255", // blue
+] as const;
+
+/* Organic silhouette in unit space: a radial harmonic sum gives the lobed,
+   slightly asymmetric outline; the fissure below carves the two hemispheres. */
+function shapeRadius(theta: number) {
+  return (
+    0.82 +
+    0.17 * Math.sin(2 * theta) +
+    0.12 * Math.cos(3 * theta + 1.1) +
+    0.07 * Math.sin(5 * theta + 0.4)
+  );
+}
+
+function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
   const ctx = canvas.getContext("2d", { alpha: false });
   if (!ctx) return { setProgress: () => {}, destroy: () => {} };
 
-  const NIGHT = { r: 11, g: 16, b: 28 };
-  // Luminous palette: mostly steel-cyan streams with sparse gold signals.
-  const PALETTE = [
-    { r: 127, g: 212, b: 255, w: 0.42 }, // signal cyan
-    { r: 96, g: 150, b: 224, w: 0.3 }, // steel blue
-    { r: 70, g: 110, b: 190, w: 0.14 }, // deep indigo
-    { r: 255, g: 210, b: 122, w: 0.14 }, // signal gold
-  ];
-
-  type Particle = {
-    x: number;
-    y: number;
-    px: number;
-    py: number;
-    speed: number;
-    life: number;
-    maxLife: number;
-    color: (typeof PALETTE)[number];
-    width: number;
+  type Glyph = {
+    /** home position in unit space, relative to the cloud centre */
+    hx: number;
+    hy: number;
+    size: number;
+    angle: number;
+    spin: number;
+    /** independent drift phase so no two glyphs breathe together */
+    phase: number;
+    drift: number;
+    colorIndex: number;
+    ambient: boolean;
   };
 
   let raf = 0;
@@ -60,181 +75,180 @@ function createSignalField(canvas: HTMLCanvasElement): SignalFieldHandle {
   let width = 0;
   let height = 0;
   let dpr = 1;
-  let particles: Particle[] = [];
+  let glyphs: Glyph[] = [];
+  let paths: Path2D[] = [];
 
-  // Lerped inputs — targets are set from outside, drawn values chase them.
   let targetProgress = 0;
   let progress = 0;
   let targetMx = 0.5;
-  let targetMy = 0.42;
+  let targetMy = 0.5;
   let mx = 0.5;
-  let my = 0.42;
+  let my = 0.5;
 
-  let time = Math.random() * 400;
+  let time = Math.random() * 500;
   let last = performance.now();
 
-  const pickColor = () => {
-    let r = Math.random();
-    for (const c of PALETTE) {
-      if (r < c.w) return c;
-      r -= c.w;
+  const seedInShape = (g: Glyph) => {
+    // rejection-sample inside the harmonic outline, skipping the fissure
+    for (let attempt = 0; attempt < 24; attempt += 1) {
+      const theta = Math.random() * Math.PI * 2;
+      // sqrt keeps the fill even instead of clumping at the centre
+      const r = Math.sqrt(Math.random()) * shapeRadius(theta);
+      const x = Math.cos(theta) * r;
+      const y = Math.sin(theta) * r * 0.86;
+      if (Math.abs(x) < 0.045 && y > -0.55) continue;
+      g.hx = x;
+      g.hy = y;
+      return;
     }
-    return PALETTE[0];
+    g.hx = 0.4;
+    g.hy = 0;
   };
 
-  const spawn = (p: Particle, anywhere: boolean) => {
-    p.x = Math.random() * width;
-    p.y = anywhere
-      ? Math.random() * height
-      : height * (0.12 + Math.random() * 0.76);
-    p.px = p.x;
-    p.py = p.y;
-    p.speed = 0.55 + Math.random() * 0.9;
-    p.maxLife = 160 + Math.random() * 240;
-    p.life = anywhere ? Math.random() * p.maxLife : 0;
-    p.color = pickColor();
-    p.width = 0.6 + Math.random() * 1.1;
+  const seedAmbient = (g: Glyph) => {
+    const theta = Math.random() * Math.PI * 2;
+    const r = 1.25 + Math.random() * 1.5;
+    g.hx = Math.cos(theta) * r;
+    g.hy = Math.sin(theta) * r * 0.72;
+  };
+
+  const build = () => {
+    const isMobile = width <= 768;
+    const count = Math.min(
+      isMobile ? 620 : 1500,
+      Math.round((width * height) / (isMobile ? 900 : 620)),
+    );
+
+    glyphs = Array.from({ length: count }, (_, i) => {
+      const ambient = i % 5 === 0;
+      const g: Glyph = {
+        hx: 0,
+        hy: 0,
+        size: ambient ? 2 + Math.random() * 3 : 1.6 + Math.random() * 2.8,
+        angle: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.006,
+        phase: Math.random() * Math.PI * 2,
+        drift: 0.006 + Math.random() * 0.02,
+        colorIndex: Math.floor(Math.random() * SPECTRUM.length),
+        ambient,
+      };
+      if (ambient) seedAmbient(g);
+      else seedInShape(g);
+      return g;
+    });
   };
 
   const resize = () => {
     const isMobile = window.innerWidth <= 768;
-    const newDpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
-    const newW = canvas.clientWidth;
-    const newH = canvas.clientHeight;
-    // Mobile URL-bar collapse fires window resize without changing the 100svh
-    // canvas box — bail out so trails and particle positions survive.
+    const nextDpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+    const nextW = canvas.clientWidth;
+    const nextH = canvas.clientHeight;
+    // Mobile URL-bar collapse fires resize without changing the 100svh box.
     if (
-      newDpr === dpr &&
-      newW === width &&
-      newH === height &&
-      particles.length > 0
+      nextDpr === dpr &&
+      nextW === width &&
+      nextH === height &&
+      glyphs.length > 0
     ) {
       return;
     }
 
-    const oldW = width;
-    const oldH = height;
-    dpr = newDpr;
-    width = newW;
-    height = newH;
+    dpr = nextDpr;
+    width = nextW;
+    height = nextH;
     canvas.width = Math.max(1, Math.round(width * dpr));
     canvas.height = Math.max(1, Math.round(height * dpr));
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = `rgb(${NIGHT.r}, ${NIGHT.g}, ${NIGHT.b})`;
-    ctx.fillRect(0, 0, width, height);
-
-    const count = Math.min(760, Math.round((width * height) / 2400));
-    if (particles.length > 0 && oldW > 0 && oldH > 0) {
-      // Real size change: rescale the living field instead of re-seeding it.
-      for (const p of particles) {
-        p.x *= width / oldW;
-        p.y *= height / oldH;
-        p.px = p.x;
-        p.py = p.y;
-      }
-      while (particles.length < count) {
-        const p = {} as Particle;
-        spawn(p, true);
-        particles.push(p);
-      }
-      particles.length = Math.min(particles.length, count);
-    } else {
-      particles = Array.from({ length: count }, () => {
-        const p = {} as Particle;
-        spawn(p, true);
-        return p;
-      });
-    }
-  };
-
-  // Flow field: three overlapping sine layers give a cheap curl-like swirl;
-  // `structure` (scroll-driven, 0 → 1) morphs it from a free swirling field
-  // ("sense") through a horizontal convergence ("decide") into a forward
-  // radiating fan ("share").
-  const fieldAngle = (x: number, y: number, s: number) => {
-    const nx = x / width;
-    const ny = y / height;
-
-    const swirl =
-      Math.sin(ny * 4.4 + time * 0.32) * 1.25 +
-      Math.cos(nx * 3.6 - time * 0.24) * 1.1 +
-      Math.sin((nx + ny) * 2.3 + time * 0.18) * 0.7;
-
-    // Pointer bends the field around a damped attractor.
-    const dx = nx - mx;
-    const dy = ny - my;
-    const dist2 = dx * dx + dy * dy;
-    const bend = Math.exp(-dist2 * 14) * 1.6;
-    const bendAngle = Math.atan2(dy, dx) + Math.PI / 2;
-
-    if (s < 0.5) {
-      // sense → decide: swirl flattens into a rightward stream that
-      // converges on the vertical center.
-      const k = s * 2;
-      const converge = Math.atan2((0.5 - ny) * 1.4, 1.6);
-      const base = swirl * (1 - k * 0.82) + converge * k;
-      return base + bend * Math.sin(bendAngle) * (1 - k * 0.5);
-    }
-    // decide → share: the stream fans out from the left-center point.
-    const k = (s - 0.5) * 2;
-    const fan = Math.atan2(ny - 0.5, nx - 0.08);
-    const converge = Math.atan2((0.5 - ny) * 1.4, 1.6);
-    const base = converge * (1 - k) + fan * k + swirl * 0.16 * (1 - k);
-    return base + bend * Math.sin(bendAngle) * 0.4;
+    build();
   };
 
   const tick = (now: number) => {
     if (!running) return;
-    const dt = Math.min(2.4, (now - last) / 16.667);
+    const dt = Math.min(2.6, (now - last) / 16.667);
     last = now;
     time += dt * 0.016;
 
-    // Chase the externally-set targets — this is the ヌメヌメ core.
-    progress += (targetProgress - progress) * (1 - Math.pow(0.94, dt));
+    // Chase external inputs so scroll and pointer never read as steps.
+    progress += (targetProgress - progress) * (1 - Math.pow(0.93, dt));
     mx += (targetMx - mx) * (1 - Math.pow(0.92, dt));
     my += (targetMy - my) * (1 - Math.pow(0.92, dt));
 
-    // Translucent night wash = persistent trails / built-in motion blur.
-    // dt-scaled so trail length reads the same at 30 / 60 / 120Hz.
-    const washAlpha = 1 - Math.pow(1 - 0.085, dt);
-    ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = `rgba(${NIGHT.r}, ${NIGHT.g}, ${NIGHT.b}, ${washAlpha})`;
+    ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, width, height);
 
-    ctx.globalCompositeOperation = "lighter";
-    ctx.lineCap = "round";
-
     const s = Math.max(0, Math.min(1, progress));
-    const speedBoost = 1 + s * 0.9;
+    const isMobile = width <= 768;
 
-    for (const p of particles) {
-      const a = fieldAngle(p.x, p.y, s);
-      const v = p.speed * speedBoost * dt;
-      p.px = p.x;
-      p.py = p.y;
-      p.x += Math.cos(a) * v * 2.1;
-      p.y += Math.sin(a) * v * 2.1;
-      p.life += dt;
+    // Two-column composition: the cloud sits in the right half on desktop,
+    // centred once the copy stacks beneath it.
+    const cx = width * (isMobile ? 0.5 : 0.67);
+    const cy = height * (isMobile ? 0.42 : 0.5);
+    const scale = Math.min(width, height) * (isMobile ? 0.4 : 0.42);
 
-      const edge =
-        p.x < -12 || p.x > width + 12 || p.y < -12 || p.y > height + 12;
-      if (edge || p.life > p.maxLife) {
-        spawn(p, false);
-        continue;
+    // Act 1 gathered → Act 2 opened out → Act 3 re-gathered, tighter.
+    const spread = 1 + Math.sin(s * Math.PI) * 0.34 + s * 0.12;
+    const swirl = s * 0.5;
+    const cosS = Math.cos(swirl);
+    const sinS = Math.sin(swirl);
+
+    // Two batches per colour — dense cloud and dim ambient scatter — so the
+    // depth separation survives the Path2D batching.
+    paths = Array.from({ length: SPECTRUM.length * 2 }, () => new Path2D());
+
+    for (const g of glyphs) {
+      g.angle += g.spin * dt;
+
+      // per-glyph wander keeps the cloud alive when the page is still
+      const wobbleX = Math.sin(time * 0.6 + g.phase) * g.drift;
+      const wobbleY = Math.cos(time * 0.52 + g.phase * 1.4) * g.drift;
+
+      let ux = (g.hx + wobbleX) * spread;
+      let uy = (g.hy + wobbleY) * spread;
+      const rx = ux * cosS - uy * sinS;
+      const ry = ux * sinS + uy * cosS;
+      ux = rx;
+      uy = ry;
+
+      let x = cx + ux * scale;
+      let y = cy + uy * scale;
+
+      // Pointer pushes the field gently aside — a damped repulsion.
+      const pdx = x - mx * width;
+      const pdy = y - my * height;
+      const pd2 = pdx * pdx + pdy * pdy;
+      const radius = Math.min(width, height) * 0.22;
+      if (pd2 < radius * radius) {
+        const pd = Math.sqrt(pd2) || 1;
+        const push = (1 - pd / radius) * 26;
+        x += (pdx / pd) * push;
+        y += (pdy / pd) * push;
       }
 
-      // Fade in / out across the particle's life for soft continuity.
-      const lifeT = p.life / p.maxLife;
-      const fade =
-        lifeT < 0.12 ? lifeT / 0.12 : lifeT > 0.78 ? (1 - lifeT) / 0.22 : 1;
-      const alpha = 0.28 * fade;
+      if (x < -20 || x > width + 20 || y < -20 || y > height + 20) continue;
 
-      ctx.strokeStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${alpha})`;
-      ctx.lineWidth = p.width;
-      ctx.beginPath();
-      ctx.moveTo(p.px, p.py);
-      ctx.lineTo(p.x, p.y);
-      ctx.stroke();
+      const cos = Math.cos(g.angle);
+      const sin = Math.sin(g.angle);
+      const path = paths[g.colorIndex + (g.ambient ? SPECTRUM.length : 0)];
+      for (let i = 0; i < 3; i += 1) {
+        const a = (i * Math.PI * 2) / 3 - Math.PI / 2;
+        const px = Math.cos(a) * g.size;
+        const py = Math.sin(a) * g.size;
+        const vx = x + px * cos - py * sin;
+        const vy = y + px * sin + py * cos;
+        if (i === 0) path.moveTo(vx, vy);
+        else path.lineTo(vx, vy);
+      }
+      path.closePath();
+    }
+
+    // Ten stroke calls a frame, whatever the glyph count.
+    ctx.lineWidth = 1;
+    ctx.lineJoin = "round";
+    for (let i = 0; i < paths.length; i += 1) {
+      const ambient = i >= SPECTRUM.length;
+      const alpha = ambient ? 0.2 : 0.46 + s * 0.14;
+      ctx.strokeStyle = `rgba(${SPECTRUM[i % SPECTRUM.length]}, ${alpha})`;
+      ctx.stroke(paths[i]);
     }
 
     raf = requestAnimationFrame(tick);
@@ -247,9 +261,7 @@ function createSignalField(canvas: HTMLCanvasElement): SignalFieldHandle {
     targetMy = (e.clientY - rect.top) / Math.max(1, rect.height);
   };
 
-  // Run only while the hero is both on-screen and the tab is visible —
-  // otherwise the loop would burn CPU for the whole session after the
-  // visitor scrolls past the 300vh stage.
+  // Run only while the hero is on-screen and the tab is visible.
   let inView = true;
   const syncRunning = () => {
     const shouldRun = inView && !document.hidden;
@@ -272,12 +284,10 @@ function createSignalField(canvas: HTMLCanvasElement): SignalFieldHandle {
   );
   io.observe(canvas);
 
-  const onVisibility = () => syncRunning();
-
   resize();
   window.addEventListener("resize", resize);
   window.addEventListener("pointermove", onPointer, { passive: true });
-  document.addEventListener("visibilitychange", onVisibility);
+  document.addEventListener("visibilitychange", syncRunning);
   raf = requestAnimationFrame(tick);
 
   return {
@@ -290,15 +300,15 @@ function createSignalField(canvas: HTMLCanvasElement): SignalFieldHandle {
       io.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointer);
-      document.removeEventListener("visibilitychange", onVisibility);
+      document.removeEventListener("visibilitychange", syncRunning);
     },
   };
 }
 
 /* ==========================================================================
-   Three-act scroll choreography (restored grammar from the old hero):
+   Three-act scroll choreography, left-aligned in the copy column.
    Act 1  "Sense. Decide. Share."  — typographic statement
-   Act 2  JP thesis + proof tiles  — credibility
+   Act 2  JP thesis + proof figures — credibility
    Act 3  CTA + latest signal      — action
    ========================================================================== */
 
@@ -368,14 +378,22 @@ function HeroNav() {
   return (
     <header className={styles.nav}>
       <a className={styles.brand} href="#top" aria-label="ページ上部へ">
+        <i aria-hidden="true" />
         <span>近藤悠太</span>
-        <span>Yuta Kondo</span>
       </a>
       <nav className={styles.navLinks} aria-label="主要セクション">
         <a href="#works">Works</a>
         <a href="#research">Research</a>
         <a href="#contact">Contact</a>
       </nav>
+      <a
+        className={styles.navAction}
+        href={heroCopyV2.primaryCta.href}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {heroCopyV2.primaryCta.label}
+      </a>
     </header>
   );
 }
@@ -394,14 +412,6 @@ function StaticHero() {
         <p className={styles.thesis}>現場の信号を、使える判断へ。</p>
         <p className={styles.lead}>{heroCopyV2.subJa}</p>
         <div className={styles.actions}>
-          <a
-            className={styles.primaryAction}
-            href={heroCopyV2.primaryCta.href}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {heroCopyV2.primaryCta.label}
-          </a>
           <Link
             className={styles.secondaryAction}
             href={heroCopyV2.secondaryCta.href}
@@ -434,7 +444,7 @@ export function FrameSequenceHero() {
 function SignalHero() {
   const stageRef = useRef<HTMLElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const fieldRef = useRef<SignalFieldHandle | null>(null);
+  const fieldRef = useRef<ConstellationHandle | null>(null);
 
   const { scrollYProgress } = useScroll({
     target: stageRef,
@@ -456,7 +466,7 @@ function SignalHero() {
     // Reduced-motion visitors briefly see SignalHero before the swap to
     // StaticHero — never start the particle engine for them.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const field = createSignalField(canvas);
+    const field = createConstellation(canvas);
     fieldRef.current = field;
     const unsubscribe = scrollYProgress.on("change", (p) =>
       field.setProgress(p),
@@ -476,7 +486,6 @@ function SignalHero() {
     >
       <div className={styles.viewport}>
         <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
-        <div className={styles.vignette} aria-hidden="true" />
 
         <HeroNav />
 
@@ -516,7 +525,7 @@ function SignalHero() {
           </motion.p>
         </motion.div>
 
-        {/* Act 2 — thesis + proof tiles */}
+        {/* Act 2 — thesis + proof figures */}
         <motion.div className={styles.act} style={acts.act2} aria-hidden="true">
           <p className={styles.thesis}>
             振動・音響・画像を、
@@ -524,16 +533,16 @@ function SignalHero() {
             デバイスの上で判断に変える。
           </p>
           <p className={styles.lead}>{heroCopyV2.subJa}</p>
-          <div className={styles.tileRow}>
-            <div className={styles.tile}>
+          <div className={styles.figureRow}>
+            <div className={styles.figure}>
               <strong>{awardPrizeCount}</strong>
               <span>受賞</span>
             </div>
-            <div className={styles.tile}>
+            <div className={styles.figure}>
               <strong>4</strong>
               <span>配布チャネル</span>
             </div>
-            <div className={styles.tile}>
+            <div className={styles.figure}>
               <strong>100%</strong>
               <span>Local first</span>
             </div>
@@ -541,17 +550,12 @@ function SignalHero() {
         </motion.div>
 
         {/* Act 3 — CTA + latest signal */}
-        <motion.div className={`${styles.act} ${styles.actCta}`} style={acts.act3}>
+        <motion.div
+          className={`${styles.act} ${styles.actCta}`}
+          style={acts.act3}
+        >
           <p className={styles.thesis}>動くものを、届ける。</p>
           <div className={styles.actions}>
-            <a
-              className={styles.primaryAction}
-              href={heroCopyV2.primaryCta.href}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {heroCopyV2.primaryCta.label}
-            </a>
             <Link
               className={styles.secondaryAction}
               href={heroCopyV2.secondaryCta.href}

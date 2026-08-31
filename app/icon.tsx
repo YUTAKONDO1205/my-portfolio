@@ -7,6 +7,8 @@ export const size = {
 
 export const contentType = "image/png";
 
+/* The brand mark: a single angular fragment on the void, violet fading
+   through teal — the same glyph the constellation is built from. */
 export default function Icon() {
   return new ImageResponse(
     (
@@ -17,37 +19,18 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background:
-            "radial-gradient(circle at 30% 30%, rgba(206, 60, 85, 0.38), transparent 36%), linear-gradient(180deg, #180b0d 0%, #0b1118 100%)",
-          color: "#fff7f0",
-          fontSize: 244,
-          fontWeight: 800,
-          letterSpacing: "-0.08em",
+          background: "#000000",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 380,
-            height: 380,
-            borderRadius: 120,
-            border: "1px solid rgba(255, 245, 240, 0.18)",
-            boxShadow: "0 0 80px rgba(206, 60, 85, 0.24)",
-            background:
-              "linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02))",
-          }}
-        >
-          <span
-            style={{
-              display: "flex",
-              transform: "translateY(-12px)",
-            }}
-          >
-            YK
-          </span>
-        </div>
+        <svg width="300" height="264" viewBox="0 0 300 264">
+          <defs>
+            <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#8052ff" />
+              <stop offset="100%" stopColor="#15846e" />
+            </linearGradient>
+          </defs>
+          <polygon points="150,8 292,256 8,256" fill="url(#mark)" />
+        </svg>
       </div>
     ),
     size,

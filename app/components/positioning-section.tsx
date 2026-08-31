@@ -205,19 +205,6 @@ export function PositioningSection({ positioning }: PositioningSectionProps) {
               role="img"
               aria-label="Positioning radar: Yuta Kondo versus typical embedded and AI engineer silhouettes across five axes."
             >
-              <defs>
-                <linearGradient
-                  id="positioning-primary-gradient"
-                  x1="0"
-                  y1="0"
-                  x2="1"
-                  y2="1"
-                >
-                  <stop offset="0%" stopColor="#2e6b84" />
-                  <stop offset="100%" stopColor="#d9a83f" />
-                </linearGradient>
-              </defs>
-
               {/* Grid rings */}
               {ringPaths.map((d, i) => (
                 <path

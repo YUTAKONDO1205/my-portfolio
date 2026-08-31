@@ -10,6 +10,43 @@ export const size = {
 
 export const contentType = "image/png";
 
+const SPECTRUM = ["#8052ff", "#ffb829", "#2fbfa3", "#d05cff", "#5a8cff"];
+
+/* A loose constellation in the right half — the same triangular glyphs as the
+   hero canvas, laid out by hand so the card is deterministic. */
+const GLYPHS: Array<[number, number, number, number]> = [
+  // x, y, size, colour index
+  [60, 40, 9, 0],
+  [128, 96, 7, 3],
+  [196, 52, 6, 1],
+  [92, 158, 11, 4],
+  [172, 148, 8, 2],
+  [246, 118, 7, 0],
+  [40, 232, 8, 1],
+  [124, 236, 12, 0],
+  [204, 214, 9, 3],
+  [278, 196, 6, 4],
+  [76, 320, 7, 2],
+  [158, 330, 10, 1],
+  [238, 300, 8, 0],
+  [300, 268, 6, 3],
+  [110, 408, 8, 4],
+  [196, 400, 7, 0],
+  [268, 372, 9, 2],
+  [22, 128, 5, 3],
+  [318, 92, 5, 1],
+  [340, 340, 7, 0],
+  [12, 300, 6, 4],
+  [250, 452, 6, 1],
+  [150, 470, 5, 2],
+];
+
+function trianglePoints(x: number, y: number, s: number) {
+  return `${x},${y - s} ${x + s * 0.87},${y + s * 0.5} ${x - s * 0.87},${
+    y + s * 0.5
+  }`;
+}
+
 export default function OpenGraphImage() {
   return new ImageResponse(
     (
@@ -20,91 +57,29 @@ export default function OpenGraphImage() {
           display: "flex",
           position: "relative",
           overflow: "hidden",
-          background:
-            "radial-gradient(circle at 84% 18%, rgba(201, 67, 92, 0.20), transparent 24%), radial-gradient(circle at 18% 84%, rgba(71, 119, 176, 0.18), transparent 22%), linear-gradient(135deg, #12090b 0%, #161018 46%, #0f1722 100%)",
-          color: "#fff7f0",
+          background: "#000000",
+          color: "#ffffff",
         }}
       >
         <div
           style={{
             position: "absolute",
-            inset: 0,
-            opacity: 0.18,
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
-            backgroundSize: "72px 72px",
-          }}
-        />
-
-        <div
-          style={{
-            position: "absolute",
-            right: -60,
-            top: -30,
-            width: 620,
-            height: 620,
-            borderRadius: 999,
-            opacity: 0.2,
-            border: "1px solid rgba(255,255,255,0.24)",
-          }}
-        />
-
-        <div
-          style={{
-            position: "absolute",
-            right: 80,
-            bottom: 72,
-            width: 320,
-            height: 320,
-            display: "flex",
-            borderRadius: 999,
-            border: "1px solid rgba(255,255,255,0.12)",
-          }}
-        />
-
-        <div
-          style={{
-            position: "absolute",
-            right: 120,
-            top: 88,
-            width: 360,
-            height: 360,
-            opacity: 0.3,
+            right: 40,
+            top: 40,
             display: "flex",
           }}
         >
-          {[
-            [20, 80],
-            [120, 24],
-            [238, 64],
-            [302, 160],
-            [240, 260],
-            [108, 294],
-            [36, 204],
-          ].map(([left, top], index) => (
-            <div
-              key={`${left}-${top}`}
-              style={{
-                position: "absolute",
-                left,
-                top,
-                width: 18,
-                height: 18,
-                borderRadius: 999,
-                background: index % 3 === 0 ? "#ea9c62" : "#9bd5d9",
-                boxShadow: "0 0 12px rgba(255,255,255,0.18)",
-              }}
-            />
-          ))}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              borderRadius: 999,
-              background:
-                "radial-gradient(circle at center, rgba(255,255,255,0.06), transparent 58%)",
-            }}
-          />
+          <svg width="380" height="520" viewBox="0 0 380 520">
+            {GLYPHS.map(([x, y, s, colour]) => (
+              <polygon
+                key={`${x}-${y}`}
+                points={trianglePoints(x, y, s)}
+                fill="none"
+                stroke={SPECTRUM[colour]}
+                strokeWidth="1.6"
+              />
+            ))}
+          </svg>
         </div>
 
         <div
@@ -120,35 +95,31 @@ export default function OpenGraphImage() {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: 14,
-              maxWidth: 720,
+              gap: 28,
+              maxWidth: 700,
             }}
           >
             <div
               style={{
                 display: "flex",
-                fontSize: 28,
-                letterSpacing: "0.26em",
+                fontSize: 22,
+                fontWeight: 600,
+                letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                color: "rgba(255,247,240,0.66)",
+                color: "#ffb829",
               }}
             >
               Sense / Decide / Share
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
-              }}
-            >
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <div
                 style={{
                   display: "flex",
-                  fontSize: 92,
-                  fontWeight: 800,
-                  letterSpacing: "-0.06em",
-                  lineHeight: 1,
+                  fontSize: 104,
+                  fontWeight: 400,
+                  letterSpacing: "-0.04em",
+                  lineHeight: 1.1,
                 }}
               >
                 Yuta Kondo
@@ -157,20 +128,22 @@ export default function OpenGraphImage() {
                 style={{
                   display: "flex",
                   fontSize: 40,
-                  color: "rgba(255,247,240,0.9)",
-                  letterSpacing: "-0.03em",
+                  fontWeight: 400,
+                  letterSpacing: "-0.02em",
+                  color: "#9a9a9a",
                 }}
               >
                 Portfolio
               </div>
             </div>
+
             <div
               style={{
                 display: "flex",
-                maxWidth: 760,
-                fontSize: 24,
+                maxWidth: 620,
+                fontSize: 22,
                 lineHeight: 1.6,
-                color: "rgba(255,247,240,0.72)",
+                color: "#bdbdbd",
               }}
             >
               {siteDescription}
@@ -184,38 +157,23 @@ export default function OpenGraphImage() {
               justifyContent: "space-between",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 18,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  width: 82,
-                  height: 82,
-                  borderRadius: 24,
-                  border: "1px solid rgba(255,245,240,0.18)",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 42,
-                  fontWeight: 800,
-                  letterSpacing: "-0.08em",
-                  background:
-                    "linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))",
-                }}
-              >
-                YK
-              </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+              <svg width="34" height="30" viewBox="0 0 34 30">
+                <defs>
+                  <linearGradient id="og-mark" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#8052ff" />
+                    <stop offset="100%" stopColor="#15846e" />
+                  </linearGradient>
+                </defs>
+                <polygon points="17,1 33,29 1,29" fill="url(#og-mark)" />
+              </svg>
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: 8,
-                  fontSize: 24,
-                  color: "rgba(255,247,240,0.72)",
+                  gap: 6,
+                  fontSize: 20,
+                  color: "#9a9a9a",
                 }}
               >
                 <div style={{ display: "flex" }}>DroneInspector / pdm_edge</div>
@@ -223,13 +181,7 @@ export default function OpenGraphImage() {
               </div>
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                fontSize: 24,
-                color: "rgba(255,247,240,0.56)",
-              }}
-            >
+            <div style={{ display: "flex", fontSize: 20, color: "#9a9a9a" }}>
               {siteTitle}
             </div>
           </div>

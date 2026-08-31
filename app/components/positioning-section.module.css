@@ -1,85 +1,80 @@
 /* ============================================================
- * Positioning Section — competitor-teardown radar
- * LIGHT porcelain stage ("Signal on Porcelain")
- * Ink-alpha grid, steel-teal→brass primary silhouette,
- * dashed ink ghosts, white evidence cards + brass numerals.
- * Panel sits transparent on the porcelain page with a faint
- * steel-teal radial tint.
+ * Positioning Section — radar on the void.
+ * No panel, no card, no shadow, no gradient. Grid geometry is drawn in
+ * low-alpha white so it reads as measurement rather than as chrome; the
+ * primary silhouette is the one saturated mark on the plot.
  * ============================================================ */
 
 .section {
   position: relative;
-  padding: 120px 32px;
+  padding: 0;
   background: transparent;
-  overflow: hidden;
-  color: var(--foreground);
+  color: var(--color-bone-white);
 }
 
 .inner {
-  max-width: 1200px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
 }
 
 .header {
-  max-width: 720px;
-  margin-bottom: 56px;
+  max-width: 900px;
+  margin-bottom: var(--spacing-96);
 }
 
 .eyebrow {
   display: inline-block;
-  font-size: 11px;
-  letter-spacing: 0.24em;
+  margin-bottom: var(--spacing-18);
+  color: var(--color-saffron-spark);
+  font-size: var(--text-nav-label);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-nav-label);
+  letter-spacing: var(--tracking-nav-label);
   text-transform: uppercase;
-  color: var(--accent-cool);
-  font-weight: 600;
-  margin-bottom: 14px;
 }
 
 .title {
-  margin: 0 0 22px;
-  font-size: clamp(28px, 3.4vw, 44px);
-  line-height: 1.18;
-  letter-spacing: -0.01em;
-  font-weight: 500;
-  color: var(--foreground);
+  margin: 0 0 var(--spacing-30);
+  font-size: clamp(34px, 5vw, var(--text-heading-lg));
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-heading-lg);
+  letter-spacing: -0.04em;
+  color: var(--color-bone-white);
 }
 
 .thesisJa {
-  margin: 0 0 12px;
-  font-size: 15px;
-  line-height: 1.75;
-  color: var(--muted);
-  letter-spacing: 0.02em;
+  margin: 0 0 var(--spacing-12);
+  max-width: 560px;
+  color: var(--color-silver-mist);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-extralight);
+  line-height: var(--leading-body);
 }
 
 .thesisEn {
   margin: 0;
-  font-size: 12.5px;
-  line-height: 1.65;
-  color: var(--accent-cool);
-  font-style: italic;
-  letter-spacing: 0.01em;
+  max-width: 560px;
+  color: var(--color-ash-gray);
+  font-size: 13px;
+  font-weight: var(--font-weight-extralight);
+  font-style: normal;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
 }
 
 .body {
   display: grid;
-  grid-template-columns: 60% 40%;
-  gap: 48px;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--spacing-96);
   align-items: start;
 }
 
-/* ---------- Radar panel ---------- */
+/* ---------- Radar ---------- */
 
 .radarPanel {
   position: relative;
-  padding: 32px;
-  border-radius: 20px;
-  /* Transparent on porcelain — only a faint steel-teal radial tint. */
-  background: radial-gradient(
-    85% 85% at 50% 42%,
-    rgba(46, 107, 132, 0.05) 0%,
-    rgba(46, 107, 132, 0) 70%
-  );
+  padding: 0;
+  background: none;
 }
 
 .radarSvg {
@@ -94,77 +89,80 @@
 
 .gridRing {
   fill: none;
-  stroke: rgba(20, 25, 38, 0.14);
+  stroke: rgba(255, 255, 255, 0.09);
   stroke-width: 1;
 }
 
 .gridSpoke {
-  stroke: rgba(20, 25, 38, 0.2);
+  stroke: rgba(255, 255, 255, 0.14);
   stroke-width: 1;
 }
 
 .gridLabel {
-  fill: var(--muted);
+  fill: var(--color-ash-gray);
+  font-family: var(--font-ppneuemontreal);
   font-size: 9px;
-  letter-spacing: 0.08em;
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  letter-spacing: 0.14em;
 }
 
 .axisLabelJa {
-  fill: var(--foreground);
+  fill: var(--color-bone-white);
+  font-family: var(--font-ppneuemontreal);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: var(--font-weight-regular);
   letter-spacing: 0.02em;
-  transition: fill 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: fill 240ms var(--ease-out);
 }
 
 .axisLabelEn {
-  fill: var(--muted-soft);
+  fill: var(--color-ash-gray);
+  font-family: var(--font-ppneuemontreal);
   font-size: 9.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  transition: fill 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: fill 240ms var(--ease-out);
 }
 
 .axisLabelGroup.highlighted .axisLabelJa {
-  fill: var(--accent-cool);
+  fill: var(--color-electric-iris);
 }
 
 .axisLabelGroup.highlighted .axisLabelEn {
-  fill: rgba(46, 107, 132, 0.8);
+  fill: var(--color-electric-iris);
 }
 
-/* Yuta — primary silhouette (steel-teal → brass) */
+/* Yuta — the primary silhouette, flat Electric Iris */
 .silhouettePrimaryFill {
-  fill: url(#positioning-primary-gradient);
-  opacity: 0.3;
+  fill: var(--color-electric-iris);
+  opacity: 0.18;
 }
 
 .silhouettePrimaryStroke {
   fill: none;
-  stroke: var(--accent-cool);
-  stroke-width: 2.5;
+  stroke: var(--color-electric-iris);
+  stroke-width: 2;
   stroke-linejoin: round;
 }
 
 .vertexDot {
-  fill: var(--foreground);
-  stroke: var(--card);
+  fill: var(--color-electric-iris);
+  stroke: var(--color-void);
   stroke-width: 1.5;
 }
 
 .vertexScore {
-  fill: var(--foreground);
+  fill: var(--color-bone-white);
+  font-family: var(--font-ppneuemontreal);
   font-size: 10.5px;
-  font-weight: 600;
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-weight: var(--font-weight-regular);
+  font-variant-numeric: tabular-nums;
   pointer-events: none;
 }
 
-/* Ghosts — dashed ink, distinct dash patterns */
+/* Reference silhouettes — dashed ash, distinct dash patterns */
 .silhouetteGhostEmbedded {
   fill: none;
-  stroke: rgba(20, 25, 38, 0.3);
+  stroke: rgba(255, 255, 255, 0.28);
   stroke-width: 1.5;
   stroke-dasharray: 7 5;
   stroke-linejoin: round;
@@ -172,7 +170,7 @@
 
 .silhouetteGhostAi {
   fill: none;
-  stroke: rgba(20, 25, 38, 0.3);
+  stroke: rgba(255, 255, 255, 0.28);
   stroke-width: 1.5;
   stroke-dasharray: 2 4;
   stroke-linecap: round;
@@ -184,41 +182,34 @@
 .legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px 14px;
-  margin-top: 24px;
-  padding-top: 22px;
-  border-top: 1px solid var(--line);
+  gap: var(--spacing-18) var(--spacing-30);
+  margin-top: var(--spacing-36);
 }
 
 .legendItem {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  border-radius: 999px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  box-shadow: 0 1px 2px rgba(20, 25, 38, 0.04);
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  color: var(--muted);
+  gap: var(--spacing-6);
+  border-radius: var(--radius-tags);
+  color: var(--color-ash-gray);
+  font-size: var(--text-caption);
+  letter-spacing: 0.04em;
 }
 
 .legendSwatch {
   display: inline-block;
   width: 22px;
-  height: 3px;
-  border-radius: 2px;
+  height: 2px;
 }
 
 .legendSwatchPrimary {
-  background: linear-gradient(90deg, #2e6b84 0%, #d9a83f 100%);
+  background: var(--color-electric-iris);
 }
 
 .legendSwatchEmbedded {
   background: repeating-linear-gradient(
     90deg,
-    rgba(20, 25, 38, 0.5) 0 6px,
+    rgba(255, 255, 255, 0.45) 0 6px,
     transparent 6px 10px
   );
 }
@@ -226,7 +217,7 @@
 .legendSwatchAi {
   background: repeating-linear-gradient(
     90deg,
-    rgba(20, 25, 38, 0.5) 0 2px,
+    rgba(255, 255, 255, 0.45) 0 2px,
     transparent 2px 6px
   );
 }
@@ -236,155 +227,95 @@
 .evidenceList {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding-top: 4px;
+  gap: var(--spacing-36);
 }
 
 .evidenceItem {
   display: grid;
-  grid-template-columns: 52px 1fr;
-  gap: 14px;
-  padding: 16px 18px;
-  border-radius: 14px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-soft);
+  grid-template-columns: 56px 1fr;
+  gap: var(--spacing-18);
+  align-items: start;
+  background: none;
+  border: none;
+  box-shadow: none;
   cursor: default;
-  transition:
-    border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.evidenceItem:hover,
-.evidenceItem:focus-within {
-  border-color: rgba(46, 107, 132, 0.45);
-  box-shadow: var(--shadow-strong);
-  transform: translateX(2px);
-}
-
-.evidenceItem:focus-visible {
-  outline: 2px solid var(--accent-cool);
-  outline-offset: 3px;
-}
-
-/* Idle float — `translate` property (not transform) so it composes
-   with Framer Motion transforms; nth-child desync. */
-@media (prefers-reduced-motion: no-preference) {
-  .evidenceItem {
-    animation: evidence-breathe 7.4s ease-in-out infinite;
-  }
-
-  .evidenceItem:nth-child(2n) {
-    animation-delay: -2.3s;
-  }
-
-  .evidenceItem:nth-child(3n) {
-    animation-delay: -4.1s;
-  }
-
-  .evidenceItem:nth-child(5n) {
-    animation-delay: -5.6s;
-  }
-}
-
-@keyframes evidence-breathe {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-  50% {
-    translate: 0 -4px;
-  }
 }
 
 .evidenceScore {
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 1;
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  background: linear-gradient(180deg, #d9a83f 0%, #a87b1e 58%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  align-self: center;
-  text-align: center;
+  color: var(--color-saffron-spark);
+  font-size: var(--text-heading-2xs);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.2;
+  letter-spacing: var(--tracking-heading-2xs);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .evidenceScore::after {
   content: " / 10";
+  color: var(--color-ash-gray);
   font-size: 10px;
-  color: var(--muted-soft);
-  -webkit-text-fill-color: var(--muted-soft);
   letter-spacing: 0.05em;
 }
 
 .evidenceMain {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--spacing-6);
   min-width: 0;
 }
 
 .evidenceLabel {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--foreground);
+  color: var(--color-bone-white);
+  font-size: 15px;
+  font-weight: var(--font-weight-regular);
   letter-spacing: 0.02em;
 }
 
 .evidenceLabelEn {
+  margin-left: var(--spacing-6);
+  color: var(--color-ash-gray);
   font-size: 9.5px;
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted-soft);
-  margin-left: 6px;
-  font-weight: 400;
 }
 
 .evidenceText {
-  font-size: 12px;
-  line-height: 1.55;
-  color: var(--muted);
+  color: var(--color-silver-mist);
+  font-size: 14px;
+  font-weight: var(--font-weight-extralight);
+  line-height: 1.7;
 }
 
-/* ---------- Mobile ---------- */
+/* ---------- Responsive ---------- */
 
 @media (max-width: 960px) {
   .body {
-    grid-template-columns: 1fr;
-    gap: 32px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-60);
   }
 
-  .radarPanel {
-    padding: 22px;
+  .header {
+    margin-bottom: var(--spacing-60);
   }
 }
 
 @media (max-width: 640px) {
-  .section {
-    padding: 80px 20px;
-  }
-
   .header {
-    margin-bottom: 36px;
-  }
-
-  .radarPanel {
-    padding: 16px;
+    margin-bottom: var(--spacing-36);
   }
 
   .legend {
-    gap: 10px 12px;
+    gap: var(--spacing-12) var(--spacing-24);
+  }
+
+  .evidenceList {
+    gap: var(--spacing-30);
   }
 
   .evidenceItem {
-    padding: 12px 14px;
-    grid-template-columns: 44px 1fr;
-    gap: 10px;
-  }
-
-  .evidenceScore {
-    font-size: 22px;
+    grid-template-columns: 48px 1fr;
+    gap: var(--spacing-12);
   }
 }
