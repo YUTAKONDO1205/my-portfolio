@@ -17,6 +17,13 @@ const easeOutQuart = [0.22, 1, 0.36, 1] as const;
    page never runs out of them however long it is, and only what is on screen
    is ever drawn. A loose scatter drifts over the top for depth.
 
+   The field listens to the page. Sections declare which act they belong to
+   with `data-signal="sense" | "decide" | "share"`, and a cluster passing
+   behind such a section folds itself into that act's shape — the raw traces,
+   the spectrum, the core-and-satellites network the hero instrument plays —
+   and relaxes back into its organic cloud in between. The whole page is one
+   instrument, not a hero followed by wallpaper.
+
    The field is not only triangles: letters of the owner's name are seeded
    into it in reading order, so fragments of "KondoYuta" surface out of the
    cloud as you scroll. Letters stay upright while triangles tumble — a
@@ -25,7 +32,8 @@ const easeOutQuart = [0.22, 1, 0.36, 1] as const;
    Clusters travel at 0.68x scroll, so they slide a long way against the
    content as you move — the field reads as a separate, deeper plane rather
    than as wallpaper stuck to the page. They also rotate and breathe on their
-   own clock, so the motion never stops when the scroll does.
+   own clock, so the motion never stops when the scroll does. Triangles near
+   the pointer turn to face it and brighten: the field notices you.
    ========================================================================== */
 
 const SPECTRUM = [
@@ -43,6 +51,10 @@ const NAME = "KondoYuta";
 const LETTER_EVERY = 9;
 
 const PARALLAX = 0.68;
+
+/* pointer lens radius in CSS px */
+const LENS = 150;
+const LENS2 = LENS * LENS;
 
 const LETTER_FONT =
   '"Meiryo UI", "MeiryoUI", Meiryo, "Hiragino Kaku Gothic ProN", system-ui, sans-serif';
@@ -69,11 +81,50 @@ function shapeRadius(theta: number, phase: number) {
   );
 }
 
+/* ---- the three act shapes, in the hero's unit space (x ±1, y ±0.7) ---- */
+
+const TRACE_Y = [-0.5, -0.17, 0.17, 0.5] as const;
+const BINS = 36;
+const SATELLITES = 4;
+const SHAPE_SCALE = 0.92;
+
+function spectrumHeight(k: number) {
+  const t = k / (BINS - 1);
+  const peak = (c: number, w: number, a: number) =>
+    a * Math.exp(-((k - c) * (k - c)) / (2 * w * w));
+  return Math.min(
+    1,
+    0.14 +
+      0.3 * Math.exp(-t * 3.4) +
+      peak(6, 1.1, 0.66) +
+      peak(16, 1.5, 0.4) +
+      peak(26, 1.0, 0.24),
+  );
+}
+
+/* 0 = organic cloud, 1 = sense, 2 = decide, 3 = share */
+const MODE_INDEX: Record<string, number> = {
+  sense: 1,
+  decide: 2,
+  share: 3,
+};
+
+function shortestAngle(delta: number) {
+  return ((((delta + Math.PI) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)) - Math.PI;
+}
+
 type FieldHandle = { destroy: () => void };
 
 type ClusterGlyph = {
+  /** homes: organic cloud, sense, decide, share */
   hx: number;
   hy: number;
+  sx: number;
+  sy: number;
+  dx: number;
+  dy: number;
+  nx: number;
+  ny: number;
   size: number;
   angle: number;
   spin: number;
@@ -93,6 +144,8 @@ type Cluster = {
   tiltRate: number;
   /** phase offset for the breathing pulse, so no two clusters pulse together */
   breathPhase: number;
+  /** blend weights over [cloud, sense, decide, share]; sums to 1 */
+  mix: [number, number, number, number];
   glyphs: ClusterGlyph[];
 };
 
@@ -109,6 +162,8 @@ type LooseGlyph = {
 };
 
 type LetterDraw = { x: number; y: number; size: number; char: string };
+
+type SignalSection = { el: HTMLElement; mode: number };
 
 function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
   const ctx = canvas.getContext("2d");
@@ -128,6 +183,18 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
   let scrollY = 0;
   let smoothScrollY = 0;
 
+  let pointerX = -1e5;
+  let pointerY = -1e5;
+
+  let sections: SignalSection[] = [];
+  let sectionRefreshIn = 0;
+
+  const refreshSections = () => {
+    sections = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-signal]"),
+    ).map((el) => ({ el, mode: MODE_INDEX[el.dataset.signal ?? ""] ?? 0 }));
+  };
+
   const buildCluster = (index: number): Cluster => {
     const rand = mulberry32(index * 2654435761 + 12345);
     const isMobile = width <= 768;
@@ -145,7 +212,8 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
     let letterCursor = index % NAME.length;
 
     for (let i = 0; i < count; i += 1) {
-      // rejection-sample inside the silhouette, skipping the fissure
+      // organic cloud: rejection-sample inside the silhouette, skipping the
+      // fissure
       let hx = 0.4;
       let hy = 0;
       for (let attempt = 0; attempt < 24; attempt += 1) {
@@ -159,6 +227,49 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
         break;
       }
 
+      // sense: four traces, one carrying a burst
+      const trace = i % TRACE_Y.length;
+      const sxu = -1 + rand() * 2;
+      const burst = trace === 2 && sxu > 0.22 && sxu < 0.58 ? 3.1 : 1;
+      const sx = sxu * SHAPE_SCALE;
+      const sy =
+        (TRACE_Y[trace] +
+          Math.sin(sxu * (6 + trace * 1.7) + trace * 1.3) * 0.08 * burst +
+          (rand() - 0.5) * 0.045 * burst) *
+        SHAPE_SCALE;
+
+      // decide: the spectrum
+      const k = i % BINS;
+      const bw = 2 / BINS;
+      const dx = (-1 + bw * (k + 0.5) + (rand() - 0.5) * bw * 0.55) * SHAPE_SCALE;
+      const dy = (0.62 - Math.sqrt(rand()) * spectrumHeight(k) * 1.18) * SHAPE_SCALE;
+
+      // share: core, satellites, links
+      const sat = i % SATELLITES;
+      const a = Math.PI / 4 + (sat * Math.PI) / 2;
+      const scx = Math.cos(a) * 0.74;
+      const scy = Math.sin(a) * 0.5;
+      const rr = rand();
+      let nx: number;
+      let ny: number;
+      if (rr < 0.36) {
+        const th = rand() * Math.PI * 2;
+        const rad = Math.sqrt(rand()) * 0.2;
+        nx = Math.cos(th) * rad;
+        ny = Math.sin(th) * rad;
+      } else if (rr < 0.8) {
+        const th = rand() * Math.PI * 2;
+        const rad = Math.sqrt(rand()) * 0.15;
+        nx = scx + Math.cos(th) * rad;
+        ny = scy + Math.sin(th) * rad;
+      } else {
+        const t = 0.22 + rand() * 0.56;
+        nx = scx * t + (rand() - 0.5) * 0.03;
+        ny = scy * t + (rand() - 0.5) * 0.03;
+      }
+      nx *= SHAPE_SCALE;
+      ny *= SHAPE_SCALE;
+
       const isLetter = i % LETTER_EVERY === 0;
       let char: string | null = null;
       if (isLetter) {
@@ -169,6 +280,12 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
       glyphs.push({
         hx,
         hy,
+        sx,
+        sy,
+        dx,
+        dy,
+        nx,
+        ny,
         size: isLetter ? 8 + rand() * 7 : 1.5 + rand() * 2.6,
         angle: rand() * Math.PI * 2,
         spin: (rand() - 0.5) * 0.018,
@@ -186,6 +303,7 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
       tilt: (rand() - 0.5) * 0.5,
       tiltRate: (rand() - 0.5) * 0.0022,
       breathPhase: rand() * Math.PI * 2,
+      mix: [1, 0, 0, 0],
       glyphs,
     };
   };
@@ -259,6 +377,17 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
     path.closePath();
   };
 
+  /* triangles inside the pointer lens turn to face it; returns true if lit */
+  const lens = (g: { angle: number }, x: number, y: number, dt: number) => {
+    const ddx = pointerX - x;
+    const ddy = pointerY - y;
+    const d2 = ddx * ddx + ddy * ddy;
+    if (d2 > LENS2) return false;
+    const target = Math.atan2(ddy, ddx) + Math.PI / 2;
+    g.angle += shortestAngle(target - g.angle) * Math.min(1, 0.16 * dt);
+    return true;
+  };
+
   const tick = (now: number) => {
     if (!running) return;
     const dt = Math.min(2.6, (now - last) / 16.667);
@@ -269,11 +398,22 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
     // scroll input itself is coarse.
     smoothScrollY += (scrollY - smoothScrollY) * (1 - Math.pow(0.82, dt));
 
+    sectionRefreshIn -= dt;
+    if (sectionRefreshIn <= 0) {
+      refreshSections();
+      sectionRefreshIn = 90;
+    }
+    const rects = sections.map((s) => {
+      const r = s.el.getBoundingClientRect();
+      return { top: r.top, bottom: r.bottom, mode: s.mode };
+    });
+
     ctx.clearRect(0, 0, width, height);
 
-    // batch 0..4 = cluster triangles, 5..9 = loose triangles (dimmer)
+    // batch 0..4 = cluster triangles, 5..9 = loose triangles (dimmer),
+    // 10..14 = triangles inside the pointer lens (brighter)
     const paths = Array.from(
-      { length: SPECTRUM.length * 2 },
+      { length: SPECTRUM.length * 3 },
       () => new Path2D(),
     );
     // Letters cannot go in a Path2D, so they are collected per colour and
@@ -300,19 +440,44 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
 
       const cx = width * cluster.xFrac;
       const cy = cluster.docY - anchor;
-      const cos = Math.cos(cluster.tilt);
-      const sin = Math.sin(cluster.tilt);
-      // slow expansion and contraction, ±14% of the cluster radius
+
+      // which act is this cluster passing behind?
+      let target = 0;
+      for (const r of rects) {
+        if (cy >= r.top && cy <= r.bottom) {
+          target = r.mode;
+          break;
+        }
+      }
+      const chase = 1 - Math.pow(0.955, dt);
+      const mix = cluster.mix;
+      for (let m = 0; m < 4; m += 1) {
+        mix[m] += ((m === target ? 1 : 0) - mix[m]) * chase;
+      }
+
+      // the act shapes stay level; only the cloud tilts
+      const tilt = cluster.tilt * mix[0];
+      const cos = Math.cos(tilt);
+      const sin = Math.sin(tilt);
+      // slow expansion and contraction, ±14% of the cluster radius — the
+      // instrument shapes breathe less
+      const breath = 0.14 * mix[0] + 0.04 * (1 - mix[0]);
       const radius =
-        cluster.radius * (1 + Math.sin(time * 0.45 + cluster.breathPhase) * 0.14);
+        cluster.radius *
+        (1 + Math.sin(time * 0.45 + cluster.breathPhase) * breath);
+      // the wander that keeps the cloud alive would smear a waveform: it
+      // fades to a quarter as the cluster takes an instrument shape
+      const wander = 0.25 + 0.75 * mix[0];
 
       for (const g of cluster.glyphs) {
         g.angle += g.spin * dt;
 
-        const wobbleX = Math.sin(time * 1.05 + g.phase) * g.drift;
-        const wobbleY = Math.cos(time * 0.92 + g.phase * 1.4) * g.drift;
-        const ux = g.hx + wobbleX;
-        const uy = g.hy + wobbleY;
+        const wobbleX = Math.sin(time * 1.05 + g.phase) * g.drift * wander;
+        const wobbleY = Math.cos(time * 0.92 + g.phase * 1.4) * g.drift * wander;
+        const ux =
+          g.hx * mix[0] + g.sx * mix[1] + g.dx * mix[2] + g.nx * mix[3] + wobbleX;
+        const uy =
+          g.hy * mix[0] + g.sy * mix[1] + g.dy * mix[2] + g.ny * mix[3] + wobbleY;
 
         const x = cx + (ux * cos - uy * sin) * radius;
         const y = cy + (ux * sin + uy * cos) * radius;
@@ -321,8 +486,9 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
         if (g.char) {
           letters[g.colorIndex].push({ x, y, size: g.size, char: g.char });
         } else {
+          const lit = lens(g, x, y, dt);
           addTriangle(
-            paths[g.colorIndex],
+            paths[g.colorIndex + (lit ? SPECTRUM.length * 2 : 0)],
             x,
             y,
             g.size,
@@ -359,8 +525,9 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
           char: g.char,
         });
       } else {
+        const lit = lens(g, g.x, g.y, dt);
         addTriangle(
-          paths[g.colorIndex + SPECTRUM.length],
+          paths[g.colorIndex + SPECTRUM.length * (lit ? 2 : 1)],
           g.x,
           g.y,
           g.size,
@@ -373,10 +540,9 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
     ctx.lineWidth = 1;
     ctx.lineJoin = "round";
     for (let i = 0; i < paths.length; i += 1) {
-      const isLoose = i >= SPECTRUM.length;
-      ctx.strokeStyle = `rgba(${SPECTRUM[i % SPECTRUM.length]}, ${
-        isLoose ? 0.26 : 0.4
-      })`;
+      const tier = Math.floor(i / SPECTRUM.length);
+      const alpha = tier === 0 ? 0.4 : tier === 1 ? 0.26 : 0.92;
+      ctx.strokeStyle = `rgba(${SPECTRUM[i % SPECTRUM.length]}, ${alpha})`;
       ctx.stroke(paths[i]);
     }
 
@@ -404,6 +570,16 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
     scrollY = window.scrollY;
   };
 
+  const onPointer = (e: PointerEvent) => {
+    pointerX = e.clientX;
+    pointerY = e.clientY;
+  };
+
+  const onPointerLeave = () => {
+    pointerX = -1e5;
+    pointerY = -1e5;
+  };
+
   const syncRunning = () => {
     const shouldRun = !document.hidden;
     if (shouldRun && !running) {
@@ -421,6 +597,8 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
   smoothScrollY = scrollY;
   window.addEventListener("resize", resize);
   window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("pointermove", onPointer, { passive: true });
+  document.addEventListener("pointerleave", onPointerLeave);
   document.addEventListener("visibilitychange", syncRunning);
   raf = requestAnimationFrame(tick);
 
@@ -430,6 +608,8 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pointermove", onPointer);
+      document.removeEventListener("pointerleave", onPointerLeave);
       document.removeEventListener("visibilitychange", syncRunning);
     },
   };

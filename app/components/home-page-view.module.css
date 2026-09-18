@@ -868,3 +868,13 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* the instrument inside a research card eases in on hover, like the old crop */
+.researchImageWrap > * {
+  transition: transform 700ms var(--ease-out);
+}
+
+.researchCard:hover .researchImageWrap > *,
+.researchCard:focus-within .researchImageWrap > * {
+  transform: scale(1.03);
+}

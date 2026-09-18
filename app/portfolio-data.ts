@@ -976,6 +976,18 @@ export function isAwardPrize(badge: AwardBadge): boolean {
 /** Canonical 受賞 count (currently 6). Use this everywhere "受賞 N 件" appears. */
 export const awardPrizeCount = awardBadges.filter(isAwardPrize).length;
 
+/** VibeGuard shipping stats — from CHANGELOG.md of the v0.3.6 release
+    (2026-08-17). Re-check against the repository before bumping. */
+export const vibeguardStats = {
+  version: "0.3.6",
+  rules: 85,
+  singleFileRules: 74,
+  crossFileRules: 11,
+  languages: 11,
+  fixers: 7,
+  safeFixers: 1,
+} as const;
+
 // ============================================================================
 // Positioning radar — competitor-teardown derived
 // ============================================================================

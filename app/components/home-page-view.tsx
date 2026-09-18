@@ -9,12 +9,13 @@ import {
   useSpring,
   type Variants,
 } from "motion/react";
-import { getArtworkStyle, getProjectArtwork } from "../artwork";
 import { FrameSequenceHero } from "./frame-sequence-hero";
 import { AwardsStrip } from "./awards-strip";
 import { ImpactDashboard } from "./impact-dashboard";
 import { PositioningSection } from "./positioning-section";
-import { awardPrizeCount } from "../portfolio-data";
+import { ResearchInstrument, instrumentModeFor } from "./research-instrument";
+import { VibeGuardScan } from "./vibeguard-scan";
+import { awardPrizeCount, vibeguardStats } from "../portfolio-data";
 import type {
   AwardBadge,
   Philosophy,
@@ -274,26 +275,19 @@ function SectionHeader({
   );
 }
 
-const MARQUEE_WORDS = [
-  "Sense",
-  "Decide",
-  "Share",
-  "Edge AI",
-  "Embedded",
-  "Local First",
-] as const;
-
-function MarqueeInterlude() {
-  // 8 copies ≈ 5300px track — one half must exceed the widest supported
+/* A ticker of facts, not slogans — every item is derived from the data the
+   rest of the page is built from. */
+function MarqueeInterlude({ items }: { items: readonly string[] }) {
+  // 6 copies ≈ 5000px+ track — one half must exceed the widest supported
   // viewport for the translateX(-50%) loop to stay seamless at 4K.
-  const sequence = Array.from({ length: 8 }, () => MARQUEE_WORDS).flat();
+  const sequence = Array.from({ length: 6 }, () => items).flat();
   return (
     <div className="interlude-marquee" aria-hidden="true">
       <div className="marquee">
         <div className="marquee-track">
           {sequence.flatMap((word, index) => [
             <span key={`${word}-${index}`}>
-              {index % 6 === 3 || index % 6 === 5 ? <em>{word}</em> : word}
+              {index % 3 === 1 ? <em>{word}</em> : word}
             </span>,
             <span
               key={`dot-${word}-${index}`}
@@ -383,6 +377,22 @@ export function HomePageView({
   const reduceMotion = useReducedMotion();
   const liveChannels = selectedWorks.flatMap((work) => work.distribution ?? []);
   const featuredWorks = selectedWorks.filter((work) => work.feature);
+  const tickerItems = [
+    `VibeGuard v${vibeguardStats.version}`,
+    `${vibeguardStats.rules} rules`,
+    `${vibeguardStats.languages} languages`,
+    `${liveChannels.length} marketplaces`,
+    `${awardPrizeCount} awards`,
+    ...talks
+      .filter((talk) => talk.date.startsWith("2026"))
+      .map((talk) =>
+        talk.status === "presented"
+          ? `${talk.venueShort} presented`
+          : `${talk.venueShort} · ${talk.dateLabel.slice(5)}`,
+      ),
+    "100% local",
+    "SPRESENSE",
+  ];
 
   return (
     <>
@@ -434,6 +444,7 @@ export function HomePageView({
 
         <motion.section
           id="works"
+          data-signal="share"
           className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
           initial="hidden"
@@ -475,6 +486,8 @@ export function HomePageView({
                   <p className={styles.cardSubtitle}>{work.subtitle}</p>
                   <p>{work.summary}</p>
                 </a>
+
+                {work.slug === "vibeguard" && <VibeGuardScan />}
 
                 {work.award && (
                   <a
@@ -536,10 +549,11 @@ export function HomePageView({
           </motion.div>
         </motion.section>
 
-        <MarqueeInterlude />
+        <MarqueeInterlude items={tickerItems} />
 
         <motion.section
           id="research"
+          data-signal="sense"
           className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
           initial="hidden"
@@ -560,8 +574,6 @@ export function HomePageView({
             viewport={revealViewport}
           >
             {researchProjects.map((project) => {
-              const artworkStyle = getArtworkStyle(getProjectArtwork(project));
-
               return (
                 <motion.article
                   key={project.slug}
@@ -572,9 +584,8 @@ export function HomePageView({
                 >
                   <Link href={`/research/${project.slug}`}>
                     <div className={styles.researchImageWrap} aria-hidden="true">
-                      <div
-                        className={styles.researchImage}
-                        style={artworkStyle}
+                      <ResearchInstrument
+                        mode={instrumentModeFor(project.themeClass)}
                       />
                     </div>
                     <span className={styles.cardMeta}>{project.year}</span>
@@ -635,6 +646,7 @@ export function HomePageView({
         {/* Talks & papers — refereed venues */}
         <motion.section
           id="talks"
+          data-signal="decide"
           className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
           initial="hidden"
@@ -655,7 +667,11 @@ export function HomePageView({
         </div>
 
         {/* Data room — impact dashboard */}
-        <div id="data" className={`${styles.shell} ${styles.section}`}>
+        <div
+          id="data"
+          data-signal="decide"
+          className={`${styles.shell} ${styles.section}`}
+        >
           <ImpactDashboard
             publications={publicationTimeline}
             awards={awardBadges}
@@ -666,6 +682,7 @@ export function HomePageView({
 
         <motion.section
           id="archive"
+          data-signal="sense"
           className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
           initial="hidden"
@@ -726,6 +743,7 @@ export function HomePageView({
         {/* Profile & Contact — finale */}
         <motion.section
           id="contact"
+          data-signal="share"
           className={`${styles.shell} ${styles.contactSection}`}
           variants={sectionVariants}
           initial="hidden"

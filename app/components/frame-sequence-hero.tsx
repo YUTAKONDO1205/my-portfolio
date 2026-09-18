@@ -359,6 +359,27 @@ function createConstellation(canvas: HTMLCanvasElement): ConstellationHandle {
       path.closePath();
     }
 
+    // Act 2 instrument chrome: a baseline and bin ticks under the spectrum,
+    // present only while the spectrum is.
+    const chrome = smoothstep(s, 0.22, 0.4) * (1 - smoothstep(s, 0.6, 0.8));
+    if (chrome > 0.02) {
+      const by = cy + 0.64 * scale;
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = `rgba(255, 255, 255, ${(0.22 * chrome).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.moveTo(cx - scale, by);
+      ctx.lineTo(cx + scale, by);
+      ctx.stroke();
+      ctx.strokeStyle = `rgba(255, 255, 255, ${(0.12 * chrome).toFixed(3)})`;
+      ctx.beginPath();
+      for (let k = 0; k < BINS; k += 1) {
+        const tx = cx + (-1 + (2 / BINS) * (k + 0.5)) * scale;
+        ctx.moveTo(tx, by);
+        ctx.lineTo(tx, by + 5);
+      }
+      ctx.stroke();
+    }
+
     // Ten stroke calls a frame, whatever the glyph count.
     ctx.lineWidth = 1;
     ctx.lineJoin = "round";

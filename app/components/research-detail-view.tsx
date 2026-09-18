@@ -9,7 +9,7 @@ import {
   useTransform,
   type Variants,
 } from "motion/react";
-import { getArtworkStyle, getProjectArtwork } from "../artwork";
+import { ResearchInstrument, instrumentModeFor } from "./research-instrument";
 import type { ResearchProject } from "../portfolio-data";
 
 type ResearchDetailViewProps = {
@@ -102,7 +102,6 @@ export function ResearchDetailView({
 
   const copyY = useTransform(scrollY, [0, 640], [0, 76]);
   const copyOpacity = useTransform(scrollY, [0, 640], [1, 0.78]);
-  const projectArtworkStyle = getArtworkStyle(getProjectArtwork(project));
 
   return (
     <main className={`project-site ${project.themeClass}`}>
@@ -213,13 +212,11 @@ export function ResearchDetailView({
               className={`project-visual-photo ${project.ambientClass}`}
               aria-hidden="true"
             />
-            {projectArtworkStyle && (
-              <div
-                className="artwork-layer project-visual-artwork"
-                style={projectArtworkStyle}
-                aria-hidden="true"
+            <div className="project-visual-artwork" aria-hidden="true">
+              <ResearchInstrument
+                mode={instrumentModeFor(project.themeClass)}
               />
-            )}
+            </div>
             <motion.div className="project-visual-core-shell">
               <div className="project-visual-core">
                 <span>{project.year}</span>
@@ -320,8 +317,6 @@ export function ResearchDetailView({
 
         <motion.div className="project-mini-grid" variants={groupVariants}>
           {otherProjects.map((candidate) => {
-            const artworkStyle = getArtworkStyle(getProjectArtwork(candidate));
-
             return (
               <motion.div
                 key={candidate.slug}
@@ -350,13 +345,11 @@ export function ResearchDetailView({
                     className={`project-mini-photo ${candidate.ambientClass}`}
                     aria-hidden="true"
                   />
-                  {artworkStyle && (
-                    <div
-                      className="artwork-layer project-mini-artwork"
-                      style={artworkStyle}
-                      aria-hidden="true"
+                  <div className="project-mini-artwork" aria-hidden="true">
+                    <ResearchInstrument
+                      mode={instrumentModeFor(candidate.themeClass)}
                     />
-                  )}
+                  </div>
                   <span className="quick-link-label">
                     {candidate.heroKicker}
                   </span>
