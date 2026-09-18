@@ -2,24 +2,29 @@
 
 開発者: 近藤 悠太 (Kondo Yuta)
 
-このリポジトリは、個人ポートフォリオサイトのソースコードです。  
-`Next.js 16` をベースに、`React 19`、`TypeScript`、`Tailwind CSS 4` を使って構築しています。
+個人ポートフォリオサイトのソースコードです。
+`Next.js 16` をベースに、`React 19`、`TypeScript`、`Tailwind CSS 4`、`Motion`、`Lenis` で構築しています。
 
 ## 公開サイト
 
 https://kondo-yuta-my-portfolio.vercel.app/
 
-## ローカル開発
+## デザインの軸
 
-まず依存関係をインストールします。
+- **ボイドとコンステレーション** — 地色は一枚の暗い面。装飾はすべて 1px の三角形グリフで、
+  ページ全体を貫く一つの粒子場として描かれる（`app/components/site-motion.tsx`）。
+- **ヒーローは計器** — 粒子は標本、スクロールはパイプライン。
+  Sense（4 チャンネルの生波形）→ Decide（FFT スペクトル）→ Share（1 コア＋4 配布チャネルの網）へ、
+  同じ粒子が形を変える（`app/components/frame-sequence-hero.tsx`）。
+- **シグナルレール** — ヒーローを抜けた後に現れる右端の固定ナビ。スクロール進捗が線を満たし、
+  セクションの位置を三角マーカーで示す（`app/components/signal-rail.tsx`）。
+- **構造は情報** — 年表の背骨（Talks）や番号（Sense → Decide → Share）は、
+  実際に順序を持つ内容にだけ使う。
+
+## ローカル開発
 
 ```bash
 npm install
-```
-
-次に開発サーバーを起動します。
-
-```bash
 npm run dev
 ```
 
@@ -27,48 +32,32 @@ npm run dev
 
 ## 利用可能なスクリプト
 
-```bash
-npm run dev
-```
-
-開発サーバーを起動します。
-
-```bash
-npm run build
-```
-
-本番用ビルドを作成します。`postbuild` で `next-sitemap` も実行されます。
-
-```bash
-npm run start
-```
-
-本番ビルドをローカルで起動します。
-
-```bash
-npm run lint
-```
-
-ESLint による静的解析を実行します。
+| コマンド | 内容 |
+|---|---|
+| `npm run dev` | 開発サーバーを起動 |
+| `npm run build` | 本番用ビルドを作成 |
+| `npm run start` | 本番ビルドをローカルで起動 |
+| `npm run lint` | ESLint による静的解析 |
 
 ## 主な構成
 
-- `app/page.tsx`: トップページ
-- `app/layout.tsx`: 共通レイアウトとメタデータ
-- `app/portfolio-data.ts`: ポートフォリオ表示用データ
-- `app/research/[slug]/page.tsx`: 研究詳細ページ
-- `public/`: 静的ファイル
+- `app/page.tsx` — トップページ（`HomePageView` にデータを渡す）
+- `app/layout.tsx` — 共通レイアウト、メタデータ、JSON-LD
+- `app/portfolio-data.ts` — 表示データの唯一の正
+  （`researchProjects` / `selectedWorks` / `talks` / `recognitions` / `awardBadges` / `profile` / `heroCopyV2` / `positioning`）
+- `app/lib/impact-metrics.ts` — ダッシュボード用の集計（データから動的に導出）
+- `app/components/` — ヒーロー、アワードストリップ、Talks 年表、ポジショニングレーダー、
+  インパクトダッシュボード、シグナルレール
+- `app/research/[slug]/page.tsx` — 研究詳細ページ
+- `DESIGN.md` — 配色・タイポグラフィ・余白のトークン定義
 
-## 技術スタック
+## 実績データの更新ルール
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Motion
-- next-sitemap
+- 受賞（`kind` 省略）／採択（`selection`）／学会発表（`presentation`）を区別して `awardBadges` に追加する。
+  「受賞 N 件」の数はサイト全体で `awardPrizeCount` から導出される。
+- 学会発表は `talks` に追加し、`status` を `presented` / `upcoming` で管理する。
+- 数値（ルール数・配布チャネル数など）は一次ソース（リポジトリ・公式ページ）で確認してから書く。
 
 ## デプロイ
 
-このサイトは Vercel へのデプロイを想定しています。  
-本番公開先は上記の URL です。
+Vercel へのデプロイを想定しています。本番公開先は上記の URL です。

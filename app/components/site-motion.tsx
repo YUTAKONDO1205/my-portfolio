@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion, useScroll, useSpring } from "motion/react";
+import { SignalRail } from "./signal-rail";
 
 const easeOutQuart = [0.22, 1, 0.36, 1] as const;
 
@@ -436,6 +437,7 @@ function createConstellationField(canvas: HTMLCanvasElement): FieldHandle {
 
 export function SiteMotionChrome() {
   const reduceMotion = useReducedMotion();
+  const pathname = usePathname();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { scrollYProgress } = useScroll();
   const progressScale = useSpring(scrollYProgress, {
@@ -463,6 +465,8 @@ export function SiteMotionChrome() {
         className="site-ambient-field"
         aria-hidden="true"
       />
+      {/* the rail maps the home page's sections; other routes have none */}
+      {pathname === "/" && <SignalRail />}
     </>
   );
 }

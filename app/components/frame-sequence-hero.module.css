@@ -8,7 +8,9 @@
 .stage {
   position: relative;
   height: 300vh;
-  background: var(--color-void);
+  /* transparent: the site-wide constellation field runs straight through the
+     hero, so the hero and the page are one field rather than two */
+  background: transparent;
   color: var(--color-bone-white);
 }
 
@@ -285,6 +287,45 @@
   color: var(--color-electric-iris);
 }
 
+/* ---------- instrument captions ----------
+   Bottom of the right column; three captions stacked and cross-faded. */
+
+.stageCaptions {
+  position: absolute;
+  inset: auto 0 var(--spacing-30) 0;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  width: min(var(--page-max-width), calc(100% - 48px));
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+.stageCaption {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  gap: var(--spacing-6);
+  max-width: 420px;
+  margin-left: 14%;
+}
+
+.stageCaption span {
+  color: var(--color-saffron-spark);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.stageCaption p {
+  margin: 0;
+  color: var(--color-ash-gray);
+  font-size: 13px;
+  font-weight: var(--font-weight-body);
+  line-height: 1.7;
+}
+
 /* ---------- scroll cue ---------- */
 
 .cue {
@@ -405,6 +446,10 @@
   .figureRow {
     gap: var(--spacing-30);
     margin-top: var(--spacing-36);
+  }
+
+  .stageCaptions {
+    display: none;
   }
 
   .figure strong {

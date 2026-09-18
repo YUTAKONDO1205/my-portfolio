@@ -2,21 +2,30 @@
 
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  type Variants,
+} from "motion/react";
 import { getArtworkStyle, getProjectArtwork } from "../artwork";
 import { FrameSequenceHero } from "./frame-sequence-hero";
 import { AwardsStrip } from "./awards-strip";
 import { ImpactDashboard } from "./impact-dashboard";
 import { PositioningSection } from "./positioning-section";
+import { awardPrizeCount } from "../portfolio-data";
 import type {
   AwardBadge,
   Philosophy,
   PlatformLink,
   Positioning,
+  Profile,
   PublicationEntry,
   ResearchProject,
   SelectedWork,
   SiteAxis,
+  Talk,
 } from "../portfolio-data";
 import styles from "./home-page-view.module.css";
 
@@ -24,10 +33,12 @@ type HomePageViewProps = {
   awardBadges: readonly AwardBadge[];
   platformLinks: readonly PlatformLink[];
   positioning: Positioning;
+  profile: Profile;
   publicationTimeline: readonly PublicationEntry[];
   researchProjects: readonly ResearchProject[];
   selectedWorks: readonly SelectedWork[];
   siteAxis: SiteAxis;
+  talks: readonly Talk[];
   philosophy: Philosophy;
 };
 
@@ -99,9 +110,7 @@ function themeClassName(themeClass: ResearchProject["themeClass"]) {
 
    So the text is tokenized into units that must not be broken apart, and only
    the gaps between units stay breakable. */
-type HeadingToken =
-  | { kind: "space" }
-  | { kind: "unit"; text: string };
+type HeadingToken = { kind: "space" } | { kind: "unit"; text: string };
 
 /* must not begin a line */
 const NO_BREAK_BEFORE = new Set(
@@ -209,7 +218,7 @@ function SplitHeading({ text }: { text: string }) {
   );
 }
 
-/* Count-up numerals for the proof strip — restored utility. */
+/* Count-up numerals for the proof strip. */
 function AnimatedCount({ value }: { value: number }) {
   const ref = useRef<HTMLSpanElement>(null);
   const reduceMotion = useReducedMotion();
@@ -298,14 +307,77 @@ function MarqueeInterlude() {
   );
 }
 
+/* Talks — a real chronology, so it gets a real spine. The line draws itself
+   as the list scrolls into view; each marker is the constellation's triangle,
+   amber for a date still ahead. */
+function TalksTimeline({ talks }: { talks: readonly Talk[] }) {
+  const ref = useRef<HTMLOListElement>(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 80%", "end 60%"],
+  });
+  const spine = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 28,
+    mass: 0.4,
+  });
+
+  return (
+    <motion.ol
+      ref={ref}
+      className={styles.talkList}
+      variants={groupVariants}
+      initial="hidden"
+      whileInView="show"
+      viewport={revealViewport}
+    >
+      <motion.span
+        className={styles.talkSpine}
+        aria-hidden="true"
+        style={{ scaleY: reduceMotion ? 1 : spine }}
+      />
+      {talks.map((talk) => (
+        <motion.li
+          key={talk.id}
+          className={styles.talk}
+          variants={itemVariants}
+          data-status={talk.status}
+        >
+          <div className={styles.talkWhen}>
+            <span>{talk.dateLabel}</span>
+            <em>{talk.status === "presented" ? "発表済" : "発表予定"}</em>
+          </div>
+          <div className={styles.talkBody}>
+            <span className={styles.talkVenue}>
+              {talk.venueShort} · {talk.kind}
+              {talk.session ? ` · ${talk.session}` : ""}
+            </span>
+            <h3>{talk.title}</h3>
+            <p>
+              {talk.venue}
+              {talk.place ? `（${talk.place}）` : ""} · {talk.project}
+            </p>
+            <a href={talk.href} target="_blank" rel="noreferrer">
+              プログラムを見る
+            </a>
+          </div>
+        </motion.li>
+      ))}
+    </motion.ol>
+  );
+}
+
 export function HomePageView({
   awardBadges,
   platformLinks,
   positioning,
+  profile,
   publicationTimeline,
   researchProjects,
   selectedWorks,
   siteAxis,
+  talks,
   philosophy,
 }: HomePageViewProps) {
   const reduceMotion = useReducedMotion();
@@ -318,8 +390,8 @@ export function HomePageView({
       <FrameSequenceHero />
 
       <main className={styles.home}>
-        {/* Social proof rail — restored, directly under the hero (full-bleed) */}
-        <AwardsStrip awards={awardBadges} />
+        {/* Social proof rail — directly under the hero (full-bleed) */}
+        <AwardsStrip awards={awardBadges} talkCount={talks.length} />
 
         <motion.section
           className={`${styles.shell} ${styles.proofSection}`}
@@ -335,15 +407,15 @@ export function HomePageView({
           <div className={styles.proofGrid}>
             <div>
               <strong>
-                <AnimatedCount value={awardBadges.length} />
+                <AnimatedCount value={awardPrizeCount} />
               </strong>
-              <span>受賞・採択・発表</span>
+              <span>受賞</span>
             </div>
             <div>
               <strong>
-                <AnimatedCount value={researchProjects.length} />
+                <AnimatedCount value={talks.length} />
               </strong>
-              <span>公開研究テーマ</span>
+              <span>学会発表</span>
             </div>
             <div>
               <strong>
@@ -403,6 +475,17 @@ export function HomePageView({
                   <p className={styles.cardSubtitle}>{work.subtitle}</p>
                   <p>{work.summary}</p>
                 </a>
+
+                {work.award && (
+                  <a
+                    className={`${styles.cardSiteLink} ${styles.cardAward}`}
+                    href={work.award.href}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {work.award.label}
+                  </a>
+                )}
 
                 {work.siteLink && (
                   <a
@@ -486,7 +569,7 @@ export function HomePageView({
                     project.themeClass,
                   )}`}
                   variants={itemVariants}
-                  >
+                >
                   <Link href={`/research/${project.slug}`}>
                     <div className={styles.researchImageWrap} aria-hidden="true">
                       <div
@@ -510,7 +593,7 @@ export function HomePageView({
           </motion.div>
         </motion.section>
 
-        {/* Sense → Decide → Share pipeline — restored axis flow */}
+        {/* Sense → Decide → Share pipeline */}
         <motion.section
           className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
@@ -549,13 +632,30 @@ export function HomePageView({
           </motion.div>
         </motion.section>
 
-        {/* Pentagon radar — restored interactive positioning */}
-        <div className={`${styles.shell} ${styles.section}`}>
+        {/* Talks & papers — refereed venues */}
+        <motion.section
+          id="talks"
+          className={`${styles.shell} ${styles.section}`}
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={revealViewport}
+        >
+          <SectionHeader
+            eyebrow="Talks & Papers"
+            title="学会で、検証を受ける"
+            body="出荷するだけでなく、方式と測定を査読と討論の場に出しています。ソフトウェア工学とセキュリティの 2 つのシンポジウムで VibeGuard を、電気学会で振動解析の研究を発表しました。"
+          />
+          <TalksTimeline talks={talks} />
+        </motion.section>
+
+        {/* Pentagon radar — positioning */}
+        <div id="positioning" className={`${styles.shell} ${styles.section}`}>
           <PositioningSection positioning={positioning} />
         </div>
 
-        {/* Data room — restored impact dashboard as a night panel */}
-        <div className={`${styles.shell} ${styles.section}`}>
+        {/* Data room — impact dashboard */}
+        <div id="data" className={`${styles.shell} ${styles.section}`}>
           <ImpactDashboard
             publications={publicationTimeline}
             awards={awardBadges}
@@ -565,6 +665,7 @@ export function HomePageView({
         </div>
 
         <motion.section
+          id="archive"
           className={`${styles.shell} ${styles.section}`}
           variants={sectionVariants}
           initial="hidden"
@@ -574,7 +675,7 @@ export function HomePageView({
           <SectionHeader
             eyebrow="Recognition Archive"
             title="外部評価と公開ログ"
-            body="研究記事、コンテスト、学会発表、セキュリティ育成プログラムまで、公開された実績を年表として追えるようにしています。"
+            body="技術記事、コンテスト、学会発表、セキュリティ育成プログラムまで、公開された実績を年表として追えるようにしています。"
           />
 
           <motion.div
@@ -603,8 +704,8 @@ export function HomePageView({
             </div>
 
             <div className={styles.archiveColumn}>
-              <h3>Awards</h3>
-              {awardBadges.slice(0, 6).map((award) => (
+              <h3>Recognition</h3>
+              {awardBadges.map((award) => (
                 <motion.a
                   key={`${award.year}-${award.organization}-${award.award}`}
                   className={styles.archiveItem}
@@ -622,7 +723,7 @@ export function HomePageView({
           </motion.div>
         </motion.section>
 
-        {/* Contact — night panel finale */}
+        {/* Profile & Contact — finale */}
         <motion.section
           id="contact"
           className={`${styles.shell} ${styles.contactSection}`}
@@ -632,7 +733,7 @@ export function HomePageView({
           viewport={revealViewport}
         >
           <div className={styles.contactCopy}>
-            <p>Contact — {philosophy.label}</p>
+            <p>Profile &amp; Contact — {philosophy.label}</p>
             <h2>{philosophy.title}</h2>
             <span>{philosophy.body}</span>
             <em className={styles.contactHint}>
@@ -640,19 +741,42 @@ export function HomePageView({
             </em>
           </div>
 
-          <div className={styles.platformGrid}>
-            {platformLinks.map((platform) => (
-              <motion.a
-                key={platform.label}
-                href={platform.href}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span>{platform.label}</span>
-                <strong>{platform.description}</strong>
-                <p>{platform.detail}</p>
-              </motion.a>
-            ))}
+          <div className={styles.profileBlock}>
+            <div className={styles.profileName}>
+              <span>Profile</span>
+              <strong>{profile.nameJa}</strong>
+              <em>
+                {profile.nameEn} · {profile.role}
+              </em>
+            </div>
+            <p className={styles.profileAffil}>
+              {profile.affiliation}
+              <br />
+              {profile.grade} · {profile.base}
+            </p>
+            <dl className={styles.profileFacts}>
+              {profile.facts.map((fact) => (
+                <div key={fact.label}>
+                  <dt>{fact.label}</dt>
+                  <dd>{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <div className={styles.platformGrid}>
+              {platformLinks.map((platform) => (
+                <motion.a
+                  key={platform.label}
+                  href={platform.href}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span>{platform.label}</span>
+                  <strong>{platform.description}</strong>
+                  <p>{platform.detail}</p>
+                </motion.a>
+              ))}
+            </div>
           </div>
         </motion.section>
 

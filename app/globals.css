@@ -1363,3 +1363,19 @@ b {
     display: none;
   }
 }
+
+/* ==========================================================================
+   Japanese display metrics — proportional kana/kanji spacing on headings so
+   large 和文 headlines set as tightly as the Latin ones beside them.
+   ========================================================================== */
+
+h1,
+h2,
+h3 {
+  font-feature-settings: "palt" 1;
+}
+
+/* anchor jumps from the rail and the hero nav land with a little air */
+main [id] {
+  scroll-margin-top: 40px;
+}

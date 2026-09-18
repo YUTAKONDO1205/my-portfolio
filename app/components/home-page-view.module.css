@@ -614,3 +614,257 @@
     text-align: left;
   }
 }
+
+/* ---------- talks timeline ----------
+   A real chronology gets a real spine: the hairline is the only rule in the
+   content flow, and it is there because order carries information. */
+
+.talkList {
+  position: relative;
+  display: grid;
+  gap: var(--spacing-60);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.talkList::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 200px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.talkSpine {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 200px;
+  width: 1px;
+  background: var(--color-electric-iris);
+  transform-origin: top;
+}
+
+.talk {
+  position: relative;
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: var(--spacing-12) 64px;
+  align-items: start;
+}
+
+/* the marker — the constellation's triangle, centred on the spine */
+.talk::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 196px;
+  width: 9px;
+  height: 9px;
+  background: var(--color-electric-iris);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.talk[data-status="upcoming"]::before {
+  background: var(--color-saffron-spark);
+}
+
+.talkWhen {
+  display: grid;
+  gap: var(--spacing-6);
+  align-content: start;
+}
+
+.talkWhen span {
+  color: var(--color-bone-white);
+  font-size: 15px;
+  font-weight: var(--font-weight-display);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.talkWhen em {
+  color: var(--color-ash-gray);
+  font-style: normal;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.talk[data-status="upcoming"] .talkWhen em {
+  color: var(--color-saffron-spark);
+}
+
+.talkBody {
+  display: grid;
+  gap: var(--spacing-12);
+  padding-left: 32px;
+}
+
+.talkVenue {
+  color: var(--color-electric-iris);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.talkBody h3 {
+  margin: 0;
+  max-width: 34ch;
+  font-size: var(--text-heading-2xs);
+  font-weight: var(--font-weight-display);
+  line-height: var(--leading-heading-2xs);
+  letter-spacing: var(--tracking-heading-2xs);
+}
+
+.talkBody p {
+  margin: 0;
+  color: var(--color-silver-mist);
+  font-size: 15px;
+  font-weight: var(--font-weight-body);
+  line-height: 1.7;
+}
+
+.talkBody a {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  color: var(--color-saffron-spark);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: color 240ms var(--ease-out);
+}
+
+.talkBody a::after {
+  content: "↗";
+  transition: transform 240ms var(--ease-out);
+}
+
+.talkBody a:hover,
+.talkBody a:focus-visible {
+  color: var(--color-bone-white);
+}
+
+.talkBody a:hover::after {
+  transform: translate(2px, -2px);
+}
+
+/* ---------- work award line ---------- */
+
+.cardAward {
+  color: var(--color-saffron-spark);
+}
+
+.cardAward::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--color-saffron-spark);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+/* ---------- profile ---------- */
+
+.profileBlock {
+  display: grid;
+  gap: var(--spacing-36);
+  align-content: start;
+}
+
+.profileName {
+  display: grid;
+  gap: var(--spacing-6);
+}
+
+.profileName span {
+  color: var(--color-saffron-spark);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.profileName strong {
+  font-size: var(--text-heading-sm);
+  font-weight: var(--font-weight-display);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: var(--color-bone-white);
+}
+
+.profileName em {
+  color: var(--color-ash-gray);
+  font-style: normal;
+  font-size: 15px;
+  font-weight: var(--font-weight-body);
+}
+
+.profileAffil {
+  margin: 0;
+  color: var(--color-silver-mist);
+  font-size: 15px;
+  font-weight: var(--font-weight-body);
+  line-height: 1.7;
+}
+
+.profileFacts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-24) var(--spacing-36);
+  margin: 0;
+}
+
+.profileFacts div {
+  display: grid;
+  gap: 4px;
+}
+
+.profileFacts dt {
+  color: var(--color-ash-gray);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.profileFacts dd {
+  margin: 0;
+  color: var(--color-bone-white);
+  font-size: 15px;
+  font-weight: var(--font-weight-display);
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .talkList::before,
+  .talkSpine {
+    left: 4px;
+  }
+
+  .talk {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-12);
+    padding-left: 28px;
+  }
+
+  .talk::before {
+    left: 0;
+  }
+
+  .talkBody {
+    padding-left: 0;
+  }
+
+  .profileFacts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

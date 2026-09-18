@@ -174,3 +174,20 @@
     font-size: 20px;
   }
 }
+
+/* kind label — what sort of recognition this is */
+.kind {
+  color: var(--color-ash-gray);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.card[data-kind="award"] .kind {
+  color: var(--color-saffron-spark);
+}
+
+.card[data-kind="presentation"] .kind {
+  color: var(--spectrum-teal);
+}
