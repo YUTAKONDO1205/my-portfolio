@@ -15,6 +15,7 @@ import { ImpactDashboard } from "./impact-dashboard";
 import { PositioningSection } from "./positioning-section";
 import { ResearchInstrument, instrumentModeFor } from "./research-instrument";
 import { VibeGuardScan } from "./vibeguard-scan";
+import { Ja, phrasesOf } from "./ja";
 import { awardPrizeCount, vibeguardStats } from "../portfolio-data";
 import type {
   AwardBadge,
@@ -170,11 +171,50 @@ function tokenizeHeading(text: string): HeadingToken[] {
   return tokens;
 }
 
+/* Phrase groups for the heading reveal. BudouX decides where a line may
+   break; inside a group nothing breaks. A phrase too long to be safe on a
+   phone is left breakable between units. */
+type HeadingGroup =
+  | "space"
+  | { units: string[]; keepTogether: boolean };
+
+const MAX_KEEP_TOGETHER = 9;
+
+function headingGroups(text: string): HeadingGroup[] {
+  const groups: HeadingGroup[] = [];
+
+  for (const phrase of phrasesOf(text)) {
+    let units: string[] = [];
+    const flush = () => {
+      if (units.length === 0) return;
+      const length = units.reduce((n, u) => n + Array.from(u).length, 0);
+      groups.push({ units, keepTogether: length <= MAX_KEEP_TOGETHER });
+      units = [];
+    };
+
+    for (const token of tokenizeHeading(phrase)) {
+      if (token.kind === "space") {
+        flush();
+        groups.push("space");
+      } else {
+        units.push(token.text);
+      }
+    }
+    flush();
+  }
+
+  return groups;
+}
+
 function SplitHeading({ text }: { text: string }) {
   const reduceMotion = useReducedMotion();
 
   if (reduceMotion) {
-    return <h2>{text}</h2>;
+    return (
+      <h2>
+        <Ja>{text}</Ja>
+      </h2>
+    );
   }
 
   return (
@@ -188,31 +228,43 @@ function SplitHeading({ text }: { text: string }) {
         show: { transition: { staggerChildren: 0.034 } },
       }}
     >
-      {tokenizeHeading(text).map((token, index) => {
-        if (token.kind === "space") {
+      {headingGroups(text).map((group, groupIndex) => {
+        if (group === "space") {
           return (
             <span
-              key={`space-${index}`}
+              key={`space-${groupIndex}`}
               className="heading-char-space"
               aria-hidden="true"
             />
           );
         }
 
-        // The animated element is the unit itself, not each character inside
-        // it. A unit is a single CJK character (plus any punctuation that must
-        // not be split from it) or one Latin word, so the reveal still reads
-        // as per-character in 和文 — and every animated element stays a direct
-        // child of the motion heading, which is what the stagger needs.
-        return (
+        // The animated element is the unit, not each character inside it. A
+        // unit is a single CJK character (plus any punctuation that must not
+        // be split from it) or one Latin word, so the reveal still reads as
+        // per-character in 和文. Units are grouped by phrase, and the group
+        // does not wrap, so a line can only break between phrases.
+        const units = group.units.map((unit, unitIndex) => (
           <motion.span
-            key={`unit-${index}-${token.text}`}
+            key={`unit-${groupIndex}-${unitIndex}`}
             className="heading-word heading-char"
             aria-hidden="true"
             variants={charVariants}
           >
-            {token.text}
+            {unit}
           </motion.span>
+        ));
+
+        return group.keepTogether ? (
+          <span
+            key={`phrase-${groupIndex}`}
+            className="heading-phrase"
+            aria-hidden="true"
+          >
+            {units}
+          </span>
+        ) : (
+          units
         );
       })}
     </motion.h2>
@@ -270,7 +322,9 @@ function SectionHeader({
     <div className={styles.sectionHeader}>
       <p>{eyebrow}</p>
       <SplitHeading text={title} />
-      <span>{body}</span>
+      <span>
+        <Ja>{body}</Ja>
+      </span>
     </div>
   );
 }
@@ -347,7 +401,9 @@ function TalksTimeline({ talks }: { talks: readonly Talk[] }) {
               {talk.venueShort} · {talk.kind}
               {talk.session ? ` · ${talk.session}` : ""}
             </span>
-            <h3>{talk.title}</h3>
+            <h3>
+              <Ja>{talk.title}</Ja>
+            </h3>
             <p>
               {talk.venue}
               {talk.place ? `（${talk.place}）` : ""} · {talk.project}
@@ -411,8 +467,10 @@ export function HomePageView({
           viewport={revealViewport}
         >
           <div className={styles.proofLead}>
-            <p>Field-ready portfolio</p>
-            <h2>研究、実装、公開までをひとつの流れとして見せる。</h2>
+            <p>In numbers</p>
+            <h2>
+              <Ja>2024〜2026 年の実績</Ja>
+            </h2>
           </div>
           <div className={styles.proofGrid}>
             <div>
@@ -431,7 +489,7 @@ export function HomePageView({
               <strong>
                 <AnimatedCount value={liveChannels.length} />
               </strong>
-              <span>プロダクト配布面</span>
+              <span>VibeGuard の配布先</span>
             </div>
             <div>
               <strong>
@@ -453,8 +511,8 @@ export function HomePageView({
         >
           <SectionHeader
             eyebrow="Shipped Work"
-            title="動くものとして届いている制作物"
-            body="公開リポジトリだけでなく、Marketplace、拡張機能、運用ワークフローまで届く形にした制作を中心に据えています。"
+            title="制作物"
+            body="VibeGuard は Marketplace と拡張機能ストアからインストールして利用できます。ほかの制作物は GitHub でコードを公開しています。"
           />
 
           <motion.div
@@ -483,8 +541,10 @@ export function HomePageView({
                       work.title
                     )}
                   </h3>
-                  <p className={styles.cardSubtitle}>{work.subtitle}</p>
-                  <p>{work.summary}</p>
+                  <p className={styles.cardSubtitle}>
+                    <Ja>{work.subtitle}</Ja>
+                  </p>
+                  <p>{work.feature ? <Ja>{work.summary}</Ja> : work.summary}</p>
                 </a>
 
                 {work.slug === "vibeguard" && <VibeGuardScan />}
@@ -516,7 +576,9 @@ export function HomePageView({
                     {work.highlights
                       .slice(0, work.feature ? 4 : 2)
                       .map((line) => (
-                        <li key={line}>{line}</li>
+                        <li key={line}>
+                          <Ja>{line}</Ja>
+                        </li>
                       ))}
                   </ul>
                 )}
@@ -590,7 +652,9 @@ export function HomePageView({
                     </div>
                     <span className={styles.cardMeta}>{project.year}</span>
                     <h3>{project.title}</h3>
-                    <p className={styles.cardSubtitle}>{project.subtitle}</p>
+                    <p className={styles.cardSubtitle}>
+                      <Ja>{project.subtitle}</Ja>
+                    </p>
                     <p>{project.cardSummary}</p>
                   </Link>
                   <div className={styles.tagRow}>
@@ -637,7 +701,9 @@ export function HomePageView({
                   <strong>{step.en}</strong>
                   <span>{step.ja}</span>
                 </div>
-                <p className="axis-step-copy">{step.description}</p>
+                <p className="axis-step-copy">
+                  <Ja>{step.description}</Ja>
+                </p>
               </motion.article>
             ))}
           </motion.div>
@@ -655,8 +721,8 @@ export function HomePageView({
         >
           <SectionHeader
             eyebrow="Talks & Papers"
-            title="学会で、検証を受ける"
-            body="出荷するだけでなく、方式と測定を査読と討論の場に出しています。ソフトウェア工学とセキュリティの 2 つのシンポジウムで VibeGuard を、電気学会で振動解析の研究を発表しました。"
+            title="学会発表"
+            body="VibeGuard の論文を SES2026 で発表しました。2026 年 10 月 22 日には、CSS2026 で VibeGuard Compiler を発表する予定です。振動解析の研究は、電気学会で 2 回発表しました。"
           />
           <TalksTimeline talks={talks} />
         </motion.section>
@@ -691,8 +757,8 @@ export function HomePageView({
         >
           <SectionHeader
             eyebrow="Recognition Archive"
-            title="外部評価と公開ログ"
-            body="技術記事、コンテスト、学会発表、セキュリティ育成プログラムまで、公開された実績を年表として追えるようにしています。"
+            title="記事と受賞の一覧"
+            body="執筆した記事と、受賞、採択、発表を新しい順に掲載しています。"
           />
 
           <motion.div
@@ -714,8 +780,12 @@ export function HomePageView({
                   variants={itemVariants}
                 >
                   <span>{entry.dateLabel}</span>
-                  <strong>{entry.title}</strong>
-                  <p>{entry.summary}</p>
+                  <strong>
+                    <Ja>{entry.title}</Ja>
+                  </strong>
+                  <p>
+                    <Ja>{entry.summary}</Ja>
+                  </p>
                 </motion.a>
               ))}
             </div>
@@ -732,7 +802,9 @@ export function HomePageView({
                   variants={itemVariants}
                 >
                   <span>{award.year}</span>
-                  <strong>{award.award}</strong>
+                  <strong>
+                    <Ja>{award.award}</Ja>
+                  </strong>
                   <p>{award.organization}</p>
                 </motion.a>
               ))}
@@ -751,11 +823,15 @@ export function HomePageView({
           viewport={revealViewport}
         >
           <div className={styles.contactCopy}>
-            <p>Profile &amp; Contact — {philosophy.label}</p>
-            <h2>{philosophy.title}</h2>
-            <span>{philosophy.body}</span>
+            <p>Profile &amp; Contact</p>
+            <h2>
+              <Ja>{philosophy.title}</Ja>
+            </h2>
+            <span>
+              <Ja>{philosophy.body}</Ja>
+            </span>
             <em className={styles.contactHint}>
-              お仕事・研究のご相談は GitHub からお気軽にご連絡ください。
+              <Ja>仕事や研究のご相談は、GitHub のプロフィールからご連絡ください。</Ja>
             </em>
           </div>
 
@@ -776,7 +852,9 @@ export function HomePageView({
               {profile.facts.map((fact) => (
                 <div key={fact.label}>
                   <dt>{fact.label}</dt>
-                  <dd>{fact.value}</dd>
+                  <dd>
+                    <Ja>{fact.value}</Ja>
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -790,8 +868,12 @@ export function HomePageView({
                   rel="noreferrer"
                 >
                   <span>{platform.label}</span>
-                  <strong>{platform.description}</strong>
-                  <p>{platform.detail}</p>
+                  <strong>
+                    <Ja>{platform.description}</Ja>
+                  </strong>
+                  <p>
+                    <Ja>{platform.detail}</Ja>
+                  </p>
                 </motion.a>
               ))}
             </div>
@@ -800,7 +882,7 @@ export function HomePageView({
 
         {featuredWorks.length > 0 && (
           <section className={`${styles.shell} ${styles.footerNote}`}>
-            <span>Featured shipping focus</span>
+            <span>Main works</span>
             <strong>{featuredWorks.map((work) => work.title).join(" / ")}</strong>
           </section>
         )}

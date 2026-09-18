@@ -29,6 +29,7 @@
   font-weight: var(--font-weight-label);
   line-height: var(--leading-nav-label);
   letter-spacing: var(--tracking-nav-label);
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -36,6 +37,7 @@
   color: var(--color-ash-gray);
   font-size: var(--text-caption);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -181,6 +183,7 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 

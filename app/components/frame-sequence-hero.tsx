@@ -16,6 +16,7 @@ import {
   selectedWorks,
   talks,
 } from "../portfolio-data";
+import { Ja } from "./ja";
 import styles from "./frame-sequence-hero.module.css";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
@@ -544,17 +545,17 @@ const STAGE_CAPTIONS = [
   {
     index: "01",
     en: "Sense",
-    ja: "4 チャンネルの生信号 — 振動・音響・画像・CO₂。1 本に外乱が乗る。",
+    ja: "4 チャンネルの生信号です。3 本目に外乱が重畳しています。",
   },
   {
     index: "02",
     en: "Decide",
-    ja: "同じ標本をデバイス上でスペクトルへ — FFT → 特徴量 → 判定。",
+    ja: "同じ信号を FFT で変換し、特徴量から判定します。",
   },
   {
     index: "03",
     en: "Share",
-    ja: "1 つの解析コアを 4 つの配布チャネルへ — 出荷・公開・査読。",
+    ja: "1 つの解析コアを、4 つの配布先で提供しています。",
   },
 ] as const;
 
@@ -598,8 +599,12 @@ function StaticHero() {
             <span key={word}>{word}</span>
           ))}
         </h1>
-        <p className={styles.thesis}>{heroCopyV2.headlineJa}</p>
-        <p className={styles.lead}>{heroCopyV2.subJa}</p>
+        <p className={styles.thesis}>
+          <Ja>{heroCopyV2.headlineJa}</Ja>
+        </p>
+        <p className={styles.lead}>
+            <Ja>{heroCopyV2.subJa}</Ja>
+          </p>
         <div className={styles.actions}>
           <Link
             className={styles.secondaryAction}
@@ -713,18 +718,20 @@ function SignalHero() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, ease: easeOut, delay: 0.9 }}
           >
-            {heroCopyV2.headlineJa}
+            <Ja>{heroCopyV2.headlineJa}</Ja>
           </motion.p>
         </motion.div>
 
         {/* Act 2 — thesis + proof figures */}
         <motion.div className={styles.act} style={acts.act2} aria-hidden="true">
           <p className={styles.thesis}>
-            振動・音響・画像を、
+            近畿大学 工学部 4 年
             <br />
-            デバイスの上で判断へ。
+            近藤悠太
           </p>
-          <p className={styles.lead}>{heroCopyV2.subJa}</p>
+          <p className={styles.lead}>
+            <Ja>{heroCopyV2.subJa}</Ja>
+          </p>
           <div className={styles.figureRow}>
             <div className={styles.figure}>
               <strong>{awardPrizeCount}</strong>
@@ -736,7 +743,7 @@ function SignalHero() {
             </div>
             <div className={styles.figure}>
               <strong>{channelCount}</strong>
-              <span>配布チャネル</span>
+              <span>配布先</span>
             </div>
             <div className={styles.figure}>
               <strong>100%</strong>
@@ -750,7 +757,9 @@ function SignalHero() {
           className={`${styles.act} ${styles.actCta}`}
           style={acts.act3}
         >
-          <p className={styles.thesis}>動くものを、届ける。</p>
+          <p className={styles.thesis}>
+            <Ja>研究と制作物は、この下にあります。</Ja>
+          </p>
           <div className={styles.actions}>
             <Link
               className={styles.secondaryAction}
@@ -768,8 +777,10 @@ function SignalHero() {
             target="_blank"
             rel="noreferrer"
           >
-            <span>Latest Signal — {heroCopyV2.latestUpdate.dateLabel}</span>
-            <strong>{heroCopyV2.latestUpdate.title}</strong>
+            <span>Latest · {heroCopyV2.latestUpdate.dateLabel}</span>
+            <strong>
+              <Ja>{heroCopyV2.latestUpdate.title}</Ja>
+            </strong>
           </a>
         </motion.div>
 
@@ -784,7 +795,9 @@ function SignalHero() {
               <span>
                 {caption.index} · {caption.en}
               </span>
-              <p>{caption.ja}</p>
+              <p>
+                <Ja>{caption.ja}</Ja>
+              </p>
             </motion.div>
           ))}
         </div>

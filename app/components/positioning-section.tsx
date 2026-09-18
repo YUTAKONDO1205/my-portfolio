@@ -7,6 +7,7 @@ import type {
   PositioningAxis,
   PositioningSilhouette,
 } from "../portfolio-data";
+import { Ja } from "./ja";
 import styles from "./positioning-section.module.css";
 
 type PositioningSectionProps = {
@@ -184,9 +185,11 @@ export function PositioningSection({ positioning }: PositioningSectionProps) {
         >
           <span className={styles.eyebrow}>{positioning.label}</span>
           <h2 id="positioning-heading" className={styles.title}>
-            {positioning.title}
+            <Ja>{positioning.title}</Ja>
           </h2>
-          <p className={styles.thesisJa}>{positioning.thesisJa}</p>
+          <p className={styles.thesisJa}>
+            <Ja>{positioning.thesisJa}</Ja>
+          </p>
           <p className={styles.thesisEn}>{positioning.thesisEn}</p>
         </motion.header>
 

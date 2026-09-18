@@ -43,6 +43,7 @@
   font-weight: var(--font-weight-label);
   line-height: var(--leading-nav-label);
   letter-spacing: var(--tracking-nav-label);
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -51,7 +52,7 @@
   font-size: clamp(34px, 5vw, var(--text-heading-lg));
   font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-lg);
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-tight);
   color: var(--color-bone-white);
 }
 
@@ -66,7 +67,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--spacing-96) var(--spacing-60);
 }
 
@@ -273,6 +274,7 @@
   color: var(--color-ash-gray);
   font-size: 10px;
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -400,14 +402,17 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
+  /* one real column — twelve tracks with a 60px gap are 660px of gap alone,
+     wider than a phone */
   .grid {
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--spacing-60);
   }
 
   .vizA,
   .vizB,
   .vizC {
-    grid-column: span 12;
+    grid-column: auto;
   }
 }
 

@@ -40,7 +40,7 @@
   font-size: clamp(34px, 5vw, var(--text-heading-lg));
   font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-lg);
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .sectionHeader p {
@@ -52,6 +52,7 @@
   font-weight: var(--font-weight-label);
   line-height: var(--leading-nav-label);
   letter-spacing: var(--tracking-nav-label);
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -82,6 +83,7 @@
   font-size: var(--text-nav-label);
   font-weight: var(--font-weight-label);
   letter-spacing: var(--tracking-nav-label);
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -90,7 +92,7 @@
   font-size: clamp(34px, 4.4vw, var(--text-heading-sm));
   font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-sm);
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .proofGrid {
@@ -106,10 +108,13 @@
 }
 
 .proofGrid strong {
-  font-size: var(--text-heading-sm);
-  font-weight: var(--font-weight-display);
+  font-family: var(--font-latin), sans-serif;
+  font-size: clamp(44px, 4.4vw, 64px);
+  font-weight: 800;
+  font-stretch: 125%;
+  font-variant-numeric: tabular-nums;
   line-height: 1;
-  letter-spacing: var(--tracking-heading-sm);
+  letter-spacing: var(--tracking-latin-display);
   color: var(--color-bone-white);
 }
 
@@ -119,6 +124,7 @@
   color: var(--color-ash-gray);
   font-size: var(--text-caption);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -161,6 +167,7 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -285,6 +292,7 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
   transition: color 240ms var(--ease-out);
 }
@@ -363,6 +371,7 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -409,6 +418,7 @@
   font-size: var(--text-nav-label);
   font-weight: var(--font-weight-label);
   letter-spacing: var(--tracking-nav-label);
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -417,7 +427,7 @@
   font-size: clamp(34px, 5vw, var(--text-heading-lg));
   font-weight: var(--font-weight-display);
   line-height: var(--leading-heading-lg);
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .contactCopy > span {
@@ -458,6 +468,7 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -497,6 +508,7 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -692,6 +704,7 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -710,15 +723,17 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
 .talkBody h3 {
   margin: 0;
-  max-width: 34ch;
-  font-size: var(--text-heading-2xs);
+  /* paper titles are long; wide enough to settle in two lines */
+  max-width: 30em;
+  font-size: clamp(19px, 1.7vw, var(--text-heading-2xs));
   font-weight: var(--font-weight-display);
-  line-height: var(--leading-heading-2xs);
+  line-height: 1.5;
   letter-spacing: var(--tracking-heading-2xs);
 }
 
@@ -739,6 +754,7 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
   transition: color 240ms var(--ease-out);
 }
@@ -790,6 +806,7 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -797,7 +814,7 @@
   font-size: var(--text-heading-sm);
   font-weight: var(--font-weight-display);
   line-height: 1.1;
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-tight);
   color: var(--color-bone-white);
 }
 
@@ -833,6 +850,7 @@
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 

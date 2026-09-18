@@ -69,6 +69,7 @@
   font-weight: var(--font-weight-label);
   letter-spacing: 0.16em;
   line-height: 1;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
   transition: color 240ms var(--ease-out);
 }
