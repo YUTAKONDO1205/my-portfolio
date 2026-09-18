@@ -110,30 +110,30 @@ export const platformLinks: readonly PlatformLink[] = [
   {
     href: "https://github.com/YUTAKONDO1205",
     label: "GitHub",
-    description: "コードと検証ログを残す公開リポジトリ",
+    description: "コードと測定データ",
     detail:
-      "研究の途中経過まで含めて公開し、組み込み、機械学習、API、実験スクリプトを横断して整理しています。",
+      "研究の途中経過も含めて公開しています。組み込み、機械学習、API、実験用スクリプトを掲載しています。",
   },
   {
     href: "https://elchika.com/user/kd_yuta/?page=0",
     label: "Elchika",
-    description: "背景と評価を日本語でまとめた制作ノート",
+    description: "作品ごとの解説記事",
     detail:
-      "課題設定、構成、評価、今後の展望を記事として残し、作品単位で読めるようにしています。",
+      "課題、構成、評価、今後の予定を、作品ごとに記載しています。",
   },
   {
     href: "https://zenn.dev/kd_yuta",
     label: "Zenn",
-    description: "LLM エージェント実装の設計記事",
+    description: "LLM エージェントの設計記事",
     detail:
-      "Microsoft Agent Hackathon に提出した EdgeOps Command Agent の設計と、承認ゲート・監査ログの考え方を記事として公開しています。",
+      "Microsoft Agent Hackathon に提出した EdgeOps Command Agent の設計と、承認ゲートや監査ログの考え方を記載しています。",
   },
   {
     href: "https://vibeguard-site.kondo-yuta-02.workers.dev",
     label: "VibeGuard 公式サイト",
-    description: "出荷中のプロダクトをそのまま読める公開サイト",
+    description: "ルール一覧と検出例",
     detail:
-      "検出ルール一覧、実際の検出例、リリース履歴を、リポジトリの中身から自動生成して掲載しています。",
+      "検出ルールの一覧、実際の検出例、リリース履歴を掲載しています。内容はリポジトリから自動生成しています。",
   },
 ] as const;
 
@@ -142,57 +142,57 @@ export const focusAreas: readonly FocusArea[] = [
     label: "Signal",
     title: "現場の信号を取る",
     description:
-      "画像、振動、音響、位置情報のような異なる信号を、現場で扱える粒度と実装コストで取得します。",
+      "画像、振動、音響、位置情報を、現場に設置できるセンサで計測します。",
   },
   {
     label: "Edge",
     title: "軽量に判断する",
     description:
-      "SPRESENSE 級の制約を前提に、FFT、Random Forest、MobileNetV2 などを使って判断をデバイス側へ寄せます。",
+      "SPRESENSE のメモリと演算性能に収まるよう、FFT、Random Forest、MobileNetV2 を用いて端末上で判定します。",
   },
   {
     label: "Open",
     title: "公開しながら磨く",
     description:
-      "コード、記事、受賞歴を切り離さず、研究の流れそのものが伝わるように公開を続けています。",
+      "コードと記事を、研究の途中から公開しています。",
   },
 ] as const;
 
 export const siteAxis: SiteAxis = {
   label: "Research Flow",
-  title: "現場の信号を、判断と公開へつないでいく",
+  title: "研究テーマ",
   summary:
-    "このサイトの軸は、センサで拾った信号をエッジで読み、必要な情報だけを送り、公開しながら次の研究へつなげる流れです。",
+    "SPRESENSE 上でセンサ信号を処理する研究が 3 件、検知結果を運用で利用するための API が 1 件あります。",
   detail:
-    "現場で信号を取り、軽量に判断し、通信制約を前提にデータを設計し、GitHub と Elchika で公開するまでの流れを、このサイト全体の軸にしています。",
+    "いずれの研究も、信号の計測、端末上での判定、公開の順に進めています。背景の粒子は、この 3 段階に対応する形へ変化します。",
   steps: [
     {
       en: "Sense",
-      ja: "現場で拾う",
+      ja: "現場での計測",
       description:
-        "画像、振動、音響、位置情報のような信号を、実験だけで終わらない粒度で現場から取る。",
+        "画像、振動、音響、位置情報、CO2 濃度を、現場に設置したセンサで計測します。",
     },
     {
       en: "Decide",
-      ja: "軽量に判断する",
+      ja: "端末上での判定",
       description:
-        "SPRESENSE 級の制約を前提に、特徴量設計や軽量モデルで判断をデバイス側へ寄せる。",
+        "SPRESENSE のメモリと演算性能に収まるよう、FFT による特徴量と軽量なモデルで判定します。",
     },
     {
       en: "Share",
-      ja: "公開して次へつなぐ",
+      ja: "公開",
       description:
-        "GitHub、Elchika、受賞歴まで含めて研究の流れを公開し、次のテーマに接続していく。",
+        "コードは GitHub で、経緯と評価は Elchika と Zenn で公開しています。学会でも発表しています。",
     },
   ],
 } as const;
 
 export const philosophy: Philosophy = {
   label: "Philosophy",
-  title: "「どう動くか」だけでなく「どう使われるか」まで設計する",
-  body: "良いエンジニアリングは、ただ動くものを作ることではなく、現場で実際に使えるシステムを設計することだと考えています。そのため、センサ取得、エッジ推論、通信、API、可視化までを横断し、必要な情報だけを送る省通信設計と、運用へつなげるイベント設計をひとつの体験として組み立てています。",
+  title: "開発の方針",
+  body: "開発したものが動作しても、現場で使われなければ意味がないと考えています。そのため、センサ、端末上の推論、通信、API、画面までを一通り自分で実装しています。送信するデータは必要な分に絞り、検知結果は記録して、あとから参照できるようにしています。",
   english:
-    "Good engineering is not only about making something work — it is about designing systems that can actually be used in the real world.",
+    "I build things until they can actually be used in the field.",
 } as const;
 
 export const researchProjects: readonly ResearchProject[] = [
@@ -202,7 +202,7 @@ export const researchProjects: readonly ResearchProject[] = [
     title: "DroneInspector",
     subtitle: "インフラ点検向けエッジAIドローン",
     cardSummary:
-      "狭小インフラ空間での点検を想定し、SPRESENSE ベースで撮像・画質ゲート・分類・証跡保存・監督制御をつないだ研究です。品質基準を満たさないフレームを、検知しないまま通過させないことを設計の中心に置いています。",
+      "狭小なインフラ空間の点検を想定した研究です。SPRESENSE 上で、撮像、画質ゲート、分類、証跡の保存、監督制御までを実行します。ぼけた画像や白飛びした画像を、検知しないまま分類へ渡さないことを重視しました。",
     pageSummary:
       "空間の制約が大きい点検現場では、品質基準を満たさないフレームをその場で棄却する人がいません。ぼけた画像や白飛びした画像にも分類器はスコアを返すため、棄却も委譲もないまま陰性と判定された損傷は silent miss になります。この研究は、画質ゲートと棄却が監督制御の判断へどう伝播するかを、固定した証拠の上で 1 層ずつ入れ替えて測定し、その結果に基づいてファームウェアを実装したものです。",
     heroKicker: "Skyborne Inspection",
@@ -235,7 +235,7 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "着眼点",
         body:
-          "トンネルや水道管のような通信条件の悪い場所では、撮影して持ち帰るだけでは作業の負荷が大きく残ります。さらに問題となるのは、品質基準を満たさないフレームをその場で棄却する人がいないことです。品質ゲートも棄却も既知の手法ですが、それらが監督制御の判断へどう伝播するかは、測定しなければ明らかになりません。固定した証拠の上でこれを確かめることを研究の中心に置いています。",
+          "トンネルや水道管のような通信条件の悪い場所では、撮影して持ち帰るだけでは作業の負荷が大きく残ります。さらに問題となるのは、品質基準を満たさないフレームをその場で棄却する人がいないことです。品質ゲートも棄却も既知の手法ですが、それらが監督制御の判断へどう伝播するかは、測定しなければ明らかになりません。この研究では、固定した証拠を用いてこの伝播を測定しました。",
       },
       {
         title: "構成",
@@ -254,11 +254,11 @@ export const researchProjects: readonly ResearchProject[] = [
       },
     ],
     highlights: [
-      "画質ゲート → 分類 → 証跡 → 5 状態監督制御を 1 本の不変条件として固定",
-      "索引を保存しない証跡ストア — 走査による再構築が 40/40 試行で完全回復",
-      "6 層の入れ替え比較 (E1–E6) で、5 つが想定と異なる挙動を示すことを実測",
-      "STPA + FMEA、Simulink/Stateflow モデル、飛行 SIL まで含む一次資料を公開",
-      "受賞作品として外部からの評価も得ている点検テーマ",
+      "画質ゲート → 分類 → 証跡 → 5 状態の監督制御を、1 本の不変条件として固定しました。",
+      "証跡ストアは索引を保存しません。走査による再構築は、40/40 試行で完全に回復しました。",
+      "6 層の入れ替え比較 (E1–E6) を行い、5 つが想定と異なる挙動を示すことを実測しました。",
+      "STPA + FMEA、Simulink/Stateflow モデル、飛行 SIL までを含む一次資料を公開しています。",
+      "2025 年 SPRESENSE 活用コンテストで特別賞を受賞しました。",
     ],
   },
   {
@@ -267,9 +267,9 @@ export const researchProjects: readonly ResearchProject[] = [
     title: "pdm_edge",
     subtitle: "加速度・音響を用いた異常検知エッジAI",
     cardSummary:
-      "加速度 3 軸と音響の 4 チャンネルを FFT 特徴へ落とし込み、SPRESENSE 上で扱える軽量な異常検知構成としてまとめた研究です。",
+      "加速度 3 軸と音響の 4 チャンネルを FFT で特徴量に変換し、SPRESENSE 上で動作する軽量な異常検知を構築しました。",
     pageSummary:
-      "予兆保全を現場寄りに考えるために、重い解析を避けつつ異常兆候の差をどこまで検出できるかを検討した研究です。波形から周波数特徴を生成し、固定長の特徴量として軽量実装へ寄せています。",
+      "計算量の大きい解析を用いずに、異常の兆候をどこまで検出できるかを検討した研究です。波形から周波数特徴を生成し、固定長の特徴量として軽量な実装で扱えるようにしました。",
     heroKicker: "Signal and Spectrum",
     heroEnglish: "Turn vibration into a readable edge.",
     themeClass: "theme-pdm",
@@ -296,7 +296,7 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "着眼点",
         body:
-          "通信前提の大きな解析系ではなく、設備のすぐ近くで異常兆候を拾える最小構成を作ることを目的にしています。現場に置ける軽量さと再現性を優先しています。",
+          "通信を前提とした大規模な解析系は用いず、設備の近傍で異常の兆候を検出できる最小構成を目指しました。現場に設置できる軽量さと再現性を優先しています。",
       },
       {
         title: "構成",
@@ -306,13 +306,13 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "現在地",
         body:
-          "学習、評価、ヘッダ再生成、SPRESENSE 側呼び出しまでが揃っており、異常再現率を重視した軽量構成としてまとまっています。",
+          "学習、評価、ヘッダの再生成、SPRESENSE 側からの呼び出しまで動作しています。異常の見逃しを減らすため、再現率を優先した構成です。",
       },
     ],
     highlights: [
-      "4 チャンネル同時処理で設備状態の変化を多面的に取得",
-      "固定長特徴で組み込み移植をしやすくした構成",
-      "LoRa と振動解析の流れにつながる基礎研究として位置づくテーマ",
+      "4 チャンネルを同時に処理し、設備の状態変化を複数の信号から捉えます。",
+      "特徴量を固定長にして、組み込み環境へ移植しやすくしました。",
+      "2024 年の LoRa 振動解析から継続しているテーマです。",
     ],
   },
   {
@@ -321,9 +321,9 @@ export const researchProjects: readonly ResearchProject[] = [
     title: "anomaly-event-api",
     subtitle: "異常検知をイベント運用までつなぐ API",
     cardSummary:
-      "画像アップロード、異常検知、説明、イベント保存、ダッシュボード可視化を一体化し、研究を運用視点まで広げた実装です。",
+      "画像のアップロード、異常検知、判定の説明、イベントの保存、ダッシュボード表示を 1 つの API として実装しました。検知後の運用までを対象としています。",
     pageSummary:
-      "判定結果を返すだけで終わらず、イベントとして残し、確認し、状態更新できるところまで視野に入れた研究実装です。ローカル検証と AWS 検証の両方を同じ体験で扱えるようにしています。",
+      "判定結果を返したあと、イベントとして保存し、確認し、状態を更新するところまでを実装しました。ローカル環境と AWS のどちらでも、同じ操作で検証できます。",
     heroKicker: "Operational Layer",
     heroEnglish: "From anomaly to action.",
     themeClass: "theme-anomaly",
@@ -346,7 +346,7 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "着眼点",
         body:
-          "現場で本当に必要なのは、判定の有無だけではなく、その結果を保存し、見返し、状態を変えられることだと考えています。そのため異常検知をイベント運用へつなげ、検知結果を運用上の判断へ変換する仕組みとして設計しています。",
+          "現場では、判定そのものに加えて、結果を保存して参照し、対応状況を更新できることが必要だと考えました。このため検知結果をイベントとして扱い、運用上の判断に利用できる形で記録しています。",
       },
       {
         title: "構成",
@@ -356,13 +356,13 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "現在地",
         body:
-          "検知、イベント化、可視化、provider 切り替えが揃い、研究の成果を現場オペレーションへ近づける基盤として機能しています。",
+          "検知、イベント化、可視化、provider の切り替えまで動作しています。",
       },
     ],
     highlights: [
-      "local / AWS の両モードで同じ操作感を保つ構成",
-      "NEW / CHECKING / RESOLVED の運用ステータス設計",
-      "説明可能性とイベント管理をひとつの体験にまとめた点が特徴",
+      "local と AWS のどちらでも、同じ操作で動作します。",
+      "対応状況を NEW / CHECKING / RESOLVED の 3 状態で管理します。",
+      "判定の説明（Grad-CAM など）とイベント管理を、同じ画面で扱えます。",
     ],
   },
   {
@@ -371,9 +371,9 @@ export const researchProjects: readonly ResearchProject[] = [
     title: "Eltres_CO2_Mapping",
     subtitle: "ELTRES通信によるCO2濃度マッピング",
     cardSummary:
-      "SPRESENSE と ELTRES を組み合わせ、CO2 濃度と位置情報を交互に送信して都市と郊外の濃度差を可視化した研究です。",
+      "SPRESENSE と ELTRES で CO2 濃度と位置情報を交互に送信し、都市部と郊外の濃度差を地図上に可視化しました。",
     pageSummary:
-      "通信、解析、表示を一連でつなぐ環境モニタリング研究です。CO2 濃度と位置情報を ELTRES で送り、CLIP Viewer Lite API から MATLAB で取得し、Web ダッシュボードまでまとめて構築しています。",
+      "通信、解析、表示までを一貫して実装した環境モニタリングの研究です。CO2 濃度と位置情報を ELTRES で送り、CLIP Viewer Lite API から MATLAB で取得し、Web ダッシュボードに表示しています。",
     heroKicker: "Atmosphere Mapping",
     heroEnglish: "Make invisible signals visible.",
     themeClass: "theme-eltres",
@@ -400,7 +400,7 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "着眼点",
         body:
-          "目に見えない CO2 濃度を、エリア単位の差として持ち帰れる形にすることを目的にしています。現場で取った値を、その場で確認できる体験までつなげることを意識しています。",
+          "目に見えない CO2 濃度を、エリアごとの差として把握できるようにすることが目的です。現場で計測した値を、その場で確認できるところまで実装しました。",
       },
       {
         title: "構成",
@@ -410,13 +410,13 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "現在地",
         body:
-          "通信、解析、表示までが一連でつながり、センサデータをエリア単位の濃度差として可視化する環境モニタリングの基礎構成として位置づいています。",
+          "通信、解析、表示までが接続され、センサの値をエリアごとの濃度差として地図上に表示できます。環境モニタリングの基礎となる構成です。",
       },
     ],
     highlights: [
-      "送信データを最小化したまま空間分布を取得できる構成",
-      "MATLAB と Web ダッシュボードまで含めた一連の可視化パイプライン",
-      "クレスコ ELTRESアドオンボード優秀賞の受賞テーマ",
+      "送信データを最小限に抑えたまま、空間分布を取得できます。",
+      "MATLAB から Web ダッシュボードまでの可視化を一通り実装しました。",
+      "クレスコ ELTRESアドオンボード優秀賞を受賞したテーマです。",
     ],
   },
 ] as const;
@@ -426,9 +426,9 @@ export const selectedWorks: readonly SelectedWork[] = [
     slug: "vibeguard",
     category: "Security Tooling",
     title: "VibeGuard",
-    subtitle: "AI 生成コードの「通ってしまうバグ」を 3 地点で止める",
+    subtitle: "AI 生成コードの脆弱性を 3 か所で検出する診断ツール",
     summary:
-      "書くとき（VS Code / Open VSX）・読むとき（Chrome）・マージ前（GitHub Actions / CLI）の 3 地点に同じ analyzer-core を配り、注入・秘密情報・認証スキップ・スタブ実装の混入を同一基準で止める診断基盤です。公式サイトの数値はすべてリポジトリから自動生成しており、コードは端末から出ません。",
+      "書くとき（VS Code / Open VSX）、読むとき（Chrome）、マージする前（GitHub Actions / CLI）の 3 か所で、同じ analyzer-core が動作します。注入、秘密情報の埋め込み、認証の省略、スタブのままの実装を、同じ基準で検出します。解析は手元の端末で完結し、コードを外部へ送信しません。",
     tags: [
       "TypeScript Monorepo",
       "SARIF",
@@ -447,14 +447,14 @@ export const selectedWorks: readonly SelectedWork[] = [
       label: "公式サイト",
     },
     highlights: [
-      "解析コア共通化 — 同じ analyzer-core を 4 つの配布チャネルに載せ、判定を 3 地点で揃える",
-      "学会で検証 — SES2026 一般論文として発表（2026.09.11 慶應日吉）、CSS2026 一般発表 4D2-3 に採択（2026.10.22 浜松）",
-      "85 ルール / 11 言語 — 単一ファイル 74 + ファイル横断 11。注入・認証・秘密情報・暗号・メモリ安全・組込 / RTOS を c / cpp / csharp / go / java / javascript / kotlin / php / python / ruby / typescript で網羅",
-      "自動修正 7 件 — うち「読まずに適用してよい」と宣言できるのは 1 件だけ。残りは needs-review として明示し、直す判断は人に残す",
-      "公式サイト公開 — ルール一覧・検出例・バージョンをリポジトリから自動生成。手で書いた数値はサイト上に 1 つもない",
-      "MCP サーバ — エージェントがファイルを書く「前」に同じエンジンへ問い合わせ、ALLOWED / REFUSED を返す",
-      "100% ローカル — テレメトリ・外部送信なし。ネットワーク遮断下で結果がバイト一致することを CI で検証",
-      "PR diff スキャン + SARIF — 追加行だけを走査し、GitHub Code Scanning タブへ連携",
+      "解析コアは 1 つです。同じ analyzer-core を 4 つの配布先で提供し、どこで実行しても同じ判定になります。",
+      "SES2026 で一般論文として発表しました（2026.09.11、慶應日吉）。CSS2026 では、一般発表 4D2-3 に採択されています（2026.10.22、浜松）。",
+      "85 ルール、11 言語に対応しています。内訳は単一ファイル 74、ファイル横断 11 です。対象言語は c / cpp / csharp / go / java / javascript / kotlin / php / python / ruby / typescript です。",
+      "自動修正は 7 件あります。確認なしで適用できるものは 1 件のみで、残りは needs-review と表示し、人が判断します。",
+      "公式サイトのルール一覧、検出例、バージョンは、リポジトリから自動生成しています。手入力の数値はありません。",
+      "MCP サーバを提供しています。エージェントがファイルを書き込む前に同じエンジンへ問い合わせ、ALLOWED / REFUSED を返します。",
+      "テレメトリも外部送信もありません。ネットワークを遮断しても結果がバイト単位で一致することを、CI で検証しています。",
+      "PR の追加行だけを走査し、SARIF 形式で GitHub Code Scanning に出力します。",
     ],
     distribution: [
       {
@@ -483,9 +483,9 @@ export const selectedWorks: readonly SelectedWork[] = [
     slug: "edgeops-command-agent",
     category: "LLM Multi-Agent",
     title: "EdgeOps Command Agent",
-    subtitle: "点検データを「意思決定」まで変換する保全マルチエージェント",
+    subtitle: "点検データから作業指示までを出力する保全向けマルチエージェント",
     summary:
-      "異常検知で終わらせず、センサ・画像・点検メモ・マニュアル・故障履歴を 8 エージェントで統合し、リスク判定・原因推定・作業指示・報告書まで一貫して変換する Azure ベースの保全 AI です。人間の承認（承認 / 修正依頼 / 却下）を前提とした Human-in-the-loop と監査ログを備えます。",
+      "異常検知後の作業までを対象とする、Azure ベースの保全 AI です。センサ、画像、点検メモ、マニュアル、故障履歴を 8 つのエージェントで処理し、リスク判定、原因の推定、作業指示、報告書を出力します。結果は、人が承認、修正依頼、却下のいずれかを選択する前提で、操作は監査ログに記録されます。",
     tags: [
       "Azure OpenAI",
       "Semantic Kernel",
@@ -499,11 +499,11 @@ export const selectedWorks: readonly SelectedWork[] = [
     href: "https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent",
     feature: true,
     highlights: [
-      "8 エージェント構成 — Intake → Signal → Vision → Manual RAG → Root Cause → Action → What-if → Governance",
-      "Azure OpenAI / Semantic Kernel / Azure AI Search による RAG とビジョン解析",
-      "SPRESENSE などのエッジ機器から Event Hubs 経由で取り込むエッジ連携",
-      "承認・監査ワークフロー — Cosmos DB へ実行履歴を残し Teams へ通知",
-      "20 シナリオ × 4 深刻度を 108 項目のポリシーチェックで検証（全項目 pass）",
+      "8 エージェントで構成しています。処理順は Intake、Signal、Vision、Manual RAG、Root Cause、Action、What-if、Governance です。",
+      "Azure OpenAI / Semantic Kernel / Azure AI Search を用いて、RAG と画像解析を行います。",
+      "SPRESENSE などのエッジ機器のデータを、Event Hubs 経由で取り込みます。",
+      "承認と監査のワークフローを備えています。実行履歴を Cosmos DB に記録し、Teams へ通知します。",
+      "20 シナリオ × 4 深刻度を、108 項目のポリシーチェックで検証しました（全項目 pass）。",
     ],
     award: {
       label: "Microsoft Agent Hackathon 2026 特別賞（個人部門）",
@@ -516,7 +516,7 @@ export const selectedWorks: readonly SelectedWork[] = [
     title: "Maison Passage",
     subtitle: "片道航空券 2 枚で組み立てる海外旅行プランナー",
     summary:
-      "海外旅行を「2 枚の片道航空券」として検索するプレミアム旅行プランナーです。Codex の Planner / Generator / Evaluator マルチエージェントハーネスをローカルで運用し、`specs/spec.json` を唯一の正としてスプリント単位で機能を進化させています。現在は Sprint 10（多地域コリドーの現実性とラベル整合）まで到達しています。",
+      "片道航空券 2 枚の組み合わせで海外旅行を検索するプランナーです。Codex の Planner / Generator / Evaluator の 3 役をローカルで反復実行して開発しています。仕様は specs/spec.json の 1 ファイルで管理し、スプリントごとに機能を追加しています。現在は Sprint 10（複数地域をまたぐ経路の現実性と、ラベルの整合）に取り組んでいます。",
     tags: [
       "Next.js",
       "TypeScript",
@@ -528,9 +528,9 @@ export const selectedWorks: readonly SelectedWork[] = [
     themeClass: "theme-drone",
     href: "https://github.com/YUTAKONDO1205/travel_app_patch",
     highlights: [
-      "Planner / Generator / Evaluator の 3 役をローカルの Codex で反復実行し、PASS / FAIL レポートを成果物として残す",
-      "複数月 × 滞在日数レンジの柔軟検索 — 最安の往路日付を選び、そこへ滞在レンジを足して復路を探す",
-      "決定論的見積もりと事業者バックのライブ運賃導線を視覚的に分離し、フォールバックを UI 上で明示",
+      "Planner / Generator / Evaluator の 3 役をローカルの Codex で反復実行し、PASS / FAIL のレポートを成果物として記録します。",
+      "複数月 × 滞在日数の幅で検索できます。最安の往路日を選択し、滞在日数を加えて復路を検索します。",
+      "概算の見積もりと、事業者から取得した実際の運賃を、画面上で区別して表示します。取得できなかった場合は、その旨を表示します。",
     ],
   },
   {
@@ -539,7 +539,7 @@ export const selectedWorks: readonly SelectedWork[] = [
     title: "Mountain Supply System",
     subtitle: "山小屋補給品の在庫・受注・売上管理",
     summary:
-      "Java / Spring Boot / SQL / テストを一通り用いた、業務アプリケーション相当の小規模システムです。商品マスタ、入出庫履歴、注文ヘッダと明細、ユーザー認証を分離した正規化設計と、JOIN・GROUP BY を中心とした集計 SQL を組み合わせています。",
+      "山小屋の補給品を管理する小規模な業務システムです。Java と Spring Boot で開発し、SQL とテストまで一通り実装しました。商品マスタ、入出庫履歴、注文ヘッダと明細、ユーザー認証を別のテーブルに分離し、集計は JOIN と GROUP BY で記述しています。",
     tags: [
       "Java 21",
       "Spring Boot",
@@ -551,9 +551,9 @@ export const selectedWorks: readonly SelectedWork[] = [
     themeClass: "theme-pdm",
     href: "https://github.com/YUTAKONDO1205/Mountain-Supply-System",
     highlights: [
-      "注文ライフサイクル — CONFIRMED → SHIPPED / CANCELLED を状態遷移として固定し、再操作は 400 で拒否する",
-      "在庫は入出庫履歴から動的算出。キャンセルは ORDER_CANCEL として戻し入庫する",
-      "単体テストと結合テストを正常系 / 異常系で分け、Basic 認証つき REST API まで通しで検証",
+      "注文の状態遷移は CONFIRMED → SHIPPED / CANCELLED に固定しています。確定後の再操作は 400 で拒否します。",
+      "在庫は入出庫履歴から動的に算出します。キャンセルは ORDER_CANCEL として戻し入庫します。",
+      "単体テストと結合テストを正常系 / 異常系に分け、Basic 認証つきの REST API まで通して検証しました。",
     ],
   },
   {
@@ -562,7 +562,7 @@ export const selectedWorks: readonly SelectedWork[] = [
     title: "Zumen LLM Docker Lab",
     subtitle: "図面業務を LLM で半自動化する実験基盤",
     summary:
-      "図面画像からの説明生成、判定理由の文章化、プロンプトのバージョン管理、顧客別用語集、評価データセットの自動採点、監査ログまでを 1 つの FastAPI + htmx アプリにまとめた、図面 LLM ワークフローの実験基盤です。Docker / Dev Container で再現でき、LLM プロバイダは mock ↔ OpenAI 互換で切り替えられます。",
+      "図面画像の説明生成、判定理由の文章化、プロンプトのバージョン管理、顧客別の用語集、評価データの自動採点、監査ログを、1 つの FastAPI + htmx アプリとして実装しました。Docker / Dev Container で再現でき、LLM は mock と OpenAI 互換 API を切り替えられます。",
     tags: [
       "FastAPI",
       "htmx",
@@ -575,9 +575,9 @@ export const selectedWorks: readonly SelectedWork[] = [
     themeClass: "theme-eltres",
     href: "https://github.com/YUTAKONDO1205/zumen_llm_docker",
     highlights: [
-      "プロンプトを SQLite に version 保存し、改善案をそのまま新 version として有効化できる",
-      "評価データセットに JSON アサーションの自動採点を付け、active な prompt version で pass / fail を集計",
-      "顧客別の用語集を説明生成へ自動で組み込み、入力と出力を監査ログとして CSV 出力できる",
+      "プロンプトを SQLite に version として保存し、改善案をそのまま新しい version として有効化できます。",
+      "評価データセットに JSON アサーションの自動採点を設け、active な prompt version で pass / fail を集計します。",
+      "顧客別の用語集を説明生成へ自動で組み込み、入力と出力を監査ログとして CSV 出力できます。",
     ],
   },
 ] as const;
@@ -601,7 +601,7 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     dateLabel: "2026.01.31",
     title: "SPRESENSEでインフラ点検向けのエッジAIドローン",
     summary:
-      "カメラ、BLE、エッジAI、軽量ドローンを組み合わせ、機体側で判断するインフラ点検の可能性を探った作品です。",
+      "カメラ、BLE、エッジ AI、軽量ドローンを組み合わせ、機体側で判断するインフラ点検を試作した作品です。",
     tags: ["AI", "BLE", "SPRESENSE", "Edge AI", "Drone"],
     awards: ["2025年 SPRESENSE 活用コンテスト クレイン電子 BLEアドオンボード特別賞"],
     href: "https://elchika.com/article/663a49cf-c895-44d7-a989-6e45e7d92056/",
@@ -623,7 +623,7 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     dateLabel: "2025.01.31",
     title: "SPRESENSEと振動解析による設備保全の最前線",
     summary:
-      "LoRa と振動解析を組み合わせ、遠隔監視と設備保全をつなぐ実装としてまとめた作品です。",
+      "LoRa と振動解析を組み合わせ、遠隔から設備の状態を監視する作品です。",
     tags: ["Arduino", "IoT", "LoRa", "MPU6050", "SPRESENSE"],
     awards: [
       "2024年 SPRESENSE 活用コンテスト LoRa活用アイデア賞",
@@ -671,7 +671,7 @@ export const recognitions: readonly Recognition[] = [
     project: "EdgeOps Command Agent",
     organization: "Microsoft Agent Hackathon powered by Tokyo Electron Device",
     note:
-      "点検データをリスク判定・原因推定・作業指示・報告まで変換する 8 エージェント保全 AI として、Human-in-the-loop と監査設計が評価された受賞です。",
+      "点検データからリスク判定、原因の推定、作業指示、報告書までを出力する 8 エージェントの保全 AI です。人の承認を挟む構成と監査ログが評価されました。",
     href: "https://zenn.dev/kd_yuta/articles/edgeops-command-agent",
   },
   {
@@ -698,7 +698,7 @@ export const recognitions: readonly Recognition[] = [
     project: "LoRa通信とAIを活用した振動検知による異常予知システムの構築",
     organization: "電気学会 U-21 学生研究発表会",
     note:
-      "LoRa 通信と AI を組み合わせた振動検知システムとして、社会実装への接続性が評価された受賞です。",
+      "LoRa 通信と AI を組み合わせた振動検知システムで受賞しました。",
     href: "https://www.iee.jp/u-21-2025-award/",
   },
   {
@@ -707,7 +707,7 @@ export const recognitions: readonly Recognition[] = [
     project: "SPRESENSEでインフラ点検向けのエッジAIドローン",
     organization: "2025年 SPRESENSE 活用コンテスト",
     note:
-      "免許不要ドローン、軽量な SPRESENSE、現実のインフラ課題との接続が評価された受賞です。",
+      "免許のいらない軽量ドローンと SPRESENSE で、インフラ点検の課題を扱った点が評価されました。",
     href: "https://elchika.com/promotion/spresense2025/winner/#nav",
   },
   {
@@ -716,7 +716,7 @@ export const recognitions: readonly Recognition[] = [
     project: "SPRESENSEとELTRES通信でCO2濃度をマッピング",
     organization: "2024年 SPRESENSE 活用コンテスト",
     note:
-      "エリアごとの CO2 濃度可視化によって社会課題への理解を促す点が評価された受賞です。",
+      "エリアごとの CO2 濃度を地図にした点が評価されました。",
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
   {
@@ -725,7 +725,7 @@ export const recognitions: readonly Recognition[] = [
     project: "SPRESENSEと振動解析による設備保全の最前線",
     organization: "2024年 SPRESENSE 活用コンテスト",
     note:
-      "遠隔監視と設備保全をつなぐ発想が評価され、LoRa 応用と IoT 応用の両面から受賞しています。",
+      "遠隔から設備を監視する構成で、LoRa 活用と IoT 活用の 2 つの賞を受賞しました。",
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
 ] as const;
@@ -868,12 +868,12 @@ export type HeroCopyV2 = {
 
 export const heroCopyV2: HeroCopyV2 = {
   eyebrow: "Embedded × Edge AI",
-  headlineJa: "現場の信号を、使える判断へ。",
+  headlineJa: "現場の信号をマイコン上で判定するエッジ AI",
   headlineEn: "Sense. Decide. Share.",
   subJa:
-    "振動・音響・画像をデバイスの上で判断に変える、近畿大学 学部 4 年の組み込み AI エンジニア。研究 4 本・受賞 6 件・学会発表 4 件。VibeGuard を 4 つのマーケットプレイスへ出荷し、SES2026 で発表、CSS2026 に採択。",
+    "振動、音響、画像をマイコン上で判定する研究に取り組んでいます。AI 生成コードの診断ツール VibeGuard を開発して 4 つのストアで公開し、SES2026 で論文を発表しました。",
   subEn:
-    "Edge AI from lab to marketplace — 6 awards, 4 talks, 4 live distributions.",
+    "Edge AI, from the lab to the marketplace.",
   primaryCta: {
     label: "VibeGuard を試す",
     href: "https://vibeguard-site.kondo-yuta-02.workers.dev",
@@ -881,7 +881,7 @@ export const heroCopyV2: HeroCopyV2 = {
   secondaryCta: { label: "研究を読む", href: "/research" },
   latestUpdate: {
     dateLabel: "2026.09.11",
-    title: "SES2026 で VibeGuard 論文を発表 — 次は CSS2026（10.22 浜松）",
+    title: "SES2026 で VibeGuard の論文を発表しました。次は CSS2026（10.22 浜松）です。",
     href: "https://ses.sigse.jp/2026/program.html",
   },
 } as const;
@@ -1018,11 +1018,11 @@ export type Positioning = {
 
 export const positioning: Positioning = {
   label: "Positioning",
-  title: "研究と実装と公開を、ひとりで閉じる",
+  title: "自己評価（5 軸）",
   thesisJa:
-    "研究の公開ループも、出荷した製品も、両方ある。組み込みエンジニアの多くは前者で止まり、AI エンジニアの多くは後者を持たない。",
+    "組み込みの研究に取り組みながら、VibeGuard を 4 つのストアで公開しています。下の 5 軸は自己評価です。",
   thesisEn:
-    "Most embedded engineers stop at the device. Most AI engineers stop at the notebook. I ship both ends.",
+    "Embedded research on one side, a shipped product on the other.",
   axes: [
     {
       key: "signal",
@@ -1030,7 +1030,7 @@ export const positioning: Positioning = {
       labelJa: "信号の幅",
       score: 9,
       evidence:
-        "画像・振動・音響・GPS+CO2・AI生成コード — 5 modalities",
+        "画像、振動、音響、GPS+CO2、AI 生成コードの 5 種類",
     },
     {
       key: "edge",

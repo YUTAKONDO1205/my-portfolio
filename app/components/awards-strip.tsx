@@ -3,6 +3,7 @@
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import type { AwardBadge } from "../portfolio-data";
 import { isAwardPrize } from "../portfolio-data";
+import { Ja } from "./ja";
 import styles from "./awards-strip.module.css";
 
 type AwardsStripProps = {
@@ -91,7 +92,9 @@ export function AwardsStrip({ awards, talkCount }: AwardsStripProps) {
             data-kind={award.kind ?? "award"}
           >
             <span className={styles.kind}>{kindLabel(award)}</span>
-            <span className={styles.award}>{award.award}</span>
+            <span className={styles.award}>
+              <Ja>{award.award}</Ja>
+            </span>
             <span className={styles.organization}>{award.organization}</span>
             <span className={styles.year}>{award.year}</span>
             <span aria-hidden="true" className={styles.arrow}>

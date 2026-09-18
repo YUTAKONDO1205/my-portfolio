@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LenisProvider } from "./components/lenis-provider";
 import { SiteMotionChrome } from "./components/site-motion";
+import { japanese, latin, mono } from "./fonts";
 import {
   personName,
   siteDescription,
@@ -103,7 +104,7 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className="h-full antialiased"
+      className={`${latin.variable} ${japanese.variable} ${mono.variable} h-full antialiased`}
     >
       <body className="site-body">
         <script

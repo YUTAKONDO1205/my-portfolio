@@ -10,6 +10,7 @@ import {
   type Variants,
 } from "motion/react";
 import { ResearchInstrument, instrumentModeFor } from "./research-instrument";
+import { Ja } from "./ja";
 import type { ResearchProject } from "../portfolio-data";
 
 type ResearchDetailViewProps = {
@@ -157,7 +158,7 @@ export function ResearchDetailView({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.64, ease: easeOutExpo, delay: 0.28 }}
             >
-              {project.subtitle}
+              <Ja>{project.subtitle}</Ja>
             </motion.p>
             <motion.p
               className="project-hero-summary"
@@ -165,15 +166,7 @@ export function ResearchDetailView({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.74, ease: easeOutExpo, delay: 0.36 }}
             >
-              {project.pageSummary}
-            </motion.p>
-            <motion.p
-              className="project-hero-english"
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.62, ease: easeOutExpo, delay: 0.46 }}
-            >
-              {project.heroEnglish}
+              <Ja>{project.pageSummary}</Ja>
             </motion.p>
 
             <motion.div
@@ -297,7 +290,9 @@ export function ResearchDetailView({
               }}
             >
               <span className="project-highlight-index">0{index + 1}</span>
-              <p>{highlight}</p>
+              <p>
+                <Ja>{highlight}</Ja>
+              </p>
             </motion.article>
           ))}
         </motion.div>

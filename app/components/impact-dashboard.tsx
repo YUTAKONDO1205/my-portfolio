@@ -12,6 +12,7 @@ import {
   getModalityCounts,
   type ModalityThemeClass,
 } from "../lib/impact-metrics";
+import { Ja } from "./ja";
 import styles from "./impact-dashboard.module.css";
 
 export type ImpactDashboardProps = {
@@ -152,14 +153,13 @@ export function ImpactDashboard({
       aria-label="Impact metrics"
     >
       <motion.span className={styles.eyebrow} variants={fadeUp}>
-        インパクト
+        Data
       </motion.span>
       <motion.h2 className={styles.title} variants={fadeUp}>
-        軌跡を、データで
+        実績の推移
       </motion.h2>
       <motion.p className={styles.lead} variants={fadeUp}>
-        2024 → 2026、4 つのモダリティ、{totalAwards} 件の受賞、
-        {channels.length} つの配布チャネル。
+        <Ja>{`2024 年から 2026 年までの実績です。扱った信号は 4 種類、受賞は ${totalAwards} 件、配布先は ${channels.length} つです。`}</Ja>
       </motion.p>
 
       <div className={styles.grid}>
@@ -171,7 +171,7 @@ export function ImpactDashboard({
           <header className={styles.tileHeader}>
             <h3 className={styles.tileTitle}>制作のペース</h3>
             <p className={styles.tileSubtitle}>
-              記事と受賞を、{cadence.length} 年連続で積み上げ
+              記事と受賞の件数（{cadence.length} 年分）
             </p>
           </header>
 
@@ -348,8 +348,8 @@ export function ImpactDashboard({
           variants={fadeUp}
         >
           <header className={styles.tileHeader}>
-            <h3 className={styles.tileTitle}>4 / 4 モダリティ稼働中</h3>
-            <p className={styles.tileSubtitle}>信号モダリティのカバー範囲</p>
+            <h3 className={styles.tileTitle}>対象とする信号（4 種類）</h3>
+            <p className={styles.tileSubtitle}>研究ごとの信号の組み合わせ</p>
           </header>
 
           <div className={styles.lollipopList}>
@@ -402,10 +402,10 @@ export function ImpactDashboard({
         >
           <header className={styles.tileHeader}>
             <h3 className={styles.tileTitle}>
-              {channels.length} マーケットプレイス · 1 codebase
+              {channels.length} つのストア、コードは 1 つ
             </h3>
             <p className={styles.tileSubtitle}>
-              {featuredWork?.title ?? "配布"} の到達範囲
+              {featuredWork?.title ?? "制作物"} の配布先
             </p>
           </header>
 
@@ -430,7 +430,7 @@ export function ImpactDashboard({
               <span className={styles.banCaptionStrong}>
                 テレメトリ送信なし
               </span>
-              コードは端末から出ない
+              コードを外部へ送信しません
               <br />
               0 telemetry · code never leaves the device
             </span>

@@ -10,6 +10,7 @@ import {
   type Variants,
 } from "motion/react";
 import { ResearchInstrument, instrumentModeFor } from "./research-instrument";
+import { Ja } from "./ja";
 import type {
   PlatformLink,
   PublicationEntry,
@@ -187,8 +188,7 @@ export function ResearchPageView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.72, ease: easeOutExpo, delay: 0.28 }}
           >
-            公開している研究を一覧できるページです。各研究の役割を概観し、
-            詳しい説明や実装はそれぞれの個別ページで確認できます。
+            <Ja>公開している研究の一覧です。概要はこのページで、詳しい説明と実装は個別ページで読めます。</Ja>
           </motion.p>
 
           <motion.div
@@ -239,7 +239,7 @@ export function ResearchPageView({
           <p className="eyebrow">プロジェクト</p>
           <h2>研究から見る</h2>
           <p className="section-intro">
-            それぞれの研究は個別ページで、背景から構成まで詳しく紹介しています。
+            背景、構成、測定結果は個別ページに記載しています。
           </p>
         </div>
 
@@ -265,7 +265,7 @@ export function ResearchPageView({
                     </p>
                     <h3>{softBreakTitle(project.title)}</h3>
                     <p className="project-preview-subtitle">
-                      {project.subtitle}
+                      <Ja>{project.subtitle}</Ja>
                     </p>
                     <p className="project-preview-summary">
                       {project.cardSummary}
@@ -305,7 +305,7 @@ export function ResearchPageView({
           <p className="eyebrow eyebrow-dark">アーカイブ</p>
           <h2>記事と受賞</h2>
           <p className="section-intro">
-            公開記事と外部評価を、研究全体の流れとしてまとめています。
+            執筆した記事と、受賞や発表の記録です。
           </p>
         </div>
 
@@ -396,10 +396,10 @@ export function ResearchPageView({
         viewport={viewport}
       >
         <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">活動の入口</p>
+          <p className="eyebrow">リンク</p>
           <h2>公開先</h2>
           <p className="section-intro">
-            実装、記事、活動の窓口をここにまとめています。
+            コード、記事、VibeGuard の公式サイトです。
           </p>
         </div>
 

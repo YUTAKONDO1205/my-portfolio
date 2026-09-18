@@ -39,15 +39,25 @@
   --action: var(--color-electric-iris);
 
   /* ---- Typography ----
-     Single typeface across every UI context: Meiryo UI, with a fallback chain
-     for platforms that do not ship it. */
+     Three faces, each with one job. Archivo (variable weight + width) sets
+     every Latin glyph; Zen Kaku Gothic New sets the 和文 and supplies the
+     300 / 900 pair the page leans on; JetBrains Mono sets labels, data and
+     code. Latin comes first in the stack so mixed lines take Archivo for
+     A–Z and digits and fall through to Zen Kaku for kana and kanji. */
   --font-ppneuemontreal:
-    "Meiryo UI", "MeiryoUI", Meiryo, "メイリオ", "Hiragino Kaku Gothic ProN",
-    "Hiragino Sans", "Yu Gothic UI", "YuGothic", system-ui, -apple-system,
-    "Segoe UI", sans-serif;
+    var(--font-latin), var(--font-japanese), "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans", "Yu Gothic UI", "YuGothic", Meiryo, system-ui,
+    -apple-system, "Segoe UI", sans-serif;
   --font-jp-sans: var(--font-ppneuemontreal);
   --font-heading: var(--font-ppneuemontreal);
-  --font-mono-stack: var(--font-ppneuemontreal);
+  --font-mono-stack:
+    var(--font-mono), var(--font-japanese), ui-monospace, "Cascadia Mono",
+    Consolas, "Hiragino Kaku Gothic ProN", Meiryo, monospace;
+
+  /* Tracking — 和文 set with palt is already tight; anything past -0.02em
+     makes kana collide. Latin-only display lines opt into the tighter one. */
+  --tracking-tight: -0.02em;
+  --tracking-latin-display: -0.035em;
 
   /* Type scale */
   --text-caption: 12px;
@@ -56,7 +66,7 @@
   --leading-nav-label: 1.2;
   --tracking-nav-label: 0.35px;
   --text-body: 18px;
-  --leading-body: 1.5;
+  --leading-body: 1.8;
   --text-heading-2xs: 24px;
   --leading-heading-2xs: 1.25;
   --tracking-heading-2xs: -0.48px;
@@ -66,24 +76,24 @@
   --leading-subheading: 1.2;
   --text-heading-sm: 42px;
   --leading-heading-sm: 1.2;
-  --tracking-heading-sm: -1.68px;
+  --tracking-heading-sm: -0.84px;
   --text-heading: 48px;
   --leading-heading: 1.1;
-  --tracking-heading: -1.68px;
+  --tracking-heading: -0.96px;
   --text-heading-lg: 78px;
   --leading-heading-lg: 1.1;
-  --tracking-heading-lg: -3.12px;
+  --tracking-heading-lg: -1.56px;
   --text-display: 113px;
   --leading-display: 1.1;
-  --tracking-display: -4.52px;
+  --tracking-display: -2.26px;
 
-  /* Weights — Meiryo UI ships exactly two: Regular and Bold. They are used
-     as a genuine pair rather than collapsed onto one. Display and emphasis
-     take Bold; body, secondary and caption text take Regular, which is the
-     light end of what this family offers. */
+  /* Weights — light against black. Body copy sits at 400, large display
+     lines at 900, card headings at 700, and mono labels at 500. */
   --font-weight-body: 400;
+  --font-weight-light: 300;
   --font-weight-display: 700;
-  --font-weight-label: 700;
+  --font-weight-hero: 900;
+  --font-weight-label: 500;
 
   /* ---- Spacing (6px base) ---- */
   --spacing-unit: 6px;
@@ -155,6 +165,8 @@ body {
   font-size: var(--text-body);
   font-weight: var(--font-weight-body);
   line-height: var(--leading-body);
+  /* a little air between 和文 glyphs — white on near-black closes up */
+  letter-spacing: 0.02em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -192,23 +204,30 @@ h4 {
   font-weight: var(--font-weight-display);
   color: var(--color-bone-white);
   text-wrap: balance;
-  /* no word-break: keep-all — it forbids breaks between Japanese characters,
-     which leaves long 和文 headlines unable to wrap at all. break-word only
-     kicks in for a token that genuinely cannot fit, so Latin display words
-     are never split mid-word. */
-  overflow-wrap: break-word;
+  /* 和文 line breaking: strict kinsoku, and phrase-aware breaks wherever the
+     browser can do them natively. Headings that matter also go through the
+     <Ja> component (BudouX), which does not depend on browser support. */
+  line-break: strict;
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+  font-feature-settings: "palt" 1;
+  font-kerning: normal;
 }
 
 h1 {
   font-size: clamp(48px, 7.4vw, var(--text-display));
+  font-weight: var(--font-weight-hero);
   line-height: var(--leading-display);
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-tight);
 }
 
 h2 {
-  font-size: clamp(34px, 5vw, var(--text-heading-lg));
-  line-height: var(--leading-heading-lg);
-  letter-spacing: -0.04em;
+  /* 和文 headlines are sentences, not words — they need less size and more
+     leading than a Latin display line to stay readable. */
+  font-size: clamp(32px, 4.2vw, 62px);
+  font-weight: var(--font-weight-hero);
+  line-height: 1.28;
+  letter-spacing: var(--tracking-tight);
 }
 
 h3 {
@@ -222,6 +241,32 @@ p {
   font-weight: var(--font-weight-body);
   line-height: var(--leading-body);
   text-wrap: pretty;
+  /* no phrase-only breaking on running text: in a narrow card column it
+     leaves the right edge too ragged. Strict kinsoku is enough here. */
+  line-break: strict;
+  overflow-wrap: anywhere;
+}
+
+li,
+dd,
+dt {
+  line-break: strict;
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+}
+
+/* <Ja> — text pre-segmented into phrases (BudouX). Breaks happen only at the
+   <wbr> between phrases; overflow-wrap is the escape hatch for a phrase
+   wider than its column. */
+ja-text {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* A phrase group inside a per-character animated heading. */
+.heading-phrase {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 strong,
@@ -317,6 +362,7 @@ b {
   font-weight: var(--font-weight-label);
   line-height: var(--leading-nav-label);
   letter-spacing: var(--tracking-nav-label);
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -350,7 +396,7 @@ b {
 .section-heading-inverse h2 {
   font-size: clamp(34px, 5vw, var(--text-heading-lg));
   line-height: var(--leading-heading-lg);
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .subsection-heading h3 {
@@ -528,6 +574,7 @@ b {
   font-weight: var(--font-weight-label);
   line-height: 1;
   letter-spacing: 0.025em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
   transition:
     background 240ms var(--ease-out),
@@ -562,6 +609,7 @@ b {
   font-size: var(--text-nav-label);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.025em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
   transition: gap 240ms var(--ease-out);
 }
@@ -648,6 +696,7 @@ b {
   font-size: var(--text-nav-label);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.025em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
   transition: color 240ms var(--ease-out);
 }
@@ -678,7 +727,7 @@ b {
 .base-hero-title {
   font-size: clamp(48px, 7.4vw, var(--text-display));
   line-height: var(--leading-display);
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .base-hero-lead {
@@ -813,6 +862,7 @@ b {
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -932,6 +982,7 @@ b {
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.06em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
   transition: color 240ms var(--ease-out);
 }
@@ -967,6 +1018,7 @@ b {
   color: var(--color-ash-gray);
   font-size: var(--text-caption);
   letter-spacing: 0.14em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -1025,6 +1077,7 @@ b {
   font-size: var(--text-nav-label);
   font-weight: var(--font-weight-label);
   letter-spacing: 0.025em;
+  font-family: var(--font-mono-stack);
   text-transform: uppercase;
 }
 
@@ -1053,7 +1106,7 @@ b {
 .project-hero-copy h1 {
   font-size: clamp(42px, 6vw, var(--text-heading-lg));
   line-height: var(--leading-heading-lg);
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .project-hero-subtitle {
@@ -1129,11 +1182,13 @@ b {
 
 .project-story-card {
   display: grid;
+  align-content: start;
   gap: var(--spacing-12);
   height: 100%;
 }
 
 .project-story-index {
+  font-family: var(--font-mono-stack);
   color: var(--color-electric-iris);
   font-size: var(--text-caption);
   font-weight: var(--font-weight-label);
@@ -1147,10 +1202,10 @@ b {
 }
 
 .project-story-card p {
-  max-width: 52ch;
+  max-width: 34em;
   color: var(--color-silver-mist);
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 16px;
+  line-height: 1.95;
 }
 
 .project-highlight-grid {
