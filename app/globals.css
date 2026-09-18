@@ -1363,3 +1363,40 @@ b {
     display: none;
   }
 }
+
+/* ==========================================================================
+   Japanese display metrics — proportional kana/kanji spacing on headings so
+   large 和文 headlines set as tightly as the Latin ones beside them.
+   ========================================================================== */
+
+h1,
+h2,
+h3 {
+  font-feature-settings: "palt" 1;
+}
+
+/* anchor jumps from the rail and the hero nav land with a little air */
+main [id] {
+  scroll-margin-top: 40px;
+}
+
+/* the rail carries scroll progress on wide screens; the top bar is for the
+   rest */
+@media (min-width: 1180px) {
+  .site-scroll-progress {
+    display: none;
+  }
+}
+
+/* instrument hosts on the research pages — the instrument fills them */
+.research-feature-artwork {
+  opacity: 0.9;
+}
+
+.project-preview-artwork,
+.project-mini-artwork,
+.project-visual-artwork,
+.research-feature-artwork {
+  border-radius: var(--radius-cards);
+  overflow: hidden;
+}

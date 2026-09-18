@@ -22,13 +22,20 @@ export const metadata: Metadata = {
     "近藤悠太",
     "Yuta Kondo",
     "Portfolio",
+    "VibeGuard",
+    "VibeGuard Compiler",
     "DroneInspector",
     "pdm_edge",
     "anomaly-event-api",
+    "EdgeOps Command Agent",
     "SPRESENSE",
     "ELTRES",
     "エッジAI",
     "異常検知",
+    "AI生成コード セキュリティ",
+    "SES2026",
+    "CSS2026",
+    "近畿大学",
     "Sense Decide Share",
   ],
   authors: [{ name: personName, url: siteUrl }],
@@ -80,7 +87,12 @@ const personJsonLd = {
   sameAs: [
     "https://github.com/YUTAKONDO1205",
     "https://elchika.com/user/kd_yuta/?page=0",
+    "https://zenn.dev/kd_yuta",
   ],
+  affiliation: {
+    "@type": "CollegeOrUniversity",
+    name: "近畿大学",
+  },
 };
 
 export default function RootLayout({

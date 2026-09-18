@@ -1,0 +1,125 @@
+/* Signal rail — fixed at the right edge, desktop only. */
+
+.rail {
+  position: fixed;
+  top: 50%;
+  right: 28px;
+  z-index: 40;
+  display: none;
+  transform: translateY(-50%) translateX(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 480ms var(--ease-out),
+    transform 640ms var(--ease-out);
+}
+
+.shown {
+  transform: translateY(-50%) translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (min-width: 1180px) {
+  .rail {
+    display: block;
+  }
+}
+
+.list {
+  position: relative;
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0 0 0 0;
+  list-style: none;
+}
+
+/* the track: a hairline the markers sit on */
+.list::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  right: 4px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* the filled portion of the track = scroll progress */
+.fill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  right: 4px;
+  width: 1px;
+  background: var(--color-electric-iris);
+  transform-origin: top;
+}
+
+.list a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-right: 18px;
+  color: var(--color-ash-gray);
+  font-size: 11px;
+  font-weight: var(--font-weight-label);
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: color 240ms var(--ease-out);
+}
+
+.list a span {
+  opacity: 0;
+  transform: translateX(6px);
+  transition:
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out);
+}
+
+.rail:hover .list a span,
+.list a:focus-visible span,
+.list a.active span {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* the marker: the constellation's triangle, centred on the track */
+.list a i {
+  position: absolute;
+  right: 0;
+  width: 9px;
+  height: 9px;
+  background: rgba(255, 255, 255, 0.28);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  transform: rotate(90deg) scale(0.8);
+  transition:
+    background 240ms var(--ease-out),
+    transform 320ms var(--ease-out);
+}
+
+.list a:hover,
+.list a:focus-visible {
+  color: var(--color-bone-white);
+}
+
+.list a.active {
+  color: var(--color-bone-white);
+}
+
+.list a.active i {
+  background: var(--color-saffron-spark);
+  transform: rotate(90deg) scale(1.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail,
+  .list a span,
+  .list a i {
+    transition: none;
+  }
+}

@@ -9,11 +9,7 @@ import {
   useTransform,
   type Variants,
 } from "motion/react";
-import {
-  getArtworkStyle,
-  getProjectArtwork,
-  researchHeroArtwork,
-} from "../artwork";
+import { ResearchInstrument, instrumentModeFor } from "./research-instrument";
 import type {
   PlatformLink,
   PublicationEntry,
@@ -134,11 +130,9 @@ export function ResearchPageView({
           className="hero-ambient hero-ambient-left ambient-clouds"
           aria-hidden="true"
         />
-        <div
-          className="artwork-layer research-feature-artwork"
-          style={getArtworkStyle(researchHeroArtwork)}
-          aria-hidden="true"
-        />
+        <div className="research-feature-artwork" aria-hidden="true">
+          <ResearchInstrument mode="pdm" />
+        </div>
         <motion.div
           className="hero-ambient hero-ambient-right ambient-machine"
           aria-hidden="true"
@@ -251,8 +245,6 @@ export function ResearchPageView({
 
         <motion.div className="project-preview-grid" variants={groupVariants}>
           {researchProjects.map((project) => {
-            const artworkStyle = getArtworkStyle(getProjectArtwork(project));
-
             return (
               <MotionCardShell key={project.slug}>
                 <article
@@ -262,13 +254,11 @@ export function ResearchPageView({
                     className={`project-preview-photo ${project.ambientClass}`}
                     aria-hidden="true"
                   />
-                  {artworkStyle && (
-                    <div
-                      className="artwork-layer project-preview-artwork"
-                      style={artworkStyle}
-                      aria-hidden="true"
+                  <div className="project-preview-artwork" aria-hidden="true">
+                    <ResearchInstrument
+                      mode={instrumentModeFor(project.themeClass)}
                     />
-                  )}
+                  </div>
                   <div className="project-preview-inner">
                     <p className="card-label card-label-inverse">
                       {project.heroKicker}

@@ -1,0 +1,181 @@
+/* VibeGuard scan — an instrument screen, same glass as the research
+   instruments: dark inset, hairline rim, nothing else. */
+
+.scan {
+  --mono: ui-monospace, "Cascadia Mono", "Cascadia Code", Consolas,
+    "SFMono-Regular", Menlo, monospace;
+  display: grid;
+  gap: var(--spacing-18);
+  padding: var(--spacing-18) var(--spacing-24) var(--spacing-24);
+  border-radius: var(--radius-cards);
+  background: rgba(0, 0, 0, 0.26);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-6) var(--spacing-18);
+  color: var(--color-ash-gray);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  font-family: var(--font-ppneuemontreal);
+  font-size: var(--text-caption);
+  letter-spacing: 0.06em;
+  transition: color 240ms var(--ease-out);
+}
+
+.status i {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-ash-gray);
+  transition: background 240ms var(--ease-out);
+}
+
+.status[data-phase="scanning"] i {
+  background: var(--color-electric-iris);
+  animation: statusPulse 0.9s ease-in-out infinite;
+}
+
+.status[data-phase="found"],
+.status[data-phase="done"] {
+  color: var(--color-bone-white);
+}
+
+.status[data-phase="found"] i,
+.status[data-phase="done"] i {
+  background: var(--color-saffron-spark);
+}
+
+@keyframes statusPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.code {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 22px;
+  color: var(--color-silver-mist);
+  white-space: pre;
+}
+
+.code ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.code li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: var(--spacing-12);
+  height: 22px;
+}
+
+.code li span {
+  color: rgba(182, 182, 190, 0.55);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.code li code {
+  font-family: inherit;
+  color: inherit;
+  transition: color 320ms var(--ease-out);
+}
+
+.code li[data-hit="true"] code {
+  color: var(--color-bone-white);
+}
+
+.code li[data-hit="true"]::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: -12px;
+  width: 2px;
+  background: var(--color-saffron-spark);
+}
+
+.code li[data-hit="true"] span {
+  color: var(--color-saffron-spark);
+}
+
+/* the scan line */
+.caret {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-electric-iris);
+  box-shadow: 0 0 14px rgba(128, 82, 255, 0.65);
+  pointer-events: none;
+}
+
+.finding {
+  display: grid;
+  gap: var(--spacing-6);
+  padding-top: var(--spacing-12);
+}
+
+.rule {
+  color: var(--color-saffron-spark);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.finding strong {
+  color: var(--color-bone-white);
+  font-size: 15px;
+  font-weight: var(--font-weight-display);
+  line-height: 1.4;
+}
+
+.finding p {
+  margin: 0;
+  color: var(--color-silver-mist);
+  font-size: 13px;
+  font-weight: var(--font-weight-body);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .scan {
+    padding: var(--spacing-18);
+  }
+
+  .code {
+    font-size: 11.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status i {
+    animation: none;
+  }
+}

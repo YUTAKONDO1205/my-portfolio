@@ -102,6 +102,8 @@ export type SelectedWork = {
   feature?: boolean;
   /** Optional: the product's own public site, shown as a lead link on the card */
   siteLink?: { href: string; label: string };
+  /** Optional: an award the work received, shown as a lead line on the card */
+  award?: { label: string; href: string };
 };
 
 export const platformLinks: readonly PlatformLink[] = [
@@ -118,6 +120,13 @@ export const platformLinks: readonly PlatformLink[] = [
     description: "背景と評価を日本語でまとめた制作ノート",
     detail:
       "課題設定、構成、評価、今後の展望を記事として残し、作品単位で読めるようにしています。",
+  },
+  {
+    href: "https://zenn.dev/kd_yuta",
+    label: "Zenn",
+    description: "LLM エージェント実装の設計記事",
+    detail:
+      "Microsoft Agent Hackathon に提出した EdgeOps Command Agent の設計と、承認ゲート・監査ログの考え方を記事として公開しています。",
   },
   {
     href: "https://vibeguard-site.kondo-yuta-02.workers.dev",
@@ -439,6 +448,7 @@ export const selectedWorks: readonly SelectedWork[] = [
     },
     highlights: [
       "解析コア共通化 — 同じ analyzer-core を 4 つの配布チャネルに載せ、判定を 3 地点で揃える",
+      "学会で検証 — SES2026 一般論文として発表（2026.09.11 慶應日吉）、CSS2026 一般発表 4D2-3 に採択（2026.10.22 浜松）",
       "85 ルール / 11 言語 — 単一ファイル 74 + ファイル横断 11。注入・認証・秘密情報・暗号・メモリ安全・組込 / RTOS を c / cpp / csharp / go / java / javascript / kotlin / php / python / ruby / typescript で網羅",
       "自動修正 7 件 — うち「読まずに適用してよい」と宣言できるのは 1 件だけ。残りは needs-review として明示し、直す判断は人に残す",
       "公式サイト公開 — ルール一覧・検出例・バージョンをリポジトリから自動生成。手で書いた数値はサイト上に 1 つもない",
@@ -495,13 +505,10 @@ export const selectedWorks: readonly SelectedWork[] = [
       "承認・監査ワークフロー — Cosmos DB へ実行履歴を残し Teams へ通知",
       "20 シナリオ × 4 深刻度を 108 項目のポリシーチェックで検証（全項目 pass）",
     ],
-    distribution: [
-      {
-        label: "Microsoft Agent Hackathon 特別賞",
-        href: "https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent",
-        status: "live",
-      },
-    ],
+    award: {
+      label: "Microsoft Agent Hackathon 2026 特別賞（個人部門）",
+      href: "https://zenn.dev/kd_yuta/articles/edgeops-command-agent",
+    },
   },
   {
     slug: "travel-app-patch",
@@ -577,6 +584,18 @@ export const selectedWorks: readonly SelectedWork[] = [
 
 export const publicationTimeline: readonly PublicationEntry[] = [
   {
+    id: "publication-edgeops-zenn",
+    date: "2026-06-01",
+    dateLabel: "2026.06.01",
+    title:
+      "異常検知で終わらせない。現場保全の判断と行動を支援するAIエージェントをAzureで作った",
+    summary:
+      "Microsoft Agent Hackathon 2026 に提出した EdgeOps Command Agent の設計記事です。8 エージェント構成、承認ゲート、監査ログの考え方を Zenn にまとめています。",
+    tags: ["Azure", "Semantic Kernel", "Multi-Agent", "Anomaly", "Dashboard"],
+    awards: ["Microsoft Agent Hackathon 2026 特別賞（個人部門）"],
+    href: "https://zenn.dev/kd_yuta/articles/edgeops-command-agent",
+  },
+  {
     id: "publication-drone",
     date: "2026-01-31",
     dateLabel: "2026.01.31",
@@ -628,12 +647,32 @@ export const publicationTimeline: readonly PublicationEntry[] = [
 export const recognitions: readonly Recognition[] = [
   {
     year: "2026",
-    award: "Microsoft Agent Hackathon 特別賞",
+    award: "CSS2026 一般発表 採択（4D2-3）",
+    project:
+      "VibeGuard Compiler：コンパイラ最適化におけるセキュリティ性質消失の追跡と第一喪失点の特定",
+    organization: "コンピュータセキュリティシンポジウム 2026（浜松）",
+    note:
+      "コンパイラ最適化の過程でセキュリティ性質が失われる点を追跡し、第一喪失点を特定する方式を、セキュア開発セッションで 2026 年 10 月 22 日に発表予定です。",
+    href: "https://www.iwsec.org/css/2026/program.html",
+  },
+  {
+    year: "2026",
+    award: "SES2026 一般論文 発表",
+    project:
+      "AI生成コードの採用判断点に基づくマルチコンテキストセキュリティ診断配置方式の提案とVibeGuardによる検証",
+    organization: "ソフトウェアエンジニアリングシンポジウム 2026（慶應義塾大学 日吉）",
+    note:
+      "AI 生成コードの安全確認を採用判断点への診断配置の問題として扱い、VibeGuard の実装と測定で検証した単著論文を 2026 年 9 月 11 日に発表しました。",
+    href: "https://ses.sigse.jp/2026/program.html",
+  },
+  {
+    year: "2026",
+    award: "Microsoft Agent Hackathon 2026 特別賞（個人部門）",
     project: "EdgeOps Command Agent",
     organization: "Microsoft Agent Hackathon powered by Tokyo Electron Device",
     note:
       "点検データをリスク判定・原因推定・作業指示・報告まで変換する 8 エージェント保全 AI として、Human-in-the-loop と監査設計が評価された受賞です。",
-    href: "https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent",
+    href: "https://zenn.dev/kd_yuta/articles/edgeops-command-agent",
   },
   {
     year: "2026",
@@ -691,6 +730,121 @@ export const recognitions: readonly Recognition[] = [
   },
 ] as const;
 
+// ============================================================================
+// Talks & papers — refereed venues, in chronological order
+// ============================================================================
+
+export type Talk = {
+  id: string;
+  /** ISO date used only for ordering; `dateLabel` is what is displayed */
+  date: string;
+  dateLabel: string;
+  status: "presented" | "upcoming";
+  venueShort: string;
+  venue: string;
+  kind: string;
+  session?: string;
+  place?: string;
+  title: string;
+  project: string;
+  href: string;
+};
+
+export const talks: readonly Talk[] = [
+  {
+    id: "talk-css2026",
+    date: "2026-10-22",
+    dateLabel: "2026.10.22",
+    status: "upcoming",
+    venueShort: "CSS2026",
+    venue: "コンピュータセキュリティシンポジウム 2026",
+    kind: "一般発表",
+    session: "4D2-3 セキュア開発 2",
+    place: "浜松",
+    title:
+      "VibeGuard Compiler：コンパイラ最適化におけるセキュリティ性質消失の追跡と第一喪失点の特定",
+    project: "VibeGuard Compiler",
+    href: "https://www.iwsec.org/css/2026/program.html",
+  },
+  {
+    id: "talk-ses2026",
+    date: "2026-09-11",
+    dateLabel: "2026.09.11",
+    status: "presented",
+    venueShort: "SES2026",
+    venue: "ソフトウェアエンジニアリングシンポジウム 2026",
+    kind: "一般論文",
+    session: "コード解析・セキュリティ・テスト支援",
+    place: "慶應義塾大学 日吉キャンパス",
+    title:
+      "AI生成コードの採用判断点に基づくマルチコンテキストセキュリティ診断配置方式の提案とVibeGuardによる検証",
+    project: "VibeGuard",
+    href: "https://ses.sigse.jp/2026/program.html",
+  },
+  {
+    id: "talk-ieej-c-2025",
+    date: "2025-08-28",
+    dateLabel: "2025.08",
+    status: "presented",
+    venueShort: "IEEJ C部門大会 2025",
+    venue: "電気学会 電子・情報・システム部門大会",
+    kind: "学生ポスター",
+    session: "PS8-8",
+    place: "金沢工業大学",
+    title:
+      "振動・音響センサを用いた異常兆候検知システムの開発と AI 識別モデル構築",
+    project: "pdm_edge",
+    href: "https://www.iee.jp/blog/c-taikai-2025/",
+  },
+  {
+    id: "talk-ieej-u21-2025",
+    date: "2025-03-01",
+    dateLabel: "2025",
+    status: "presented",
+    venueShort: "IEEJ U-21 2025",
+    venue: "電気学会 U-21 学生研究発表会",
+    kind: "学生研究発表",
+    session: "2D-2 · 奨励賞",
+    title: "LoRa通信とAIを活用した振動検知による異常予知システムの構築",
+    project: "振動解析による設備保全",
+    href: "https://www.iee.jp/u-21-2025-award/",
+  },
+] as const;
+
+// ============================================================================
+// Profile
+// ============================================================================
+
+export type ProfileFact = { label: string; value: string };
+
+export type Profile = {
+  nameJa: string;
+  nameEn: string;
+  role: string;
+  affiliation: string;
+  grade: string;
+  base: string;
+  facts: readonly ProfileFact[];
+};
+
+export const profile: Profile = {
+  nameJa: "近藤悠太",
+  nameEn: "Kondo Yuta",
+  role: "Edge AI / 組み込みエンジニア",
+  affiliation: "近畿大学 工学部 電子情報工学科 電気電子コース",
+  grade: "学部 4 年（2027 年 3 月 卒業見込み）",
+  base: "広島",
+  facts: [
+    { label: "Program", value: "SecHack365 2026 研究駆動コース トレーニー" },
+    {
+      label: "Certification",
+      value: "AWS Certified Solutions Architect – Associate",
+    },
+    { label: "English", value: "TOEIC 880" },
+    { label: "Handles", value: "GitHub YUTAKONDO1205 · Elchika / Zenn kd_yuta" },
+  ],
+} as const;
+
 export const projectSlugs = researchProjects.map((project) => project.slug);
 
 export function getResearchProject(slug: string) {
@@ -714,20 +868,21 @@ export type HeroCopyV2 = {
 
 export const heroCopyV2: HeroCopyV2 = {
   eyebrow: "Embedded × Edge AI",
-  headlineJa: "SPRESENSE で動く、エッジAI を作る。",
-  headlineEn: "Embedded AI on SPRESENSE — sensor to marketplace.",
+  headlineJa: "現場の信号を、使える判断へ。",
+  headlineEn: "Sense. Decide. Share.",
   subJa:
-    "振動・音響・画像をデバイス上で判断する組み込み AI エンジニア。研究 4 本・受賞 6 件・SecHack365 '26 採択。VibeGuard を 4 マーケットプレイスへ出荷し、Microsoft Agent Hackathon 特別賞も受賞。",
-  subEn: "Edge AI from lab to marketplace — 6 awards, 4 live distributions.",
+    "振動・音響・画像をデバイスの上で判断に変える、近畿大学 学部 4 年の組み込み AI エンジニア。研究 4 本・受賞 6 件・学会発表 4 件。VibeGuard を 4 つのマーケットプレイスへ出荷し、SES2026 で発表、CSS2026 に採択。",
+  subEn:
+    "Edge AI from lab to marketplace — 6 awards, 4 talks, 4 live distributions.",
   primaryCta: {
     label: "VibeGuard を試す",
     href: "https://vibeguard-site.kondo-yuta-02.workers.dev",
   },
   secondaryCta: { label: "研究を読む", href: "/research" },
   latestUpdate: {
-    dateLabel: "2026.08",
-    title: "VibeGuard 公式サイトを公開 — v0.3.6 / 85 ルール",
-    href: "https://vibeguard-site.kondo-yuta-02.workers.dev",
+    dateLabel: "2026.09.11",
+    title: "SES2026 で VibeGuard 論文を発表 — 次は CSS2026（10.22 浜松）",
+    href: "https://ses.sigse.jp/2026/program.html",
   },
 } as const;
 
@@ -748,9 +903,23 @@ export type AwardBadge = {
 export const awardBadges: readonly AwardBadge[] = [
   {
     year: "2026",
+    organization: "CSS2026 · セキュア開発",
+    award: "一般発表 採択 4D2-3",
+    href: "https://www.iwsec.org/css/2026/program.html",
+    kind: "presentation",
+  },
+  {
+    year: "2026",
+    organization: "SES2026 · 慶應日吉",
+    award: "一般論文 発表",
+    href: "https://ses.sigse.jp/2026/program.html",
+    kind: "presentation",
+  },
+  {
+    year: "2026",
     organization: "Microsoft Agent Hackathon",
-    award: "特別賞",
-    href: "https://github.com/YUTAKONDO1205/EdgeOps-Command-Agent",
+    award: "特別賞（個人部門）",
+    href: "https://zenn.dev/kd_yuta/articles/edgeops-command-agent",
   },
   {
     year: "2026",
@@ -806,6 +975,18 @@ export function isAwardPrize(badge: AwardBadge): boolean {
 
 /** Canonical 受賞 count (currently 6). Use this everywhere "受賞 N 件" appears. */
 export const awardPrizeCount = awardBadges.filter(isAwardPrize).length;
+
+/** VibeGuard shipping stats — from CHANGELOG.md of the v0.3.6 release
+    (2026-08-17). Re-check against the repository before bumping. */
+export const vibeguardStats = {
+  version: "0.3.6",
+  rules: 85,
+  singleFileRules: 74,
+  crossFileRules: 11,
+  languages: 11,
+  fixers: 7,
+  safeFixers: 1,
+} as const;
 
 // ============================================================================
 // Positioning radar — competitor-teardown derived
@@ -865,7 +1046,7 @@ export const positioning: Positioning = {
       labelJa: "市場への到達",
       score: 8,
       evidence:
-        "VibeGuard live: GitHub Marketplace, VS Code, Chrome Web Store, Open VSX + 公式サイト",
+        "VibeGuard v0.3.6 live: GitHub Marketplace, VS Code, Chrome Web Store, Open VSX + 公式サイト",
     },
     {
       key: "research",
@@ -873,7 +1054,7 @@ export const positioning: Positioning = {
       labelJa: "公開研究の継続性",
       score: 9,
       evidence:
-        "4 Elchika 記事 + 受賞 6 件 + 電気学会 C部門発表 + SecHack365 '26 採択",
+        "記事 5 本 + 受賞 6 件 + SES2026 発表 + CSS2026 採択 + 電気学会 2 件 + SecHack365 '26",
     },
     {
       key: "ops",

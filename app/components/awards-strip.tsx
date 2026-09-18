@@ -2,16 +2,40 @@
 
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import type { AwardBadge } from "../portfolio-data";
+import { isAwardPrize } from "../portfolio-data";
 import styles from "./awards-strip.module.css";
 
 type AwardsStripProps = {
   awards: readonly AwardBadge[];
+  /** Refereed talks, counted from the talks list so the number agrees with
+      the rest of the page (a prize won at a talk is both). */
+  talkCount: number;
 };
 
 const easeOutQuart = [0.22, 1, 0.36, 1] as const;
 
-export function AwardsStrip({ awards }: AwardsStripProps) {
+/* The three kinds of recognition are different things, and the strip says
+   which is which: a prize is judged, a selection is admitted, a presentation
+   is refereed. Collapsing them into one "実績" label would inflate the count. */
+function kindLabel(badge: AwardBadge) {
+  switch (badge.kind) {
+    case "selection":
+      return "採択";
+    case "presentation":
+      return "学会発表";
+    default:
+      return "受賞";
+  }
+}
+
+export function AwardsStrip({ awards, talkCount }: AwardsStripProps) {
   const reduceMotion = useReducedMotion();
+
+  const prizes = awards.filter(isAwardPrize).length;
+  const selections = awards.filter((a) => a.kind === "selection").length;
+  const presentations = talkCount;
+  const years = awards.map((a) => a.year).sort();
+  const span = `${years[0]}–${years[years.length - 1]}`;
 
   const containerVariants: Variants = {
     hidden: { opacity: reduceMotion ? 1 : 0 },
@@ -27,9 +51,7 @@ export function AwardsStrip({ awards }: AwardsStripProps) {
   };
 
   const itemVariants: Variants = {
-    hidden: reduceMotion
-      ? { opacity: 1, y: 0 }
-      : { opacity: 0, y: 18 },
+    hidden: reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 },
     visible: {
       opacity: 1,
       y: 0,
@@ -46,7 +68,7 @@ export function AwardsStrip({ awards }: AwardsStripProps) {
           Recognition · 実績
         </span>
         <span className={styles.count}>
-          実績 {awards.length} 件 · 2024–2026
+          受賞 {prizes} · 採択 {selections} · 学会発表 {presentations} · {span}
         </span>
       </div>
 
@@ -66,7 +88,9 @@ export function AwardsStrip({ awards }: AwardsStripProps) {
             rel="noreferrer"
             variants={itemVariants}
             aria-label={`${award.year} ${award.organization} ${award.award}`}
+            data-kind={award.kind ?? "award"}
           >
+            <span className={styles.kind}>{kindLabel(award)}</span>
             <span className={styles.award}>{award.award}</span>
             <span className={styles.organization}>{award.organization}</span>
             <span className={styles.year}>{award.year}</span>
