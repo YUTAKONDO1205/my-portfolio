@@ -1,3 +1,13 @@
+> **現行デザイン（2026-09-19〜）**
+> このファイルの本文は、以前の暗色デザイン（Dala 参照）の記録です。現行のトークンは `app/globals.css` の `:root` が正です。
+>
+> - 白い紙（`#fdfdfc`）、墨（`#0b0d14`）、青 1 色（`#1a3cff`）。背景の演出、カード、影、グラデーションは使いません
+> - 区切りは罫線。見出しは左の細い列に置き、スクロール中は sticky で残します
+> - ヒーローは文 1 つと、実際に動く VibeGuard（`app/vendor/vibeguard-core.js`、analyzer-core のブラウザ用ビルド）
+> - 色が付くのはデータだけです（VibeGuard の severity、研究の計器）
+> - 書体: LINE Seed JP（和文と本文）、Bricolage Grotesque（欧文見出しと数字）、JetBrains Mono（コードと日付）
+> - 出身大学と学年は掲載しません
+
 # Your workplace has the answer. Just ask Dala for it. — Style Reference
 > constellation floating on black velvet
 

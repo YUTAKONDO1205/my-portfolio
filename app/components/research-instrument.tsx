@@ -40,17 +40,33 @@ export function instrumentModeFor(themeClass: string): InstrumentMode {
 }
 
 const C = {
-  violet: "128, 82, 255",
-  amber: "255, 184, 41",
-  teal: "47, 191, 163",
-  magenta: "208, 92, 255",
-  blue: "90, 140, 255",
-  white: "255, 255, 255",
-  ash: "182, 182, 190",
+  violet: "26, 60, 255",
+  amber: "240, 110, 30",
+  teal: "10, 150, 114",
+  magenta: "180, 50, 226",
+  blue: "37, 99, 235",
+  /* "white" is the neutral trace colour — ink on the light glass */
+  white: "11, 13, 20",
+  ash: "90, 97, 128",
 } as const;
 
-const FONT =
-  '"Meiryo UI", "MeiryoUI", Meiryo, "Hiragino Kaku Gothic ProN", system-ui, sans-serif';
+/* next/font hashes its family names, so the canvas reads them back from the
+   CSS variables the layout sets on <html>. */
+const canvasFontCache = new Map<string, string>();
+
+function canvasFont(...vars: string[]) {
+  if (typeof document === "undefined") return "system-ui, sans-serif";
+  const key = vars.join("|");
+  const cached = canvasFontCache.get(key);
+  if (cached) return cached;
+  const style = getComputedStyle(document.documentElement);
+  const families = vars
+    .map((name) => style.getPropertyValue(name).trim())
+    .filter(Boolean);
+  const stack = [...families, "system-ui", "sans-serif"].join(", ");
+  canvasFontCache.set(key, stack);
+  return stack;
+}
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -97,7 +113,7 @@ function label(
   align: CanvasTextAlign = "left",
   size = 10,
 ) {
-  ctx.font = `${size}px ${FONT}`;
+  ctx.font = `${size}px ${canvasFont("--font-mono", "--font-japanese")}`;
   ctx.textAlign = align;
   ctx.textBaseline = "middle";
   ctx.fillStyle = color;

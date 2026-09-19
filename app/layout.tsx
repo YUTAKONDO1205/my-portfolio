@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { LenisProvider } from "./components/lenis-provider";
-import { SiteMotionChrome } from "./components/site-motion";
 import { japanese, latin, mono } from "./fonts";
 import {
   personName,
@@ -36,7 +35,6 @@ export const metadata: Metadata = {
     "AI生成コード セキュリティ",
     "SES2026",
     "CSS2026",
-    "近畿大学",
     "Sense Decide Share",
   ],
   authors: [{ name: personName, url: siteUrl }],
@@ -90,10 +88,6 @@ const personJsonLd = {
     "https://elchika.com/user/kd_yuta/?page=0",
     "https://zenn.dev/kd_yuta",
   ],
-  affiliation: {
-    "@type": "CollegeOrUniversity",
-    name: "近畿大学",
-  },
 };
 
 export default function RootLayout({
@@ -115,7 +109,6 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
-        <SiteMotionChrome />
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

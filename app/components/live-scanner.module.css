@@ -1,0 +1,305 @@
+/* Live scanner — an editor and a findings list, nothing else. The only
+   colours are the engine's own severities. */
+
+.scanner {
+  --critical: #d92d20;
+  --high: #ec6a00;
+  --medium: #b98900;
+  --low: #1a3cff;
+  --line-h: 24px;
+  --pad: 14px;
+  border: 1px solid var(--color-ink);
+  border-radius: 12px;
+  background: var(--color-white);
+  overflow: hidden;
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 0 16px 0 6px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono-stack);
+  font-size: 12px;
+}
+
+.tabs {
+  display: flex;
+  overflow-x: auto;
+}
+
+.tab,
+.tabActive {
+  padding: 13px 12px 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--color-ink-mute);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--color-ink);
+}
+
+.tabActive {
+  border-bottom-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.meter {
+  margin: 0;
+  padding: 8px 0;
+  color: var(--color-ink-mute);
+  font-size: 12px;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+.meter b {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+}
+
+/* ---------- editor ---------- */
+
+.editor {
+  max-height: 460px;
+  overflow: auto;
+  border-right: 1px solid var(--line);
+  font-family: var(--font-mono-stack);
+  font-size: 13.5px;
+  line-height: var(--line-h);
+  letter-spacing: 0;
+}
+
+.sheet {
+  display: flex;
+  min-width: max-content;
+  min-height: 100%;
+}
+
+.gutter {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  flex: none;
+  width: 46px;
+  margin: 0;
+  padding: var(--pad) 0;
+  list-style: none;
+  background: var(--color-white);
+  color: var(--color-ink-mute);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.gutter li {
+  height: var(--line-h);
+  padding-right: 12px;
+  border-left: 3px solid transparent;
+}
+
+.gutter li[data-severity="critical"] {
+  border-left-color: var(--critical);
+  color: var(--critical);
+}
+
+.gutter li[data-severity="high"] {
+  border-left-color: var(--high);
+  color: var(--high);
+}
+
+.gutter li[data-severity="medium"] {
+  border-left-color: var(--medium);
+  color: var(--medium);
+}
+
+.gutter li[data-severity="low"],
+.gutter li[data-severity="info"] {
+  border-left-color: var(--low);
+  color: var(--low);
+}
+
+.codeWrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.marks {
+  position: absolute;
+  inset: var(--pad) 0 auto 0;
+}
+
+.marks i {
+  display: block;
+  height: var(--line-h);
+}
+
+.marks i[data-severity="critical"] {
+  background: rgba(217, 45, 32, 0.09);
+}
+
+.marks i[data-severity="high"] {
+  background: rgba(236, 106, 0, 0.1);
+}
+
+.marks i[data-severity="medium"] {
+  background: rgba(185, 137, 0, 0.1);
+}
+
+.marks i[data-severity="low"],
+.marks i[data-severity="info"] {
+  background: rgba(26, 60, 255, 0.07);
+}
+
+.marks i[data-active] {
+  box-shadow: inset 0 0 0 1px var(--color-ink);
+}
+
+.area {
+  position: relative;
+  display: block;
+  min-width: 100%;
+  margin: 0;
+  padding: var(--pad) 16px var(--pad) 4px;
+  border: 0;
+  outline: 0;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  line-height: var(--line-h);
+  letter-spacing: 0;
+  white-space: pre;
+  tab-size: 4;
+  caret-color: var(--color-iris);
+}
+
+/* ---------- findings ---------- */
+
+.findings {
+  max-height: 460px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.findings li + li {
+  border-top: 1px solid var(--line);
+}
+
+.empty {
+  padding: 16px 18px;
+  color: var(--color-ink-mute);
+  font-size: 14px;
+}
+
+.finding {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 13px 18px 14px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.finding:hover,
+.finding:focus-visible {
+  background: rgba(16, 21, 56, 0.04);
+}
+
+.findingHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-ink-mute);
+  font-family: var(--font-mono-stack);
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.findingHead i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--low);
+}
+
+.findingHead em {
+  font-style: normal;
+}
+
+.findingHead u {
+  margin-left: auto;
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.finding[data-severity="critical"] i {
+  background: var(--critical);
+}
+
+.finding[data-severity="critical"] em {
+  color: var(--critical);
+}
+
+.finding[data-severity="high"] i {
+  background: var(--high);
+}
+
+.finding[data-severity="high"] em {
+  color: var(--high);
+}
+
+.finding[data-severity="medium"] i {
+  background: var(--medium);
+}
+
+.finding[data-severity="medium"] em {
+  color: var(--medium);
+}
+
+.finding strong {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+@media (max-width: 860px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .editor {
+    max-height: 320px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 12.5px;
+  }
+
+  .findings {
+    max-height: 300px;
+  }
+}

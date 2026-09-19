@@ -10,7 +10,7 @@ export const size = {
 
 export const contentType = "image/png";
 
-const SPECTRUM = ["#8052ff", "#ffb829", "#2fbfa3", "#d05cff", "#5a8cff"];
+const SPECTRUM = ["#5a3df0", "#ff6038", "#0aa47c", "#be3aec", "#1e80f0"];
 
 /* A loose constellation in the right half — the same triangular glyphs as the
    hero canvas, laid out by hand so the card is deterministic. */
@@ -57,8 +57,8 @@ export default function OpenGraphImage() {
           display: "flex",
           position: "relative",
           overflow: "hidden",
-          background: "#111114",
-          color: "#ffffff",
+          background: "#f5f8ff",
+          color: "#101538",
         }}
       >
         <div
@@ -106,7 +106,7 @@ export default function OpenGraphImage() {
                 fontWeight: 600,
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                color: "#ffb829",
+                color: "#d63f1a",
               }}
             >
               Sense / Decide / Share
@@ -130,7 +130,7 @@ export default function OpenGraphImage() {
                   fontSize: 40,
                   fontWeight: 400,
                   letterSpacing: "-0.02em",
-                  color: "#9a9a9a",
+                  color: "#69708f",
                 }}
               >
                 Portfolio
@@ -143,7 +143,7 @@ export default function OpenGraphImage() {
                 maxWidth: 620,
                 fontSize: 22,
                 lineHeight: 1.6,
-                color: "#bdbdbd",
+                color: "#3a4166",
               }}
             >
               {siteDescription}
@@ -161,8 +161,8 @@ export default function OpenGraphImage() {
               <svg width="34" height="30" viewBox="0 0 34 30">
                 <defs>
                   <linearGradient id="og-mark" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#8052ff" />
-                    <stop offset="100%" stopColor="#15846e" />
+                    <stop offset="0%" stopColor="#5a3df0" />
+                    <stop offset="100%" stopColor="#1e80f0" />
                   </linearGradient>
                 </defs>
                 <polygon points="17,1 33,29 1,29" fill="url(#og-mark)" />
@@ -173,7 +173,7 @@ export default function OpenGraphImage() {
                   flexDirection: "column",
                   gap: 6,
                   fontSize: 20,
-                  color: "#9a9a9a",
+                  color: "#69708f",
                 }}
               >
                 <div style={{ display: "flex" }}>DroneInspector / pdm_edge</div>
@@ -181,7 +181,7 @@ export default function OpenGraphImage() {
               </div>
             </div>
 
-            <div style={{ display: "flex", fontSize: 20, color: "#9a9a9a" }}>
+            <div style={{ display: "flex", fontSize: 20, color: "#69708f" }}>
               {siteTitle}
             </div>
           </div>

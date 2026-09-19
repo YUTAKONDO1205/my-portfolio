@@ -12,7 +12,11 @@ const parser = loadDefaultJapaneseParser();
 const NO_BREAK_BEFORE = /^[、。，．・：；？！）〕］｝〉》」』】’”ー)\],.;:?!]/;
 
 /* Compounds BudouX splits but a reader would not. */
-const KEEP_TOGETHER = ["研究駆動コース"];
+const KEEP_TOGETHER = [
+  "研究駆動コース",
+  "クレイン電子",
+  "活用アイデア賞",
+];
 
 const KATAKANA = /[ァ-ヶー]/;
 const KANJI = /[一-龠々]/;

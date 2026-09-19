@@ -146,14 +146,14 @@ export function ResearchPageView({
           transition={{ duration: 0.7, ease: easeOutExpo }}
         >
           <div>
-            <p className="site-mark">研究インデックス</p>
+            <p className="site-mark">研究一覧</p>
             <p className="site-caption">Sense / Decide / Share</p>
           </div>
 
           <nav className="hero-nav" aria-label="研究ページナビゲーション">
             <Link href="/">ホーム</Link>
             <a href="#project-sites">研究テーマ</a>
-            <a href="#research-archive">アーカイブ</a>
+            <a href="#research-archive">記事と受賞</a>
           </nav>
         </motion.header>
 
@@ -167,7 +167,7 @@ export function ResearchPageView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.54, ease: easeOutExpo, delay: 0.08 }}
           >
-            研究
+            Research
           </motion.p>
           <motion.h1
             className="base-hero-title"
@@ -180,7 +180,7 @@ export function ResearchPageView({
             transition={{ duration: 0.84, ease: easeOutExpo, delay: 0.18 }}
             style={reduceMotion ? undefined : { transformPerspective: 1200 }}
           >
-            公開中の研究
+            研究一覧
           </motion.h1>
           <motion.p
             className="base-hero-lead"
@@ -188,7 +188,7 @@ export function ResearchPageView({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.72, ease: easeOutExpo, delay: 0.28 }}
           >
-            <Ja>公開している研究の一覧です。概要はこのページで、詳しい説明と実装は個別ページで読めます。</Ja>
+            <Ja>公開している研究の一覧です。概要はこのページに、背景、構成、測定結果は個別ページに記載しています。</Ja>
           </motion.p>
 
           <motion.div
@@ -236,10 +236,10 @@ export function ResearchPageView({
         viewport={viewport}
       >
         <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">プロジェクト</p>
-          <h2>研究から見る</h2>
+          <p className="eyebrow">Projects</p>
+          <h2>研究テーマ</h2>
           <p className="section-intro">
-            背景、構成、測定結果は個別ページに記載しています。
+            センサ信号を SPRESENSE 上で処理する研究が 3 件、検知結果を運用で利用するための API が 1 件あります。
           </p>
         </div>
 
@@ -268,7 +268,7 @@ export function ResearchPageView({
                       <Ja>{project.subtitle}</Ja>
                     </p>
                     <p className="project-preview-summary">
-                      {project.cardSummary}
+                      <Ja>{project.cardSummary}</Ja>
                     </p>
                     <div className="tag-row">
                       {project.tags.slice(0, 5).map((tag) => (
@@ -282,7 +282,7 @@ export function ResearchPageView({
                         href={`/research/${project.slug}`}
                         className="arrow-link"
                       >
-                        詳しく見る
+                        詳細を見る
                       </Link>
                     </div>
                   </div>
@@ -302,7 +302,7 @@ export function ResearchPageView({
         viewport={viewport}
       >
         <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">アーカイブ</p>
+          <p className="eyebrow eyebrow-dark">Archive</p>
           <h2>記事と受賞</h2>
           <p className="section-intro">
             執筆した記事と、受賞や発表の記録です。
@@ -313,7 +313,7 @@ export function ResearchPageView({
           <motion.div className="archive-column" variants={groupVariants}>
             <div className="subsection-heading">
               <p className="card-label">記事</p>
-              <h3>Elchika の公開記事</h3>
+              <h3>公開記事</h3>
             </div>
 
             <div className="publication-grid">
@@ -328,8 +328,12 @@ export function ResearchPageView({
                         記事を読む
                       </a>
                     </div>
-                    <h3>{entry.title}</h3>
-                    <p>{entry.summary}</p>
+                    <h3>
+                      <Ja>{entry.title}</Ja>
+                    </h3>
+                    <p>
+                      <Ja>{entry.summary}</Ja>
+                    </p>
                     <div className="tag-row">
                       {entry.tags.map((tag) => (
                         <span key={tag} className="tag tag-light">
@@ -374,9 +378,13 @@ export function ResearchPageView({
                         詳細を見る
                       </a>
                     </div>
-                    <h3>{recognition.award}</h3>
+                    <h3>
+                      <Ja>{recognition.award}</Ja>
+                    </h3>
                     <p className="recognition-project">{recognition.project}</p>
-                    <p>{recognition.note}</p>
+                    <p>
+                      <Ja>{recognition.note}</Ja>
+                    </p>
                     <span className="recognition-org">
                       {recognition.organization}
                     </span>
@@ -396,7 +404,7 @@ export function ResearchPageView({
         viewport={viewport}
       >
         <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">リンク</p>
+          <p className="eyebrow">Links</p>
           <h2>公開先</h2>
           <p className="section-intro">
             コード、記事、VibeGuard の公式サイトです。

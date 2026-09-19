@@ -248,7 +248,9 @@ export function ResearchDetailView({
               <article className="project-story-card">
                 <p className="project-story-index">0{index + 1}</p>
                 <h2>{section.title}</h2>
-                <p>{section.body}</p>
+                <p>
+                  <Ja>{section.body}</Ja>
+                </p>
               </article>
             </MotionCardShell>
           ))}
@@ -263,8 +265,8 @@ export function ResearchDetailView({
         viewport={viewport}
       >
         <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">ハイライト</p>
-          <h2>ポイント</h2>
+          <p className="eyebrow eyebrow-dark">Highlights</p>
+          <h2>要点</h2>
         </div>
 
         <motion.div className="project-highlight-grid" variants={groupVariants}>
@@ -306,7 +308,7 @@ export function ResearchDetailView({
         viewport={viewport}
       >
         <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">ほかのプロジェクト</p>
+          <p className="eyebrow eyebrow-dark">Related</p>
           <h2>ほかの研究</h2>
         </div>
 
@@ -349,7 +351,9 @@ export function ResearchDetailView({
                     {candidate.heroKicker}
                   </span>
                   <strong>{candidate.title}</strong>
-                  <p>{candidate.cardSummary}</p>
+                  <p>
+                    <Ja>{candidate.cardSummary}</Ja>
+                  </p>
                 </Link>
               </motion.div>
             );
