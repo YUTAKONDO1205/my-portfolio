@@ -448,7 +448,7 @@ export const selectedWorks: readonly SelectedWork[] = [
     },
     highlights: [
       "解析エンジンは analyzer-core の 1 つです。4 つのストアのいずれから導入しても、同じ判定になります。",
-      "SES2026 で一般論文として発表しました（2026.09.11、慶應義塾大学 日吉キャンパス）。CSS2026 では、一般発表 4D2-3 に採択されています（2026.10.22、浜松）。",
+      "SES2026 で一般論文として発表しました（2026.09.11、慶應義塾大学 日吉キャンパス）。CSS2026 では、一般発表 4D2-3 で発表予定です（2026.10.22、浜松）。",
       "85 ルール、11 言語に対応しています。内訳は単一ファイル 74、ファイル横断 11 です。対象言語は c / cpp / csharp / go / java / javascript / kotlin / php / python / ruby / typescript です。",
       "自動修正は 7 件あります。確認なしで適用できるものは 1 件のみで、残りは needs-review と表示し、人が判断します。",
       "公式サイトのルール一覧、検出例、バージョンは、リポジトリから自動生成しています。手入力の数値はありません。",
@@ -647,7 +647,7 @@ export const publicationTimeline: readonly PublicationEntry[] = [
 export const recognitions: readonly Recognition[] = [
   {
     year: "2026",
-    award: "CSS2026 一般発表 採択（4D2-3）",
+    award: "CSS2026 一般発表（4D2-3）",
     project:
       "VibeGuard Compiler：コンパイラ最適化におけるセキュリティ性質消失の追跡と第一喪失点の特定",
     organization: "コンピュータセキュリティシンポジウム 2026（浜松）",
@@ -900,7 +900,7 @@ export const awardBadges: readonly AwardBadge[] = [
   {
     year: "2026",
     organization: "CSS2026 · セキュア開発",
-    award: "一般発表 採択 4D2-3",
+    award: "一般発表 4D2-3",
     href: "https://www.iwsec.org/css/2026/program.html",
     kind: "presentation",
   },
@@ -1050,7 +1050,7 @@ export const positioning: Positioning = {
       labelJa: "研究の公開",
       score: 9,
       evidence:
-        "記事 5 本、受賞 6 件、SES2026 発表、CSS2026 採択、電気学会 2 件、SecHack365 '26",
+        "記事 5 本、受賞 6 件、SES2026 発表、CSS2026 発表予定、電気学会 2 件、SecHack365 '26",
     },
     {
       key: "ops",
