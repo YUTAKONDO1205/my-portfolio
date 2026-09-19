@@ -189,7 +189,7 @@ export const siteAxis: SiteAxis = {
 
 export const philosophy: Philosophy = {
   label: "Philosophy",
-  title: "開発の方針",
+  title: "プロフィールと連絡先",
   body: "開発したものが動作しても、現場で使われなければ意味がないと考えています。そのため、センサ、端末上の推論、通信、API、画面までを一通り自分で実装しています。送信するデータは必要な分に絞り、検知結果は記録して、あとから参照できるようにしています。",
   english:
     "I build things until they can actually be used in the field.",
@@ -200,12 +200,12 @@ export const researchProjects: readonly ResearchProject[] = [
     slug: "drone-inspector",
     year: "2026",
     title: "DroneInspector",
-    subtitle: "インフラ点検向けエッジAIドローン",
+    subtitle: "インフラ点検向けエッジ AI ドローン",
     cardSummary:
-      "狭小なインフラ空間の点検を想定した研究です。SPRESENSE 上で、撮像、画質ゲート、分類、証跡の保存、監督制御までを実行します。ぼけた画像や白飛びした画像を、検知しないまま分類へ渡さないことを重視しました。",
+      "狭小なインフラ空間の点検を想定した研究です。SPRESENSE 上で、撮像、画質ゲート、分類、証跡の保存、監督制御までを実行します。ぼけた画像や白飛びした画像を、分類へ渡す前に画質ゲートで検出することを重視しました。",
     pageSummary:
       "空間の制約が大きい点検現場では、品質基準を満たさないフレームをその場で棄却する人がいません。ぼけた画像や白飛びした画像にも分類器はスコアを返すため、棄却も委譲もないまま陰性と判定された損傷は silent miss になります。この研究は、画質ゲートと棄却が監督制御の判断へどう伝播するかを、固定した証拠の上で 1 層ずつ入れ替えて測定し、その結果に基づいてファームウェアを実装したものです。",
-    heroKicker: "Skyborne Inspection",
+    heroKicker: "Drone / Image",
     heroEnglish: "Read the scene before the signal is lost.",
     themeClass: "theme-drone",
     ambientClass: "ambient-clouds",
@@ -224,7 +224,7 @@ export const researchProjects: readonly ResearchProject[] = [
       },
       {
         href: "https://github.com/YUTAKONDO1205/DroneInspector/tree/main/research",
-        label: "測定・解析データ (research/)",
+        label: "測定・解析データ（research/）",
       },
       {
         href: "https://elchika.com/article/663a49cf-c895-44d7-a989-6e45e7d92056/",
@@ -233,30 +233,30 @@ export const researchProjects: readonly ResearchProject[] = [
     ],
     sections: [
       {
-        title: "着眼点",
+        title: "背景",
         body:
-          "トンネルや水道管のような通信条件の悪い場所では、撮影して持ち帰るだけでは作業の負荷が大きく残ります。さらに問題となるのは、品質基準を満たさないフレームをその場で棄却する人がいないことです。品質ゲートも棄却も既知の手法ですが、それらが監督制御の判断へどう伝播するかは、測定しなければ明らかになりません。この研究では、固定した証拠を用いてこの伝播を測定しました。",
+          "トンネルや水道管のような通信条件の悪い場所では、撮影して持ち帰るだけでは作業の負荷が大きく残ります。さらに問題となるのは、品質基準を満たさないフレームをその場で棄却する人がいないことです。画質ゲートも棄却も既知の手法ですが、それらが監督制御の判断へどう伝播するかは、測定しなければ明らかになりません。この研究では、固定した証拠を用いてこの伝播を測定しました。",
       },
       {
         title: "構成",
         body:
-          "撮像 → ハッシュ → 画質指標 q → 分類 → 証跡コミット → 5 状態の監督制御、という一本道でファームウェアを構成しています。監督制御は受理 / 再撮像 / 安全停止に分岐し、再撮像は N_max = 2 で飽和、安全停止はラッチして解除コマンドが来るまで点検を再開しません。証跡ストアは 1 レコード 1 不変ファイルで、索引は保存せず起動時の走査で再構築します。",
+          "撮像、ハッシュ、画質指標 q の算出、分類、証跡コミット、5 状態の監督制御の順に処理が進むよう、ファームウェアを構成しています。監督制御は受理、再撮像、安全停止に分岐します。再撮像は N_max = 2 で飽和し、安全停止はラッチして、解除コマンドを受信するまで点検を再開しません。証跡ストアは 1 レコード 1 不変ファイルで、索引は保存せず起動時の走査で再構築します。",
       },
       {
         title: "測定結果",
         body:
-          "凍結チェックポイントで採点し直した 1,000 枚のコンクリートパッチを固定証拠として、6 つの候補改善 (E1–E6) を 1 層ずつ入れ替えて比較しました。結果として 6 つのうち 5 つが、改善を動機づけた想定とは異なる挙動を示しました。証跡バッファは保管では優位だが到達では優位でない、配備フォーマットの整数化は同一画素で 13,638 件の監督判断を変える、判定が出た時点で機体は既に通過しており 1,000 レコード中 387 が別の面を指す、といった結果です。",
+          "凍結チェックポイントで採点し直した 1,000 枚のコンクリートパッチを固定証拠として、6 つの候補改善（E1–E6）を 1 層ずつ入れ替えて比較しました。6 つのうち 5 つは、事前の想定と異なる挙動を示しました。証跡バッファは保管では優位だが到達では優位でない、配備フォーマットの整数化は同一画素で 13,638 件の監督判断を変える、判定が出た時点で機体は既に通過しており 1,000 レコード中 387 件が別の面を指す、といった結果です。",
       },
       {
-        title: "現在地",
+        title: "現状",
         body:
-          "機体プロセッサ上での MobileNetV2 int8 推論、索引の走査再構築 (40/40 試行で 4,000 件を完全回復)、実ケーブル抜きに対する証跡の耐久 (18/18)、監督判断経路の WCET まで実機で測り切っています。一方でオンターゲット推論は 94.3 秒でリアルタイムではなく、消費電力と現場精度は未測定です。検証は台上条件に限られ、飛行や現場試験はまだ主張していません。",
+          "機体プロセッサ上での MobileNetV2 int8 推論、索引の走査再構築（40/40 試行で 4,000 件を完全回復）、実ケーブル抜きに対する証跡の耐久（18/18）、監督判断経路の WCET までを実機で測定しました。一方でオンターゲット推論は 94.3 秒でリアルタイムではなく、消費電力と現場精度は未測定です。検証は台上の条件に限られ、飛行時と現場での性能はまだ確認できていません。",
       },
     ],
     highlights: [
-      "画質ゲート → 分類 → 証跡 → 5 状態の監督制御を、1 本の不変条件として固定しました。",
+      "画質ゲート、分類、証跡、5 状態の監督制御の処理順を、不変条件として定義しました。",
       "証跡ストアは索引を保存しません。走査による再構築は、40/40 試行で完全に回復しました。",
-      "6 層の入れ替え比較 (E1–E6) を行い、5 つが想定と異なる挙動を示すことを実測しました。",
+      "6 層の入れ替え比較（E1–E6）を行い、5 つが想定と異なる挙動を示すことを実測しました。",
       "STPA + FMEA、Simulink/Stateflow モデル、飛行 SIL までを含む一次資料を公開しています。",
       "2025 年 SPRESENSE 活用コンテストで特別賞を受賞しました。",
     ],
@@ -265,12 +265,12 @@ export const researchProjects: readonly ResearchProject[] = [
     slug: "pdm-edge",
     year: "2026",
     title: "pdm_edge",
-    subtitle: "加速度・音響を用いた異常検知エッジAI",
+    subtitle: "加速度・音響を用いた異常検知エッジ AI",
     cardSummary:
-      "加速度 3 軸と音響の 4 チャンネルを FFT で特徴量に変換し、SPRESENSE 上で動作する軽量な異常検知を構築しました。",
+      "加速度 3 軸と音響の 4 チャンネルを FFT で特徴量に変換し、SPRESENSE 上で動作する軽量な異常検知モデルを構築しました。",
     pageSummary:
       "計算量の大きい解析を用いずに、異常の兆候をどこまで検出できるかを検討した研究です。波形から周波数特徴を生成し、固定長の特徴量として軽量な実装で扱えるようにしました。",
-    heroKicker: "Signal and Spectrum",
+    heroKicker: "Vibration / Audio",
     heroEnglish: "Turn vibration into a readable edge.",
     themeClass: "theme-pdm",
     ambientClass: "ambient-machine",
@@ -294,17 +294,17 @@ export const researchProjects: readonly ResearchProject[] = [
     ],
     sections: [
       {
-        title: "着眼点",
+        title: "背景",
         body:
           "通信を前提とした大規模な解析系は用いず、設備の近傍で異常の兆候を検出できる最小構成を目指しました。現場に設置できる軽量さと再現性を優先しています。",
       },
       {
         title: "構成",
         body:
-          "1 kHz の時系列を FFT で周波数特徴へ変換し、0 から 500 Hz を固定 bin に要約して Random Forest へ渡します。学習後はヘッダ化して SPRESENSE へ持ち込めるようにしています。",
+          "1 kHz の時系列を FFT で周波数特徴へ変換し、0 から 500 Hz を固定 bin に要約して Random Forest へ渡します。学習後のモデルはヘッダファイルに変換し、SPRESENSE に組み込めるようにしています。",
       },
       {
-        title: "現在地",
+        title: "現状",
         body:
           "学習、評価、ヘッダの再生成、SPRESENSE 側からの呼び出しまで動作しています。異常の見逃しを減らすため、再現率を優先した構成です。",
       },
@@ -319,12 +319,12 @@ export const researchProjects: readonly ResearchProject[] = [
     slug: "anomaly-event-api",
     year: "2026",
     title: "anomaly-event-api",
-    subtitle: "異常検知をイベント運用までつなぐ API",
+    subtitle: "異常検知の結果をイベントとして運用する API",
     cardSummary:
       "画像のアップロード、異常検知、判定の説明、イベントの保存、ダッシュボード表示を 1 つの API として実装しました。検知後の運用までを対象としています。",
     pageSummary:
       "判定結果を返したあと、イベントとして保存し、確認し、状態を更新するところまでを実装しました。ローカル環境と AWS のどちらでも、同じ操作で検証できます。",
-    heroKicker: "Operational Layer",
+    heroKicker: "API / Operations",
     heroEnglish: "From anomaly to action.",
     themeClass: "theme-anomaly",
     ambientClass: "ambient-server",
@@ -344,7 +344,7 @@ export const researchProjects: readonly ResearchProject[] = [
     ],
     sections: [
       {
-        title: "着眼点",
+        title: "背景",
         body:
           "現場では、判定そのものに加えて、結果を保存して参照し、対応状況を更新できることが必要だと考えました。このため検知結果をイベントとして扱い、運用上の判断に利用できる形で記録しています。",
       },
@@ -354,7 +354,7 @@ export const researchProjects: readonly ResearchProject[] = [
           "Node.js + TypeScript の API 層に Python 推論を接続し、Grad-CAM、focus regions、attention grid といった説明情報も返すようにしています。local と AWS のモード差もサービス層で吸収しています。",
       },
       {
-        title: "現在地",
+        title: "現状",
         body:
           "検知、イベント化、可視化、provider の切り替えまで動作しています。",
       },
@@ -369,12 +369,12 @@ export const researchProjects: readonly ResearchProject[] = [
     slug: "eltres-co2-mapping",
     year: "2025",
     title: "Eltres_CO2_Mapping",
-    subtitle: "ELTRES通信によるCO2濃度マッピング",
+    subtitle: "ELTRES 通信による CO2 濃度マッピング",
     cardSummary:
       "SPRESENSE と ELTRES で CO2 濃度と位置情報を交互に送信し、都市部と郊外の濃度差を地図上に可視化しました。",
     pageSummary:
       "通信、解析、表示までを一貫して実装した環境モニタリングの研究です。CO2 濃度と位置情報を ELTRES で送り、CLIP Viewer Lite API から MATLAB で取得し、Web ダッシュボードに表示しています。",
-    heroKicker: "Atmosphere Mapping",
+    heroKicker: "CO2 / GPS",
     heroEnglish: "Make invisible signals visible.",
     themeClass: "theme-eltres",
     ambientClass: "ambient-tunnel",
@@ -398,7 +398,7 @@ export const researchProjects: readonly ResearchProject[] = [
     ],
     sections: [
       {
-        title: "着眼点",
+        title: "背景",
         body:
           "目に見えない CO2 濃度を、エリアごとの差として把握できるようにすることが目的です。現場で計測した値を、その場で確認できるところまで実装しました。",
       },
@@ -408,9 +408,9 @@ export const researchProjects: readonly ResearchProject[] = [
           "SPRESENSE でセンサ値と位置情報を交互に取得し、ELTRES アドオンで送信します。クラウド側では CLIP Viewer Lite API から MATLAB で取得し、Web ダッシュボードで可視化しています。",
       },
       {
-        title: "現在地",
+        title: "現状",
         body:
-          "通信、解析、表示までが接続され、センサの値をエリアごとの濃度差として地図上に表示できます。環境モニタリングの基礎となる構成です。",
+          "通信、解析、表示までを接続し、センサの値をエリアごとの濃度差として地図上に表示できます。",
       },
     ],
     highlights: [
@@ -426,9 +426,9 @@ export const selectedWorks: readonly SelectedWork[] = [
     slug: "vibeguard",
     category: "Security Tooling",
     title: "VibeGuard",
-    subtitle: "AI 生成コードの脆弱性を 3 か所で検出する診断ツール",
+    subtitle: "AI 生成コードの脆弱性を 3 つの場面で検出する診断ツール",
     summary:
-      "書くとき（VS Code / Open VSX）、読むとき（Chrome）、マージする前（GitHub Actions / CLI）の 3 か所で、同じ analyzer-core が動作します。注入、秘密情報の埋め込み、認証の省略、スタブのままの実装を、同じ基準で検出します。解析は手元の端末で完結し、コードを外部へ送信しません。",
+      "コードを書くとき（VS Code / Open VSX）、読むとき（Chrome）、マージする前（GitHub Actions / CLI）の 3 つの場面で、同じ解析エンジン（analyzer-core）が動作します。インジェクション、秘密情報の埋め込み、認証の省略、スタブのままの実装を、同じ基準で検出します。解析は手元の端末で完結し、コードを外部へ送信しません。",
     tags: [
       "TypeScript Monorepo",
       "SARIF",
@@ -447,12 +447,12 @@ export const selectedWorks: readonly SelectedWork[] = [
       label: "公式サイト",
     },
     highlights: [
-      "解析コアは 1 つです。同じ analyzer-core を 4 つの配布先で提供し、どこで実行しても同じ判定になります。",
-      "SES2026 で一般論文として発表しました（2026.09.11、慶應日吉）。CSS2026 では、一般発表 4D2-3 に採択されています（2026.10.22、浜松）。",
+      "解析エンジンは analyzer-core の 1 つです。4 つのストアのいずれから導入しても、同じ判定になります。",
+      "SES2026 で一般論文として発表しました（2026.09.11、慶應義塾大学 日吉キャンパス）。CSS2026 では、一般発表 4D2-3 に採択されています（2026.10.22、浜松）。",
       "85 ルール、11 言語に対応しています。内訳は単一ファイル 74、ファイル横断 11 です。対象言語は c / cpp / csharp / go / java / javascript / kotlin / php / python / ruby / typescript です。",
       "自動修正は 7 件あります。確認なしで適用できるものは 1 件のみで、残りは needs-review と表示し、人が判断します。",
       "公式サイトのルール一覧、検出例、バージョンは、リポジトリから自動生成しています。手入力の数値はありません。",
-      "MCP サーバを提供しています。エージェントがファイルを書き込む前に同じエンジンへ問い合わせ、ALLOWED / REFUSED を返します。",
+      "MCP サーバを提供しています。エージェントがファイルを書き込む前に同じ解析エンジンへ問い合わせ、ALLOWED / REFUSED を返します。",
       "テレメトリも外部送信もありません。ネットワークを遮断しても結果がバイト単位で一致することを、CI で検証しています。",
       "PR の追加行だけを走査し、SARIF 形式で GitHub Code Scanning に出力します。",
     ],
@@ -483,9 +483,9 @@ export const selectedWorks: readonly SelectedWork[] = [
     slug: "edgeops-command-agent",
     category: "LLM Multi-Agent",
     title: "EdgeOps Command Agent",
-    subtitle: "点検データから作業指示までを出力する保全向けマルチエージェント",
+    subtitle: "点検データから作業指示を生成する保全向けマルチエージェント",
     summary:
-      "異常検知後の作業までを対象とする、Azure ベースの保全 AI です。センサ、画像、点検メモ、マニュアル、故障履歴を 8 つのエージェントで処理し、リスク判定、原因の推定、作業指示、報告書を出力します。結果は、人が承認、修正依頼、却下のいずれかを選択する前提で、操作は監査ログに記録されます。",
+      "異常検知後の作業までを対象とする、Azure ベースの保全 AI です。センサ、画像、点検メモ、マニュアル、故障履歴を 8 つのエージェントで処理し、リスク判定、原因の推定、作業指示、報告書を出力します。出力した結果に対して、人が承認、修正依頼、却下のいずれかを選択します。この操作は監査ログに記録します。",
     tags: [
       "Azure OpenAI",
       "Semantic Kernel",
@@ -516,7 +516,7 @@ export const selectedWorks: readonly SelectedWork[] = [
     title: "Maison Passage",
     subtitle: "片道航空券 2 枚で組み立てる海外旅行プランナー",
     summary:
-      "片道航空券 2 枚の組み合わせで海外旅行を検索するプランナーです。Codex の Planner / Generator / Evaluator の 3 役をローカルで反復実行して開発しています。仕様は specs/spec.json の 1 ファイルで管理し、スプリントごとに機能を追加しています。現在は Sprint 10（複数地域をまたぐ経路の現実性と、ラベルの整合）に取り組んでいます。",
+      "片道航空券 2 枚の組み合わせで海外旅行を検索するプランナーです。Codex の Planner / Generator / Evaluator の 3 役をローカルで反復実行して開発しています。仕様は specs/spec.json の 1 ファイルで管理し、スプリントごとに機能を追加しています。現在はスプリント 10（複数地域をまたぐ経路の現実性と、ラベルの整合）に取り組んでいます。",
     tags: [
       "Next.js",
       "TypeScript",
@@ -707,7 +707,7 @@ export const recognitions: readonly Recognition[] = [
     project: "SPRESENSEでインフラ点検向けのエッジAIドローン",
     organization: "2025年 SPRESENSE 活用コンテスト",
     note:
-      "免許のいらない軽量ドローンと SPRESENSE で、インフラ点検の課題を扱った点が評価されました。",
+      "免許が不要な軽量ドローンと SPRESENSE で、インフラ点検の課題を扱った点が評価されました。",
     href: "https://elchika.com/promotion/spresense2025/winner/#nav",
   },
   {
@@ -716,7 +716,7 @@ export const recognitions: readonly Recognition[] = [
     project: "SPRESENSEとELTRES通信でCO2濃度をマッピング",
     organization: "2024年 SPRESENSE 活用コンテスト",
     note:
-      "エリアごとの CO2 濃度を地図にした点が評価されました。",
+      "エリアごとの CO2 濃度を地図上に可視化した点が評価されました。",
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
   {
@@ -821,8 +821,6 @@ export type Profile = {
   nameJa: string;
   nameEn: string;
   role: string;
-  affiliation: string;
-  grade: string;
   base: string;
   facts: readonly ProfileFact[];
 };
@@ -830,18 +828,16 @@ export type Profile = {
 export const profile: Profile = {
   nameJa: "近藤悠太",
   nameEn: "Kondo Yuta",
-  role: "Edge AI / 組み込みエンジニア",
-  affiliation: "近畿大学 工学部 電子情報工学科 電気電子コース",
-  grade: "学部 4 年（2027 年 3 月 卒業見込み）",
+  role: "エッジ AI、組み込み",
   base: "広島",
   facts: [
-    { label: "Program", value: "SecHack365 2026 研究駆動コース トレーニー" },
+    { label: "プログラム", value: "SecHack365 2026 トレーニー（研究駆動コース）" },
     {
-      label: "Certification",
+      label: "資格",
       value: "AWS Certified Solutions Architect – Associate",
     },
-    { label: "English", value: "TOEIC 880" },
-    { label: "Handles", value: "GitHub YUTAKONDO1205 · Elchika / Zenn kd_yuta" },
+    { label: "英語", value: "TOEIC 880" },
+    { label: "アカウント", value: "YUTAKONDO1205（GitHub）、kd_yuta（Elchika、Zenn）" },
   ],
 } as const;
 
@@ -868,10 +864,10 @@ export type HeroCopyV2 = {
 
 export const heroCopyV2: HeroCopyV2 = {
   eyebrow: "Embedded × Edge AI",
-  headlineJa: "現場の信号をマイコン上で判定するエッジ AI",
+  headlineJa: "マイコン上で動作する AI と、AI 生成コードの診断ツールを開発しています。",
   headlineEn: "Sense. Decide. Share.",
   subJa:
-    "振動、音響、画像をマイコン上で判定する研究に取り組んでいます。AI 生成コードの診断ツール VibeGuard を開発して 4 つのストアで公開し、SES2026 で論文を発表しました。",
+    "研究では、振動、音響、画像を SPRESENSE 上で判定しています。診断ツールの VibeGuard は 4 つのストアで公開しており、2026 年 9 月に SES2026 で論文を発表しました。",
   subEn:
     "Edge AI, from the lab to the marketplace.",
   primaryCta: {
@@ -881,7 +877,7 @@ export const heroCopyV2: HeroCopyV2 = {
   secondaryCta: { label: "研究を読む", href: "/research" },
   latestUpdate: {
     dateLabel: "2026.09.11",
-    title: "SES2026 で VibeGuard の論文を発表しました。次は CSS2026（10.22 浜松）です。",
+    title: "SES2026 で VibeGuard の論文を発表しました。次の発表は CSS2026（2026.10.22、浜松）です。",
     href: "https://ses.sigse.jp/2026/program.html",
   },
 } as const;
@@ -1038,31 +1034,31 @@ export const positioning: Positioning = {
       labelJa: "エッジ制約下の実装",
       score: 9,
       evidence:
-        "SPRESENSE FFT + Random Forest + TFLite Micro + .tflite→C++ header",
+        "SPRESENSE 上の FFT、Random Forest、TFLite Micro。.tflite は C++ ヘッダに変換",
     },
     {
       key: "ship",
       labelEn: "Ship to Market",
-      labelJa: "市場への到達",
+      labelJa: "製品の公開",
       score: 8,
       evidence:
-        "VibeGuard v0.3.6 live: GitHub Marketplace, VS Code, Chrome Web Store, Open VSX + 公式サイト",
+        "VibeGuard v0.3.6 を GitHub Marketplace、VS Code、Chrome Web Store、Open VSX で公開",
     },
     {
       key: "research",
       labelEn: "Public Research",
-      labelJa: "公開研究の継続性",
+      labelJa: "研究の公開",
       score: 9,
       evidence:
-        "記事 5 本 + 受賞 6 件 + SES2026 発表 + CSS2026 採択 + 電気学会 2 件 + SecHack365 '26",
+        "記事 5 本、受賞 6 件、SES2026 発表、CSS2026 採択、電気学会 2 件、SecHack365 '26",
     },
     {
       key: "ops",
       labelEn: "Operationalization",
-      labelJa: "運用接続",
+      labelJa: "運用への組み込み",
       score: 8,
       evidence:
-        "EdgeOps 8-agent + 承認/監査ワークフロー、anomaly-event-api の NEW/CHECKING/RESOLVED",
+        "EdgeOps の承認と監査のワークフロー、anomaly-event-api の 3 状態管理",
     },
   ],
   silhouettes: [

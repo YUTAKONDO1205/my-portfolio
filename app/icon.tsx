@@ -19,14 +19,14 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#111114",
+          background: "#f5f8ff",
         }}
       >
         <svg width="300" height="264" viewBox="0 0 300 264">
           <defs>
             <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#8052ff" />
-              <stop offset="100%" stopColor="#15846e" />
+              <stop offset="0%" stopColor="#5a3df0" />
+              <stop offset="100%" stopColor="#1e80f0" />
             </linearGradient>
           </defs>
           <polygon points="150,8 292,256 8,256" fill="url(#mark)" />

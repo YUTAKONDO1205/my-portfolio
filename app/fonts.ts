@@ -1,19 +1,25 @@
-import { Archivo, JetBrains_Mono, Zen_Kaku_Gothic_New } from "next/font/google";
+import {
+  Bricolage_Grotesque,
+  JetBrains_Mono,
+  LINE_Seed_JP,
+} from "next/font/google";
 
-/* Latin — Archivo is variable on both weight and width. The width axis is
-   what the hero headline plays with; everywhere else it sits at 100–112. */
-export const latin = Archivo({
+/* Latin display — Bricolage Grotesque is variable on weight, width and
+   optical size. The hero headline plays with the width axis (75–100);
+   numerals and English headings use it at full width. */
+export const latin = Bricolage_Grotesque({
   subsets: ["latin"],
-  axes: ["wdth"],
+  axes: ["opsz", "wdth"],
   display: "swap",
   variable: "--font-latin",
 });
 
-/* 和文 — five static weights. 300 and 900 are the pair the page is built on;
-   400/500/700 cover body, labels and card headings. Google serves this in
-   unicode-range slices, so only the glyphs a page uses are fetched. */
-export const japanese = Zen_Kaku_Gothic_New({
-  weight: ["300", "400", "500", "700", "900"],
+/* 和文 — LINE Seed JP. Open counters and an even, geometric skeleton read
+   bright on a light ground. 400 sets running text, 700 card headings, 800
+   the large headlines. Google serves it in unicode-range slices, so only the
+   glyphs a page uses are fetched. */
+export const japanese = LINE_Seed_JP({
+  weight: ["400", "700", "800"],
   subsets: ["latin"],
   display: "swap",
   preload: false,

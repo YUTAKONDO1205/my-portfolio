@@ -1,13 +1,12 @@
-/* Instrument screen — the one place the void gets a surface: a screen is a
-   piece of glass, and a hairline rim is how you read it as one. */
+/* Instrument screen — flat, with a hairline rim. */
 
 .frame {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  border-radius: var(--radius-cards);
-  background: rgba(0, 0, 0, 0.26);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  background: #f4f5f7;
+  box-shadow: inset 0 0 0 1px rgba(11, 13, 20, 0.08);
 }
 
 .canvas {

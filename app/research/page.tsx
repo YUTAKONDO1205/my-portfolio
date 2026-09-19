@@ -10,7 +10,7 @@ import {
 import { personName, siteLabel } from "../site-metadata";
 
 const researchDescription =
-  "近藤悠太の研究一覧。DroneInspector、pdm_edge、anomaly-event-api、Eltres_CO2_Mapping の概要と個別ページへのリンクです。";
+  "近藤悠太の研究一覧です。DroneInspector、pdm_edge、anomaly-event-api、Eltres_CO2_Mapping の概要を掲載しています。";
 
 export const metadata: Metadata = {
   title: "Research",
