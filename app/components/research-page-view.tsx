@@ -370,13 +370,24 @@ export function ResearchPageView({
                   <article className="recognition-card award-accent-card">
                     <div className="publication-meta">
                       <span>{recognition.year}</span>
-                      <a
-                        href={recognition.href}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        詳細を見る
-                      </a>
+                      <span className="publication-links">
+                        {recognition.paper && (
+                          <a
+                            href={recognition.paper.href}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            論文を見る
+                          </a>
+                        )}
+                        <a
+                          href={recognition.href}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          詳細を見る
+                        </a>
+                      </span>
                     </div>
                     <h3>
                       <Ja>{recognition.award}</Ja>

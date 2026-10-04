@@ -43,6 +43,14 @@ export type PublicationEntry = {
   href: string;
 };
 
+/** A paper as published in the proceedings. `citation` keeps the
+    proceedings title as printed; `href` is the publisher's record page. */
+export type PaperRef = {
+  citation: string;
+  source: string;
+  href: string;
+};
+
 export type Recognition = {
   year: string;
   award: string;
@@ -50,6 +58,7 @@ export type Recognition = {
   organization: string;
   note: string;
   href: string;
+  paper?: PaperRef;
 };
 
 export type ResearchProject = {
@@ -644,6 +653,13 @@ export const publicationTimeline: readonly PublicationEntry[] = [
   },
 ] as const;
 
+// IPSJ record 2011748 (issued 2026-09-03). Full text is free from 2028-09-03.
+const ses2026Paper: PaperRef = {
+  citation: "ソフトウェアエンジニアリングシンポジウム2026論文集、pp. 78–85",
+  source: "情報処理学会 電子図書館",
+  href: "https://ipsj.ixsq.nii.ac.jp/records/2011748",
+};
+
 export const recognitions: readonly Recognition[] = [
   {
     year: "2026",
@@ -664,6 +680,7 @@ export const recognitions: readonly Recognition[] = [
     note:
       "AI 生成コードの安全確認を採用判断点への診断配置の問題として扱い、VibeGuard の実装と測定で検証した単著論文を 2026 年 9 月 11 日に発表しました。",
     href: "https://ses.sigse.jp/2026/program.html",
+    paper: ses2026Paper,
   },
   {
     year: "2026",
@@ -748,6 +765,7 @@ export type Talk = {
   title: string;
   project: string;
   href: string;
+  paper?: PaperRef;
 };
 
 export const talks: readonly Talk[] = [
@@ -780,6 +798,7 @@ export const talks: readonly Talk[] = [
       "AI生成コードの採用判断点に基づくマルチコンテキストセキュリティ診断配置方式の提案とVibeGuardによる検証",
     project: "VibeGuard",
     href: "https://ses.sigse.jp/2026/program.html",
+    paper: ses2026Paper,
   },
   {
     id: "talk-ieej-c-2025",

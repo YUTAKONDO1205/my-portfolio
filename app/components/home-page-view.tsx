@@ -272,6 +272,15 @@ export function HomePageView({
                     {talk.place ? `（${talk.place}）` : ""}、{talk.kind}
                     {talk.session ? `、${talk.session}` : ""}
                   </p>
+                  {talk.paper && (
+                    <p className={styles.paper}>
+                      <span>論文</span>
+                      <a href={talk.paper.href} target="_blank" rel="noreferrer">
+                        {talk.paper.citation}
+                      </a>
+                      （{talk.paper.source}）
+                    </p>
+                  )}
                 </div>
               </li>
             ))}

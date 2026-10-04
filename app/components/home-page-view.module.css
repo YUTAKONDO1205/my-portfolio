@@ -192,6 +192,7 @@
 .row h3 a,
 .research h3 a,
 .talks h3 a,
+.paper a,
 .list a,
 .links a,
 .award {
@@ -208,6 +209,7 @@
 .row h3 a:hover,
 .research h3 a:hover,
 .talks h3 a:hover,
+.paper a:hover,
 .list a:hover,
 .links a:hover,
 .award:hover {
@@ -426,6 +428,17 @@
   margin-top: 8px;
   font-size: 14px;
   line-height: 1.8;
+}
+
+.talks .paper {
+  margin-top: 4px;
+}
+
+.paper span {
+  margin-right: 12px;
+  color: var(--color-ink-mute);
+  font-family: var(--font-mono-stack);
+  font-size: 12px;
 }
 
 /* ---------- awards & articles ---------- */

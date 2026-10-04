@@ -870,6 +870,11 @@ b {
   color: var(--color-ink);
 }
 
+.publication-meta .publication-links {
+  display: inline-flex;
+  gap: var(--spacing-18);
+}
+
 .award-accent-card .publication-meta span {
   color: var(--color-coral);
 }
