@@ -1,365 +1,129 @@
 "use client";
 
-import type { PropsWithChildren } from "react";
 import Link from "next/link";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-  type Variants,
-} from "motion/react";
 import { ResearchInstrument, instrumentModeFor } from "./research-instrument";
-import { Ja } from "./ja";
+import { SlideDeckViewer } from "./slide-deck-viewer";
+import { Ja, softBreakTitle, tagLine } from "./ja";
+import { SiteHeader } from "./site-header";
 import type { ResearchProject } from "../portfolio-data";
+import styles from "./home-page-view.module.css";
+import local from "./research-views.module.css";
+
+/* A research page, set like the home page: the title and its note with the
+   instrument beside them, then 内容, スライド, 要点 and ほかの研究, each with
+   its heading in the side column. */
 
 type ResearchDetailViewProps = {
   project: ResearchProject;
   otherProjects: readonly ResearchProject[];
 };
 
-const easeOutExpo = [0.22, 1, 0.36, 1] as const;
-const viewport = { once: true, amount: 0.2 } as const;
-
-const sectionVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 112,
-    filter: "blur(26px)",
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 1.05,
-      ease: easeOutExpo,
-    },
-  },
-};
-
-const groupVariants: Variants = {
-  hidden: {},
-  show: {
-    transition: {
-      delayChildren: 0.08,
-      staggerChildren: 0.12,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 68,
-    scale: 0.9,
-    filter: "blur(18px)",
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.9,
-      ease: easeOutExpo,
-    },
-  },
-};
-
-function MotionCardShell({ children }: PropsWithChildren) {
-  const reduceMotion = useReducedMotion();
-
-  return (
-    <motion.div
-      className="motion-card-shell"
-      variants={itemVariants}
-      whileHover={
-        reduceMotion
-          ? undefined
-          : {
-              y: -10,
-              scale: 1.016,
-            }
-      }
-      transition={{
-        type: "spring",
-        stiffness: 240,
-        damping: 21,
-        mass: 0.82,
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
 export function ResearchDetailView({
   project,
   otherProjects,
 }: ResearchDetailViewProps) {
-  const reduceMotion = useReducedMotion();
-  const { scrollY } = useScroll();
-
-  const copyY = useTransform(scrollY, [0, 640], [0, 76]);
-  const copyOpacity = useTransform(scrollY, [0, 640], [1, 0.78]);
+  // two lists side by side, as the home page sets 受賞と記事
+  const half = Math.ceil(otherProjects.length / 2);
+  const relatedColumns = [otherProjects.slice(0, half), otherProjects.slice(half)];
 
   return (
-    <main className={`project-site ${project.themeClass}`}>
-      <motion.section className="shell project-hero">
-        <motion.div
-          className={`project-hero-photo ${project.ambientClass}`}
-          aria-hidden="true"
-        />
+    <div className={styles.page}>
+      <SiteHeader page="other" />
 
-        <motion.div
-          className="project-hero-topbar"
-          initial={{ opacity: 0, y: -18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: easeOutExpo }}
-        >
-          <Link href="/">ホーム</Link>
-          <span>/</span>
-          <Link href="/research">研究</Link>
-          <span>/</span>
-          <span>{project.title}</span>
-        </motion.div>
+      <main className={styles.main}>
+        <section className={styles.hero}>
+          <p className={local.kicker}>
+            <time>{project.year}</time>
+            <span>{project.heroKicker}</span>
+          </p>
+          <h1 className={styles.statement}>{softBreakTitle(project.title)}</h1>
 
-        <div className="project-hero-grid">
-          <motion.div
-            className="project-hero-copy"
-            style={
-              reduceMotion ? undefined : { y: copyY, opacity: copyOpacity }
-            }
-          >
-            <motion.p
-              className="eyebrow"
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.56, ease: easeOutExpo, delay: 0.08 }}
-            >
-              {project.heroKicker}
-            </motion.p>
-            <motion.h1
-              initial={{
-                opacity: 0,
-                y: 112,
-                rotateX: reduceMotion ? 0 : -56,
-              }}
-              animate={{ opacity: 1, y: 0, rotateX: 0 }}
-              transition={{ duration: 0.92, ease: easeOutExpo, delay: 0.18 }}
-              style={reduceMotion ? undefined : { transformPerspective: 1200 }}
-            >
-              {project.title}
-            </motion.h1>
-            <motion.p
-              className="project-hero-subtitle"
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.64, ease: easeOutExpo, delay: 0.28 }}
-            >
-              <Ja>{project.subtitle}</Ja>
-            </motion.p>
-            <motion.p
-              className="project-hero-summary"
-              initial={{ opacity: 0, y: 26 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.74, ease: easeOutExpo, delay: 0.36 }}
-            >
-              <Ja>{project.pageSummary}</Ja>
-            </motion.p>
-
-            <motion.div
-              className="hero-actions"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: easeOutExpo, delay: 0.52 }}
-            >
-              <Link
-                href="/research"
-                className="button-link button-link-primary"
-              >
-                研究一覧へ戻る
-              </Link>
-              {project.links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="button-link button-link-secondary"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="project-visual"
-            initial={{ opacity: 0, y: 40, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.88, ease: easeOutExpo, delay: 0.22 }}
-          >
-            <div
-              className={`project-visual-photo ${project.ambientClass}`}
-              aria-hidden="true"
-            />
-            <div className="project-visual-artwork" aria-hidden="true">
-              <ResearchInstrument
-                mode={instrumentModeFor(project.themeClass)}
-              />
+          <div className={local.detailHero}>
+            <div>
+              <p className={styles.subtitle}>
+                <Ja>{project.subtitle}</Ja>
+              </p>
+              <p>
+                <Ja>{project.pageSummary}</Ja>
+              </p>
+              <p className={styles.stack}>{tagLine(project.tags)}</p>
+              <p className={local.actions}>
+                <Link href="/research">研究一覧へ戻る</Link>
+                {project.links.map((link) => (
+                  <a key={link.href} href={link.href} target="_blank" rel="noreferrer">
+                    {link.label}
+                  </a>
+                ))}
+              </p>
             </div>
-            <motion.div className="project-visual-core-shell">
-              <div className="project-visual-core">
-                <span>{project.year}</span>
-                <strong>{project.heroKicker}</strong>
-              </div>
-            </motion.div>
-            <div className="project-visual-layer project-visual-layer-a" />
-            <div className="project-visual-layer project-visual-layer-b" />
-            <div className="project-visual-layer project-visual-layer-c" />
-          </motion.div>
-        </div>
-      </motion.section>
+            <div className={local.detailFigure} aria-hidden="true">
+              <ResearchInstrument mode={instrumentModeFor(project.themeClass)} />
+            </div>
+          </div>
+        </section>
 
-      <motion.section
-        className="shell section project-content-panel"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewport}
-      >
-        <motion.div className="tag-row" variants={groupVariants}>
-          {project.tags.map((tag) => (
-            <motion.span
-              key={tag}
-              className="tag project-tag"
-              variants={itemVariants}
-            >
-              {tag}
-            </motion.span>
-          ))}
-        </motion.div>
-
-        <motion.div className="project-story-grid" variants={groupVariants}>
-          {project.sections.map((section, index) => (
-            <MotionCardShell key={section.title}>
-              <article className="project-story-card">
-                <p className="project-story-index">0{index + 1}</p>
-                <h2>{section.title}</h2>
+        <section className={styles.section}>
+          <h2 className={styles.heading}>内容</h2>
+          <div className={`${styles.rows} ${local.ruled}`}>
+            {project.sections.map((section) => (
+              <article key={section.title} className={styles.row}>
+                <h3>{section.title}</h3>
                 <p>
                   <Ja>{section.body}</Ja>
                 </p>
               </article>
-            </MotionCardShell>
-          ))}
-        </motion.div>
-      </motion.section>
+            ))}
+          </div>
+        </section>
 
-      <motion.section
-        className="shell section project-content-panel project-content-panel-alt"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewport}
-      >
-        <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Highlights</p>
-          <h2>要点</h2>
-        </div>
-
-        <motion.div className="project-highlight-grid" variants={groupVariants}>
-          {project.highlights.map((highlight, index) => (
-            <motion.article
-              key={highlight}
-              className="project-highlight-card"
-              variants={itemVariants}
-              whileHover={
-                reduceMotion
-                  ? undefined
-                  : {
-                      y: -8,
-                      scale: 1.016,
-                    }
-              }
-              transition={{
-                type: "spring",
-                stiffness: 240,
-                damping: 20,
-                mass: 0.8,
-                delay: index * 0.04,
-              }}
-            >
-              <span className="project-highlight-index">0{index + 1}</span>
+        {project.slides && (
+          <section className={styles.section}>
+            <h2 className={styles.heading}>発表スライド</h2>
+            <div className={local.block}>
               <p>
-                <Ja>{highlight}</Ja>
+                <Ja>
+                  {`${project.slides.context}で発表したスライドです。1〜${project.slides.mainPages} 枚目が本編、${project.slides.mainPages + 1} 枚目以降が質疑用の付録です。`}
+                </Ja>
               </p>
-            </motion.article>
-          ))}
-        </motion.div>
-      </motion.section>
+              <SlideDeckViewer deck={project.slides} />
+            </div>
+          </section>
+        )}
 
-      <motion.section
-        className="shell section project-content-panel"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewport}
-      >
-        <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Related</p>
-          <h2>ほかの研究</h2>
-        </div>
+        <section className={styles.section}>
+          <h2 className={styles.heading}>要点</h2>
+          <div className={local.block}>
+            <ul className={styles.points}>
+              {project.highlights.map((highlight) => (
+                <li key={highlight}>
+                  <Ja>{highlight}</Ja>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
 
-        <motion.div className="project-mini-grid" variants={groupVariants}>
-          {otherProjects.map((candidate) => {
-            return (
-              <motion.div
-                key={candidate.slug}
-                className="motion-card-shell"
-                variants={itemVariants}
-                whileHover={
-                  reduceMotion
-                    ? undefined
-                    : {
-                        y: -10,
-                        scale: 1.018,
-                      }
-                }
-                transition={{
-                  type: "spring",
-                  stiffness: 240,
-                  damping: 21,
-                  mass: 0.82,
-                }}
-              >
-                <Link
-                  href={`/research/${candidate.slug}`}
-                  className={`project-mini-card ${candidate.themeClass}`}
-                >
-                  <div
-                    className={`project-mini-photo ${candidate.ambientClass}`}
-                    aria-hidden="true"
-                  />
-                  <div className="project-mini-artwork" aria-hidden="true">
-                    <ResearchInstrument
-                      mode={instrumentModeFor(candidate.themeClass)}
-                    />
-                  </div>
-                  <span className="quick-link-label">
-                    {candidate.heroKicker}
-                  </span>
-                  <strong>{candidate.title}</strong>
-                  <p>
-                    <Ja>{candidate.cardSummary}</Ja>
-                  </p>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      </motion.section>
-    </main>
+        <section className={styles.section}>
+          <h2 className={styles.heading}>ほかの研究</h2>
+          <div className={`${styles.records} ${local.related}`}>
+            {relatedColumns.map((column, index) => (
+              <ul key={index} className={styles.list}>
+                {column.map((candidate) => (
+                  <li key={candidate.slug}>
+                    <span>{candidate.year}</span>
+                    <Link href={`/research/${candidate.slug}`}>
+                      {softBreakTitle(candidate.title)}
+                    </Link>
+                    <small>
+                      <Ja>{candidate.subtitle}</Ja>
+                    </small>
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
+        </section>
+      </main>
+    </div>
   );
 }

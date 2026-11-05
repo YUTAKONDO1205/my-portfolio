@@ -28,13 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: project.title,
-    description: project.pageSummary,
+    description: project.description,
     alternates: {
       canonical: `/research/${project.slug}`,
     },
     openGraph: {
       title: `${project.title} | ${personName}`,
-      description: project.pageSummary,
+      description: project.description,
       url: `/research/${project.slug}`,
       type: "article",
       siteName: siteLabel,
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: `${project.title} | ${personName}`,
-      description: project.pageSummary,
+      description: project.description,
     },
   };
 }

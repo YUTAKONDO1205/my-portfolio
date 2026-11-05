@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
-import { siteDescription, siteTitle } from "./site-metadata";
+import { heroCopyV2, profile } from "./portfolio-data";
+import { personName, siteTitle, siteUrl } from "./site-metadata";
 
 export const alt = siteTitle;
 
@@ -10,44 +11,64 @@ export const size = {
 
 export const contentType = "image/png";
 
-const SPECTRUM = ["#5a3df0", "#ff6038", "#0aa47c", "#be3aec", "#1e80f0"];
+/* The share card is the top of the home page: the name, the latest line,
+   the one sentence, on the same paper, ink and single blue. Nothing here is
+   drawn for the card alone. */
 
-/* A loose constellation in the right half — the same triangular glyphs as the
-   hero canvas, laid out by hand so the card is deterministic. */
-const GLYPHS: Array<[number, number, number, number]> = [
-  // x, y, size, colour index
-  [60, 40, 9, 0],
-  [128, 96, 7, 3],
-  [196, 52, 6, 1],
-  [92, 158, 11, 4],
-  [172, 148, 8, 2],
-  [246, 118, 7, 0],
-  [40, 232, 8, 1],
-  [124, 236, 12, 0],
-  [204, 214, 9, 3],
-  [278, 196, 6, 4],
-  [76, 320, 7, 2],
-  [158, 330, 10, 1],
-  [238, 300, 8, 0],
-  [300, 268, 6, 3],
-  [110, 408, 8, 4],
-  [196, 400, 7, 0],
-  [268, 372, 9, 2],
-  [22, 128, 5, 3],
-  [318, 92, 5, 1],
-  [340, 340, 7, 0],
-  [12, 300, 6, 4],
-  [250, 452, 6, 1],
-  [150, 470, 5, 2],
-];
+const PAPER = "#fdfdfc";
+const INK = "#0b0d14";
+const INK_SOFT = "#3d4350";
+const INK_MUTE = "#6c7280";
+const BLUE = "#1a3cff";
 
-function trianglePoints(x: number, y: number, s: number) {
-  return `${x},${y - s} ${x + s * 0.87},${y + s * 0.5} ${x - s * 0.87},${
-    y + s * 0.5
-  }`;
+/* The sentence, broken where the hero breaks it at desktop width. If the
+   copy changes and these no longer spell it, the card falls back to the
+   sentence as one block. */
+const STATEMENT_LINES = ["マイコン上で動作する", "AI と、AI 生成コードの", "診断ツールを開発しています。"];
+
+const compact = (text: string) => text.replace(/\s/g, "");
+
+/* next/og has no Japanese face of its own; fetch the site's faces, cut down
+   to the characters on the card. */
+async function loadGoogleFont(family: string, weight: number, text: string) {
+  const url = `https://fonts.googleapis.com/css2?family=${family.replace(/ /g, "+")}:wght@${weight}&text=${encodeURIComponent(text)}`;
+  const css = await (await fetch(url)).text();
+  const resource = css.match(/src: url\((.+?)\) format\('(opentype|truetype)'\)/);
+  if (!resource) throw new Error(`no font file for ${family} ${weight}`);
+  const response = await fetch(resource[1]);
+  if (!response.ok) throw new Error(`font fetch failed for ${family} ${weight}`);
+  return response.arrayBuffer();
 }
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const { latestUpdate, headlineJa } = heroCopyV2;
+  const lines =
+    compact(STATEMENT_LINES.join("")) === compact(headlineJa) ? STATEMENT_LINES : [headlineJa];
+  const host = new URL(siteUrl).host;
+
+  const boldText = personName + lines.join("");
+  const regularText = latestUpdate.title + profile.role + host + "Portfolio";
+  const monoText = latestUpdate.dateLabel;
+
+  let fonts:
+    | { name: string; data: ArrayBuffer; weight: 400 | 800; style: "normal" }[]
+    | undefined;
+  try {
+    const [bold, regular, mono] = await Promise.all([
+      loadGoogleFont("LINE Seed JP", 800, boldText),
+      loadGoogleFont("LINE Seed JP", 400, regularText),
+      loadGoogleFont("JetBrains Mono", 400, monoText),
+    ]);
+    fonts = [
+      { name: "LINE Seed JP", data: bold, weight: 800, style: "normal" },
+      { name: "LINE Seed JP", data: regular, weight: 400, style: "normal" },
+      { name: "JetBrains Mono", data: mono, weight: 400, style: "normal" },
+    ];
+  } catch {
+    // offline build: next/og's own fallback still renders the text
+    fonts = undefined;
+  }
+
   return new ImageResponse(
     (
       <div
@@ -55,139 +76,59 @@ export default function OpenGraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          position: "relative",
-          overflow: "hidden",
-          background: "#f5f8ff",
-          color: "#101538",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: "64px 80px 56px",
+          background: PAPER,
+          color: INK,
+          fontFamily: "LINE Seed JP",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            right: 40,
-            top: 40,
-            display: "flex",
-          }}
-        >
-          <svg width="380" height="520" viewBox="0 0 380 520">
-            {GLYPHS.map(([x, y, s, colour]) => (
-              <polygon
-                key={`${x}-${y}`}
-                points={trianglePoints(x, y, s)}
-                fill="none"
-                stroke={SPECTRUM[colour]}
-                strokeWidth="1.6"
-              />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <div style={{ display: "flex", fontSize: 28, fontWeight: 800, letterSpacing: "0.04em" }}>
+            {personName}
+          </div>
+          <div style={{ display: "flex", fontSize: 22, fontWeight: 400, color: INK_MUTE }}>
+            Portfolio
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 18, fontSize: 22, fontWeight: 400 }}>
+            <div style={{ display: "flex", fontFamily: "JetBrains Mono", fontSize: 20, color: BLUE }}>
+              {latestUpdate.dateLabel}
+            </div>
+            <div style={{ display: "flex", color: INK_SOFT }}>{latestUpdate.title}</div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", fontSize: 66, fontWeight: 800, lineHeight: 1.28 }}>
+            {lines.map((line) => (
+              <div key={line} style={{ display: "flex" }}>
+                {line}
+              </div>
             ))}
-          </svg>
+          </div>
         </div>
 
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
             justifyContent: "space-between",
-            width: "100%",
-            padding: "60px 72px",
+            alignItems: "center",
+            paddingTop: 22,
+            borderTop: `1px solid ${INK}`,
+            fontSize: 20,
+            fontWeight: 400,
+            color: INK_SOFT,
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 28,
-              maxWidth: 700,
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                fontSize: 22,
-                fontWeight: 600,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "#d63f1a",
-              }}
-            >
-              Sense / Decide / Share
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <div
-                style={{
-                  display: "flex",
-                  fontSize: 104,
-                  fontWeight: 400,
-                  letterSpacing: "-0.04em",
-                  lineHeight: 1.1,
-                }}
-              >
-                Yuta Kondo
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  fontSize: 40,
-                  fontWeight: 400,
-                  letterSpacing: "-0.02em",
-                  color: "#69708f",
-                }}
-              >
-                Portfolio
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                maxWidth: 620,
-                fontSize: 22,
-                lineHeight: 1.6,
-                color: "#3a4166",
-              }}
-            >
-              {siteDescription}
-            </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{ display: "flex", width: 12, height: 12, background: BLUE }} />
+            {profile.role}
           </div>
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-              <svg width="34" height="30" viewBox="0 0 34 30">
-                <defs>
-                  <linearGradient id="og-mark" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#5a3df0" />
-                    <stop offset="100%" stopColor="#1e80f0" />
-                  </linearGradient>
-                </defs>
-                <polygon points="17,1 33,29 1,29" fill="url(#og-mark)" />
-              </svg>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 6,
-                  fontSize: 20,
-                  color: "#69708f",
-                }}
-              >
-                <div style={{ display: "flex" }}>DroneInspector / pdm_edge</div>
-                <div style={{ display: "flex" }}>anomaly-event-api</div>
-              </div>
-            </div>
-
-            <div style={{ display: "flex", fontSize: 20, color: "#69708f" }}>
-              {siteTitle}
-            </div>
-          </div>
+          <div style={{ display: "flex", color: INK_MUTE }}>{host}</div>
         </div>
       </div>
     ),
-    size,
+    { ...size, fonts },
   );
 }

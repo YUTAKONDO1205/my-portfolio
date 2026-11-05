@@ -19,15 +19,21 @@ import styles from "./research-instrument.module.css";
               grid over the one being checked
      eltres   a sensor walking a GPS path, leaving CO₂ samples that read
               higher in the urban block
+     supercap the falsifier probing the ±10 % capacitance square while each
+              probe's inrush current is plotted against the 0.5 A limit;
+              round 1 finds a violator, round 2 (violator added to the
+              training set) finds none
 
    Everything is procedural and cheap: a canvas runs only while on screen,
    and reduced-motion visitors get one still frame.
    ========================================================================== */
 
-export type InstrumentMode = "drone" | "pdm" | "anomaly" | "eltres";
+export type InstrumentMode = "drone" | "pdm" | "anomaly" | "eltres" | "supercap";
 
 export function instrumentModeFor(themeClass: string): InstrumentMode {
   switch (themeClass) {
+    case "theme-supercap":
+      return "supercap";
     case "theme-drone":
       return "drone";
     case "theme-pdm":
@@ -49,6 +55,9 @@ const C = {
   white: "11, 13, 20",
   ash: "90, 97, 128",
 } as const;
+
+/* the host's background (research-instrument.module.css) */
+const PANEL = "rgba(244, 245, 247, 0.92)";
 
 /* next/font hashes its family names, so the canvas reads them back from the
    CSS variables the layout sets on <html>. */
@@ -112,10 +121,20 @@ function label(
   color: string,
   align: CanvasTextAlign = "left",
   size = 10,
+  /* a ring in the panel colour, for text drawn over moving marks */
+  halo = false,
 ) {
   ctx.font = `${size}px ${canvasFont("--font-mono", "--font-japanese")}`;
   ctx.textAlign = align;
   ctx.textBaseline = "middle";
+  if (halo) {
+    ctx.save();
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = PANEL;
+    ctx.strokeText(text, x, y);
+    ctx.restore();
+  }
   ctx.fillStyle = color;
   ctx.fillText(text, x, y);
 }
@@ -406,12 +425,11 @@ function drawEltres(ctx: Ctx, w: number, h: number, t: number) {
       ctx.fillRect(x, y, 1, 1);
     }
   }
-  label(ctx, "suburban", w * 0.05, h * 0.1, rgba(C.ash, 0.75), "left", 9);
-  label(ctx, "urban", ux0 + 6, uy0 - 8, rgba(C.ash, 0.75), "left", 9);
 
+  // vertically 0.16h–0.80h, so the samples stay clear of the legend at 0.9h
   const path = (tt: number) => ({
     x: w * (0.5 + 0.4 * Math.sin(tt * 0.23) * Math.cos(tt * 0.07 + 1)),
-    y: h * (0.5 + 0.36 * Math.sin(tt * 0.17 + 0.8)),
+    y: h * (0.48 + 0.32 * Math.sin(tt * 0.17 + 0.8)),
   });
   const co2 = (x: number, y: number, tt: number) => {
     const d = Math.hypot(x - ccx, y - ccy) / (w * 0.42);
@@ -432,6 +450,10 @@ function drawEltres(ctx: Ctx, w: number, h: number, t: number) {
     tri(ctx, p.x, p.y, 2 + 4 * v, ts * 0.6);
     ctx.stroke();
   }
+
+  // place names over the samples, as on a map: the route crosses 「urban」
+  label(ctx, "suburban", w * 0.05, h * 0.1, rgba(C.ash, 0.75), "left", 9, true);
+  label(ctx, "urban", ux0 + 6, uy0 - 8, rgba(C.ash, 0.75), "left", 9, true);
 
   // the sensor
   const now = path(t);
@@ -461,11 +483,152 @@ function drawEltres(ctx: Ctx, w: number, h: number, t: number) {
   label(ctx, "high", w * 0.42 + 9, ly, rgba(C.ash, 0.75), "left", 9);
 }
 
+/* ---------------------------------------------------------------------- */
+
+/* Inrush current at the parallel switch grows with how unequal the two cell
+   groups are. Round 1 is the BO optimum (1.21 A in the worst corner, the
+   deck's +142.1 %); round 2 is the rule after the violating unit joined the
+   training set (stays under the 0.5 A limit). */
+function inrush(round: number, x: number, y: number) {
+  const mismatch = Math.min(1, Math.abs(y - x) / 2);
+  return round === 0 ? 0.3 + 0.91 * mismatch ** 1.5 : 0.3 + 0.17 * mismatch;
+}
+
+function drawSupercap(ctx: Ctx, w: number, h: number, t: number) {
+  const period = 6;
+  const round = Math.floor(t / period) % 2;
+  const local = t % period;
+  const probes = 12;
+  const shown = Math.min(probes, Math.floor(local / 0.4) + 1);
+  const limit = 0.5;
+  const maxI = 1.4;
+
+  // probe i of a round, in the tolerance square [-1, 1]²
+  const corner = round === 0 ? { x: -1, y: 1 } : { x: 1, y: -1 };
+  const probe = (i: number) => {
+    const u = smooth(i / (probes - 1));
+    const jx = (hash(i, round + 3) - 0.5) * 1.6 * (1 - u);
+    const jy = (hash(i, round + 7) - 0.5) * 1.6 * (1 - u);
+    return { x: lerp(jx, corner.x, u), y: lerp(jy, corner.y, u) };
+  };
+
+  // ---- left: the ±10 % tolerance square of the two groups' capacitance
+  const s = Math.min(w * 0.36, h * 0.56);
+  const sx = w * 0.06;
+  const sy = h * 0.2;
+  const toX = (v: number) => sx + ((v + 1) / 2) * s;
+  const toY = (v: number) => sy + ((1 - v) / 2) * s;
+
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = rgba(C.white, 0.16);
+  ctx.strokeRect(sx, sy, s, s);
+  ctx.strokeStyle = rgba(C.white, 0.07);
+  ctx.beginPath();
+  ctx.moveTo(sx + s / 2, sy);
+  ctx.lineTo(sx + s / 2, sy + s);
+  ctx.moveTo(sx, sy + s / 2);
+  ctx.lineTo(sx + s, sy + s / 2);
+  ctx.stroke();
+  label(ctx, "容量 ±10%", sx, sy - 14, rgba(C.ash, 0.8), "left", 9);
+  label(ctx, "↑ 組 B", sx, sy + s + 9, rgba(C.ash, 0.7), "left", 8);
+  label(ctx, "組 A →", sx + s, sy + s + 9, rgba(C.ash, 0.7), "right", 8);
+
+  // training units: the nominal one, plus round 1's violator in round 2
+  const training = [{ x: 0.05, y: -0.05 }];
+  if (round === 1) training.push({ x: -1, y: 1 });
+  ctx.fillStyle = rgba(C.white, 0.85);
+  ctx.beginPath();
+  for (const p of training) tri(ctx, toX(p.x), toY(p.y), 4.2, 0);
+  ctx.fill();
+
+  // attacker probes
+  for (let i = 0; i < shown; i += 1) {
+    const p = probe(i);
+    const bad = inrush(round, p.x, p.y) > limit;
+    const fresh = i === shown - 1;
+    ctx.strokeStyle = rgba(bad ? C.amber : C.violet, fresh ? 0.95 : 0.4);
+    ctx.beginPath();
+    tri(ctx, toX(p.x), toY(p.y), fresh ? 4 : 2.6, Math.PI);
+    ctx.stroke();
+    if (bad && fresh) {
+      ctx.strokeStyle = rgba(C.amber, 0.35 + 0.3 * Math.sin(local * 6));
+      ctx.beginPath();
+      ctx.arc(toX(p.x), toY(p.y), 9, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+
+  // ---- right: inrush current of each probe against the limit
+  const cx0 = w * 0.54;
+  const cx1 = w * 0.94;
+  const cy0 = sy;
+  const cy1 = sy + s;
+  const toCY = (amps: number) => cy1 - (amps / maxI) * (cy1 - cy0);
+  const toCX = (i: number) => cx0 + (i / (probes - 1)) * (cx1 - cx0);
+
+  label(ctx, "突入電流", cx0, sy - 14, rgba(C.ash, 0.8), "left", 9);
+  ctx.strokeStyle = rgba(C.white, 0.16);
+  ctx.beginPath();
+  ctx.moveTo(cx0, cy1);
+  ctx.lineTo(cx1, cy1);
+  ctx.stroke();
+
+  ctx.setLineDash([3, 3]);
+  ctx.strokeStyle = rgba(C.amber, 0.55);
+  ctx.beginPath();
+  ctx.moveTo(cx0, toCY(limit));
+  ctx.lineTo(cx1, toCY(limit));
+  ctx.stroke();
+  ctx.setLineDash([]);
+  // above the line: round 2 probes sit just under it, round 1's right end is far above
+  label(ctx, "上限 0.5 A", cx1, toCY(limit) - 8, rgba(C.amber, 0.85), "right", 8);
+
+  ctx.strokeStyle = rgba(C.white, 0.14);
+  ctx.beginPath();
+  for (let i = 0; i < shown; i += 1) {
+    const p = probe(i);
+    const x = toCX(i);
+    const y = toCY(inrush(round, p.x, p.y));
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  for (let i = 0; i < shown; i += 1) {
+    const p = probe(i);
+    const amps = inrush(round, p.x, p.y);
+    const bad = amps > limit;
+    ctx.fillStyle = rgba(bad ? C.amber : C.violet, i === shown - 1 ? 0.95 : 0.55);
+    ctx.beginPath();
+    tri(ctx, toCX(i), toCY(amps), i === shown - 1 ? 3.6 : 2.4, 0);
+    ctx.fill();
+    if (bad && i === probes - 1) {
+      // above the point: the line climbs in from the lower left, so beside it
+      // the label would sit on the line
+      label(ctx, "1.21 A", toCX(i) + 3, toCY(amps) - 11, rgba(C.amber, 0.95), "right", 9);
+    }
+  }
+
+  // ---- caption
+  const done = shown === probes;
+  const caption =
+    round === 0
+      ? done
+        ? "ラウンド 1：違反を発見、学習に追加"
+        : "ラウンド 1：反証 AI が探索中"
+      : done
+        ? "ラウンド 2：違反なし"
+        : "ラウンド 2：反証 AI が探索中";
+  const tone = done ? (round === 0 ? C.amber : C.teal) : C.ash;
+  label(ctx, caption, sx, h * 0.92, rgba(tone, 0.9), "left", 9);
+}
+
 const DRAW: Record<InstrumentMode, (ctx: Ctx, w: number, h: number, t: number) => void> = {
   drone: drawDrone,
   pdm: drawPdm,
   anomaly: drawAnomaly,
   eltres: drawEltres,
+  supercap: drawSupercap,
 };
 
 /* ---------------------------------------------------------------------- */
