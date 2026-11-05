@@ -1,3 +1,5 @@
+import { aiLeaders2026Deck, type SlideDeck } from "./slide-decks";
+
 export type PlatformLink = {
   href: string;
   label: string;
@@ -68,9 +70,16 @@ export type ResearchProject = {
   subtitle: string;
   cardSummary: string;
   pageSummary: string;
+  /** meta description of the research page: 1–2 sentences, 50–90 characters */
+  description: string;
   heroKicker: string;
   heroEnglish: string;
-  themeClass: "theme-drone" | "theme-pdm" | "theme-anomaly" | "theme-eltres";
+  themeClass:
+    | "theme-drone"
+    | "theme-pdm"
+    | "theme-anomaly"
+    | "theme-eltres"
+    | "theme-supercap";
   ambientClass:
     | "ambient-clouds"
     | "ambient-machine"
@@ -86,6 +95,8 @@ export type ResearchProject = {
     body: string;
   }[];
   highlights: readonly string[];
+  /** Optional: the presentation deck, shown in a page-by-page viewer */
+  slides?: SlideDeck;
 };
 
 export type SelectedWorkDistribution = {
@@ -133,7 +144,7 @@ export const platformLinks: readonly PlatformLink[] = [
   {
     href: "https://zenn.dev/kd_yuta",
     label: "Zenn",
-    description: "LLM エージェントの設計記事",
+    description: "AI エージェントの設計記事",
     detail:
       "Microsoft Agent Hackathon に提出した EdgeOps Command Agent の設計と、承認ゲートや監査ログの考え方を記載しています。",
   },
@@ -171,7 +182,7 @@ export const siteAxis: SiteAxis = {
   label: "Research Flow",
   title: "研究テーマ",
   summary:
-    "SPRESENSE 上でセンサ信号を処理する研究が 3 件、検知結果を運用で利用するための API が 1 件あります。",
+    "SPRESENSE 上でセンサ信号を処理する研究が 3 件、検知結果を運用で利用するための API が 1 件、回路シミュレーション上で AI どうしを対戦させる自律実験が 1 件あります。",
   detail:
     "いずれの研究も、信号の計測、端末上での判定、公開の順に進めています。背景の粒子は、この 3 段階に対応する形へ変化します。",
   steps: [
@@ -199,12 +210,81 @@ export const siteAxis: SiteAxis = {
 export const philosophy: Philosophy = {
   label: "Philosophy",
   title: "プロフィールと連絡先",
-  body: "開発したものが動作しても、現場で使われなければ意味がないと考えています。そのため、センサ、端末上の推論、通信、API、画面までを一通り自分で実装しています。送信するデータは必要な分に絞り、検知結果は記録して、あとから参照できるようにしています。",
+  body: "開発したものが動作しても、現場で使われなければ意味がないと考えています。そのため、センサ、端末上の推論、通信、API、画面までを一通り自分で実装しています。送信するデータは必要な範囲に絞り、検知結果は記録して、あとから参照できるようにしています。",
   english:
     "I build things until they can actually be used in the field.",
 } as const;
 
+// Official page (results not posted there as of 2026-11-05; prize per the owner).
+const aiLeadersAwardUrl = "https://events.nikkeibp.co.jp/xtechnext/2026tky/ailaward/";
+
 export const researchProjects: readonly ResearchProject[] = [
+  // Numbers: final-review deck 学生AIリーダーズ大賞2026_最終審査_近藤悠太.pptx
+  // (2026-10-24 build), main slides 2–15. All are circuit/battery simulation values.
+  {
+    slug: "self-play-autonomous-experiment",
+    year: "2026",
+    title: "自己対戦型自律実験",
+    subtitle: "AI が見つけた充電制御則を、別の AI に反証させる",
+    cardSummary:
+      "AI が見つけた最適な充電制御則が、部品の製造ばらつきの内側で安全制約に違反する問題を扱った研究です。発見 AI と反証 AI を対戦させ、反証 AI が違反を見つけた部品の値の組み合わせ（個体）を学習用の個体に加えて再探索します。実験はすべて回路シミュレーションで、実機では検証していません。",
+    pageSummary:
+      "最適化で得た解は制約の境界付近に集まるため、学習に使った個体（部品の値の組み合わせ 1 組）では安全でも、製造ばらつきの内側にある別の個体では制約に違反することがあります。この研究では、スーパーキャパシタ 4 個を直並列に切り替えて充電する回路を対象に、効率が最大の充電制御則（以下、充電則）を探す発見 AI と、その充電則が違反する個体を公差の範囲から探す反証 AI を対戦させました。",
+    description:
+      "近藤悠太の研究「自己対戦型自律実験」のページです。AI が見つけた充電制御則の違反を別の AI に探させる手順と、回路シミュレーションでの結果を掲載しています。",
+    heroKicker: "スーパーキャパシタ・自己対戦",
+    heroEnglish: "Falsify the optimum before adopting it.",
+    themeClass: "theme-supercap",
+    ambientClass: "ambient-machine",
+    tags: [
+      "LTspice",
+      "Bayesian Optimization",
+      "Supercapacitor",
+      "Adversarial Search",
+      "Claude",
+      "PyBaMM",
+    ],
+    links: [
+      {
+        href: aiLeaders2026Deck.pdfHref,
+        label: "発表スライド（PDF）",
+      },
+      {
+        href: aiLeadersAwardUrl,
+        label: "学生AIリーダーズ大賞の公式ページ",
+      },
+    ],
+    slides: aiLeaders2026Deck,
+    sections: [
+      {
+        title: "対象と安全制約",
+        body:
+          "対象は、入力 5\u00a0V の降圧回路でセル 4 個を充電し、途中で 4 直列から 2 直列 2 並列へ 1 回切り替える回路です。セルは 20\u00a0mF 級のスケールモデルです。安全制約は、入力ピーク電流 1.0\u00a0A 以下、切替時の突入電流 0.5\u00a0A 以下、充電時間 0.28 秒以下の 3 本です。切替を遅らせるほど効率は上がりますが、セルの個体差による突入電流は大きくなります。",
+      },
+      {
+        title: "構成",
+        body:
+          "発見 AI はベイズ最適化（ガウス過程）で、直並列を切り替える電圧（切替電圧）1 個、電流の境界 3 個、電流指令 4 個の計 8 個の定数を探します。反証 AI は同じ探索器で探す向きを反転し、その充電則が違反する個体を、容量の公差 ±10% の範囲から探します。違反が見つかれば、その個体を学習用の個体（学習個体）に加えて再探索し、評価用の 20 個体で違反が見つからなくなるまで繰り返します。ロバスト最適化と敵対的訓練そのものは、機械学習では既知の手法です。この研究では、既知の最悪条件探索を、反証 AI として自律実験のループに組み込みました。実験はすべて LTspice 上で実行し、回路モデルと探索コードの実装から結果の回収までを、Claude で自動化しています。",
+      },
+      {
+        title: "結果",
+        body:
+          "発見 AI の最適解を、学習に使っていない個体で検査しました。人手で選んだ 3 個体では突入電流の違反が見つからず（最大 0.49\u00a0A）、公差の範囲から無作為に選んだ 24 個体では 7 個体が違反しました。反証 AI は、容量の小さい組と大きい組を並列にした瞬間に 1.21\u00a0A（上限の 2.4 倍）が流れる個体を見つけました。この個体を学習個体に加えた 2 ラウンド目では、評価用の 20 個体で違反が見つからず、無作為の 24 個体での違反は 7 個体から 0 個体になりました。その代わりに、充電効率は約 1.2 ポイント低下しました（学習個体 1 つでの値で 95.86% から 94.64%）。",
+      },
+      {
+        title: "追加の検証",
+        body:
+          "インダクタンスと巻線抵抗の ±20% を加えた 12 次元のばらつきでは、10 次元のばらつきに対してロバスト化した充電則が、4,096 コーナー（各部品の値を上限か下限に置いた組み合わせ）中 2,288 で違反しました。充電則はそのままで電流フィードバックを加えると、違反は 0 になりました（電流を誤差なく測るモデルでの値）。同じ手順をリチウムイオン電池の急速充電（PyBaMM の電気化学モデル）に移すと、違反は 256 コーナー中 214 から 0 になり、充電時間は 2.73 倍になりました。数値はすべてシミュレーションの値で、評価した個体とコーナーでの結果です。公差の範囲にあるすべての個体で安全を保証するものではなく、実機と実際の電池では検証していません。",
+      },
+    ],
+    highlights: [
+      "発見 AI と反証 AI に同じベイズ最適化を使い、探す向きだけを反転させています。",
+      "人手で選んだ 3 個体では見逃し、無作為の 24 個体では大きさを過小評価した突入電流の違反を、反証 AI が見つけました。",
+      "自己対戦の 2 ラウンドで、無作為の 24 個体での違反は 7 個体から 0 個体になりました。最終の充電則は定数 8 個で、16 バイトに収まります。",
+      "応募書の主張 43 件を再実行して確認し、3 件の不一致を訂正しました。安全な条件をランダム探索の 2.8 倍見つけたという主張は、乱数の種を変えると約 1.6 倍でした。",
+      "学生AIリーダーズ大賞 2026（日経BP）の自然科学部門で、最優秀賞を受賞しました。",
+    ],
+  },
   {
     slug: "drone-inspector",
     year: "2026",
@@ -213,8 +293,10 @@ export const researchProjects: readonly ResearchProject[] = [
     cardSummary:
       "狭小なインフラ空間の点検を想定した研究です。SPRESENSE 上で、撮像、画質ゲート、分類、証跡の保存、監督制御までを実行します。ぼけた画像や白飛びした画像を、分類へ渡す前に画質ゲートで検出することを重視しました。",
     pageSummary:
-      "空間の制約が大きい点検現場では、品質基準を満たさないフレームをその場で棄却する人がいません。ぼけた画像や白飛びした画像にも分類器はスコアを返すため、棄却も委譲もないまま陰性と判定された損傷は silent miss になります。この研究は、画質ゲートと棄却が監督制御の判断へどう伝播するかを、固定した証拠の上で 1 層ずつ入れ替えて測定し、その結果に基づいてファームウェアを実装したものです。",
-    heroKicker: "Drone / Image",
+      "空間の制約が大きい点検現場では、品質基準を満たさないフレームをその場で棄却する人がいません。ぼけた画像や白飛びした画像にも分類器はスコアを返すため、棄却も人への委譲もないまま陰性と判定された損傷は、誰にも気づかれない見逃し（silent miss）になります。この研究は、画質ゲートと棄却が監督制御の判断へどう伝播するかを、固定した証拠の上で 1 層ずつ入れ替えて測定し、その結果に基づいてファームウェアを実装したものです。",
+    description:
+      "近藤悠太の研究「DroneInspector」のページです。SPRESENSE 上で撮像から監督制御までを実行する、インフラ点検向けドローンの構成と測定結果を掲載しています。",
+    heroKicker: "ドローン・画像",
     heroEnglish: "Read the scene before the signal is lost.",
     themeClass: "theme-drone",
     ambientClass: "ambient-clouds",
@@ -244,30 +326,30 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "背景",
         body:
-          "トンネルや水道管のような通信条件の悪い場所では、撮影して持ち帰るだけでは作業の負荷が大きく残ります。さらに問題となるのは、品質基準を満たさないフレームをその場で棄却する人がいないことです。画質ゲートも棄却も既知の手法ですが、それらが監督制御の判断へどう伝播するかは、測定しなければ明らかになりません。この研究では、固定した証拠を用いてこの伝播を測定しました。",
+          "トンネルや水道管のような通信条件の悪い場所では、撮影して持ち帰るだけでは作業の負荷が大きく残ります。さらに問題となるのは、品質基準を満たさないフレームをその場で棄却する人がいないことです。画質ゲートも棄却も既知の手法ですが、それらが監督制御の判断へどう伝播するかは、測定しなければ分かりません。この研究では、固定した証拠を用いてこの伝播を測定しました。",
       },
       {
         title: "構成",
         body:
-          "撮像、ハッシュ、画質指標 q の算出、分類、証跡コミット、5 状態の監督制御の順に処理が進むよう、ファームウェアを構成しています。監督制御は受理、再撮像、安全停止に分岐します。再撮像は N_max = 2 で飽和し、安全停止はラッチして、解除コマンドを受信するまで点検を再開しません。証跡ストアは 1 レコード 1 不変ファイルで、索引は保存せず起動時の走査で再構築します。",
+          "撮像、ハッシュ、画質指標 q の算出、分類、証跡コミット、5 状態の監督制御の順に処理が進むよう、ファームウェアを構成しています。監督制御は受理、再撮像、安全停止に分岐します。再撮像は N_max\u00a0=\u00a02 で飽和し、安全停止はラッチして、解除コマンドを受信するまで点検を再開しません。証跡ストアは 1 レコードを 1 つの不変ファイルとして保存し、索引は保存せずに起動時の走査で再構築します。",
       },
       {
         title: "測定結果",
         body:
-          "凍結チェックポイントで採点し直した 1,000 枚のコンクリートパッチを固定証拠として、6 つの候補改善（E1–E6）を 1 層ずつ入れ替えて比較しました。6 つのうち 5 つは、事前の想定と異なる挙動を示しました。証跡バッファは保管では優位だが到達では優位でない、配備フォーマットの整数化は同一画素で 13,638 件の監督判断を変える、判定が出た時点で機体は既に通過しており 1,000 レコード中 387 件が別の面を指す、といった結果です。",
+          "凍結チェックポイントで採点し直した 1,000 枚のコンクリートパッチを固定した証拠として、6 つの候補改善（E1〜E6）を 1 層ずつ入れ替えて比較しました。6 つのうち 5 つは、事前の想定と異なる挙動を示しました。たとえば、証跡バッファは保管では優位でしたが、到達では優位ではありませんでした。配備フォーマットの整数化は、同じ画素に対して 13,638 件の監督判断を変えました。判定が出た時点で機体は既に通過しており、1,000 レコード中 387 件は別の面を指していました。",
       },
       {
         title: "現状",
         body:
-          "機体プロセッサ上での MobileNetV2 int8 推論、索引の走査再構築（40/40 試行で 4,000 件を完全回復）、実ケーブル抜きに対する証跡の耐久（18/18）、監督判断経路の WCET までを実機で測定しました。一方でオンターゲット推論は 94.3 秒でリアルタイムではなく、消費電力と現場精度は未測定です。検証は台上の条件に限られ、飛行時と現場での性能はまだ確認できていません。",
+          "機体プロセッサ上での MobileNetV2 int8 推論、走査による索引の再構築、ケーブルを実際に抜く電源断、監督判断の経路の最悪実行時間（WCET）までを実機で測定しました。索引は 40 回の試行すべてで 4,000 件を回復しました。18 回の電源断では、書きかけのまま開けるレコードは 0 件で、索引を別ファイルに持つ方式は 18 回すべてで索引とレコードが食い違いました。一方で、機体プロセッサ上での推論は 160×160 画素の 1 枚あたり 94.3 秒（中央値）かかり、リアルタイムではありません。消費電力と現場での精度は未測定です。検証は台上の条件に限られ、飛行時と現場での性能はまだ確認できていません。",
       },
     ],
     highlights: [
       "画質ゲート、分類、証跡、5 状態の監督制御の処理順を、不変条件として定義しました。",
-      "証跡ストアは索引を保存しません。走査による再構築は、40/40 試行で完全に回復しました。",
-      "6 層の入れ替え比較（E1–E6）を行い、5 つが想定と異なる挙動を示すことを実測しました。",
+      "証跡ストアは索引を保存しません。起動時の走査で再構築すると、40 回の試行すべてで索引が回復しました。",
+      "6 つの候補改善（E1〜E6）を 1 層ずつ入れ替えて比較し、5 つが事前の想定と異なる挙動を示すことを実測しました。",
       "STPA + FMEA、Simulink/Stateflow モデル、飛行 SIL までを含む一次資料を公開しています。",
-      "2025 年 SPRESENSE 活用コンテストで特別賞を受賞しました。",
+      "2025 年 SPRESENSE 活用コンテストで、クレイン電子 BLEアドオンボード特別賞を受賞しました。",
     ],
   },
   {
@@ -279,7 +361,9 @@ export const researchProjects: readonly ResearchProject[] = [
       "加速度 3 軸と音響の 4 チャンネルを FFT で特徴量に変換し、SPRESENSE 上で動作する軽量な異常検知モデルを構築しました。",
     pageSummary:
       "計算量の大きい解析を用いずに、異常の兆候をどこまで検出できるかを検討した研究です。波形から周波数特徴を生成し、固定長の特徴量として軽量な実装で扱えるようにしました。",
-    heroKicker: "Vibration / Audio",
+    description:
+      "近藤悠太の研究「pdm_edge」のページです。加速度と音響を FFT で特徴量に変換し、SPRESENSE 上で異常の兆候を判定する構成を掲載しています。",
+    heroKicker: "振動・音響",
     heroEnglish: "Turn vibration into a readable edge.",
     themeClass: "theme-pdm",
     ambientClass: "ambient-machine",
@@ -310,7 +394,7 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "構成",
         body:
-          "1 kHz の時系列を FFT で周波数特徴へ変換し、0 から 500 Hz を固定 bin に要約して Random Forest へ渡します。学習後のモデルはヘッダファイルに変換し、SPRESENSE に組み込めるようにしています。",
+          "1 kHz で取得した時系列を FFT で周波数特徴へ変換し、0〜500 Hz を固定したビンに集約して Random Forest へ渡します。学習後のモデルはヘッダファイルに変換し、SPRESENSE に組み込めるようにしています。",
       },
       {
         title: "現状",
@@ -322,6 +406,7 @@ export const researchProjects: readonly ResearchProject[] = [
       "4 チャンネルを同時に処理し、設備の状態変化を複数の信号から捉えます。",
       "特徴量を固定長にして、組み込み環境へ移植しやすくしました。",
       "2024 年の LoRa 振動解析から継続しているテーマです。",
+      "2025 年の電気学会 C部門大会で、学生ポスター（PS8-8）として発表しました。",
     ],
   },
   {
@@ -333,7 +418,9 @@ export const researchProjects: readonly ResearchProject[] = [
       "画像のアップロード、異常検知、判定の説明、イベントの保存、ダッシュボード表示を 1 つの API として実装しました。検知後の運用までを対象としています。",
     pageSummary:
       "判定結果を返したあと、イベントとして保存し、確認し、状態を更新するところまでを実装しました。ローカル環境と AWS のどちらでも、同じ操作で検証できます。",
-    heroKicker: "API / Operations",
+    description:
+      "近藤悠太の研究「anomaly-event-api」のページです。異常検知の結果をイベントとして保存し、対応状況を管理する API の構成を掲載しています。",
+    heroKicker: "API・運用",
     heroEnglish: "From anomaly to action.",
     themeClass: "theme-anomaly",
     ambientClass: "ambient-server",
@@ -355,21 +442,21 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "背景",
         body:
-          "現場では、判定そのものに加えて、結果を保存して参照し、対応状況を更新できることが必要だと考えました。このため検知結果をイベントとして扱い、運用上の判断に利用できる形で記録しています。",
+          "現場では、判定そのものに加えて、結果を保存して参照し、対応状況を更新できることが必要だと考えました。このため、検知結果をイベントとして扱い、運用上の判断に利用できる形で記録しています。",
       },
       {
         title: "構成",
         body:
-          "Node.js + TypeScript の API 層に Python 推論を接続し、Grad-CAM、focus regions、attention grid といった説明情報も返すようにしています。local と AWS のモード差もサービス層で吸収しています。",
+          "Node.js + TypeScript の API 層に Python の推論処理を接続し、Grad-CAM、focus regions、attention grid といった説明情報も返すようにしています。ローカル環境と AWS の動作の違いは、サービス層で吸収しています。",
       },
       {
         title: "現状",
         body:
-          "検知、イベント化、可視化、provider の切り替えまで動作しています。",
+          "検知、イベント化、可視化、ローカル環境と AWS の切り替えまで動作しています。",
       },
     ],
     highlights: [
-      "local と AWS のどちらでも、同じ操作で動作します。",
+      "ローカル環境と AWS のどちらでも、同じ操作で動作します。",
       "対応状況を NEW / CHECKING / RESOLVED の 3 状態で管理します。",
       "判定の説明（Grad-CAM など）とイベント管理を、同じ画面で扱えます。",
     ],
@@ -383,7 +470,9 @@ export const researchProjects: readonly ResearchProject[] = [
       "SPRESENSE と ELTRES で CO2 濃度と位置情報を交互に送信し、都市部と郊外の濃度差を地図上に可視化しました。",
     pageSummary:
       "通信、解析、表示までを一貫して実装した環境モニタリングの研究です。CO2 濃度と位置情報を ELTRES で送り、CLIP Viewer Lite API から MATLAB で取得し、Web ダッシュボードに表示しています。",
-    heroKicker: "CO2 / GPS",
+    description:
+      "近藤悠太の研究「Eltres_CO2_Mapping」のページです。SPRESENSE と ELTRES で CO2 濃度と位置情報を送信し、地図上に可視化する構成を掲載しています。",
+    heroKicker: "CO2・位置情報",
     heroEnglish: "Make invisible signals visible.",
     themeClass: "theme-eltres",
     ambientClass: "ambient-tunnel",
@@ -409,7 +498,7 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "背景",
         body:
-          "目に見えない CO2 濃度を、エリアごとの差として把握できるようにすることが目的です。現場で計測した値を、その場で確認できるところまで実装しました。",
+          "目に見えない CO2 濃度の差を、エリアごとに把握できるようにすることが目的です。現場で計測した値を、その場で確認できるところまで実装しました。",
       },
       {
         title: "構成",
@@ -425,7 +514,7 @@ export const researchProjects: readonly ResearchProject[] = [
     highlights: [
       "送信データを最小限に抑えたまま、空間分布を取得できます。",
       "MATLAB から Web ダッシュボードまでの可視化を一通り実装しました。",
-      "クレスコ ELTRESアドオンボード優秀賞を受賞したテーマです。",
+      "2024 年 SPRESENSE 活用コンテストで、クレスコ ELTRESアドオンボード優秀賞を受賞しました。",
     ],
   },
 ] as const;
@@ -456,10 +545,10 @@ export const selectedWorks: readonly SelectedWork[] = [
       label: "公式サイト",
     },
     highlights: [
-      "解析エンジンは analyzer-core の 1 つです。4 つのストアのいずれから導入しても、同じ判定になります。",
-      "SES2026 で一般論文として発表しました（2026.09.11、慶應義塾大学 日吉キャンパス）。CSS2026 では、一般発表 4D2-3 で発表予定です（2026.10.22、浜松）。",
-      "85 ルール、11 言語に対応しています。内訳は単一ファイル 74、ファイル横断 11 です。対象言語は c / cpp / csharp / go / java / javascript / kotlin / php / python / ruby / typescript です。",
-      "自動修正は 7 件あります。確認なしで適用できるものは 1 件のみで、残りは needs-review と表示し、人が判断します。",
+      "解析エンジンは analyzer-core の 1 つだけです。4 つのストアのどれから導入しても、判定は同じです。",
+      "2026 年 9 月 11 日に SES2026（慶應義塾大学 日吉キャンパス）で一般論文を発表し、10 月 22 日に CSS2026（浜松）で一般発表を行いました。",
+      "検出ルールは 85 件（単一ファイル 74 件、ファイル横断 11 件）で、11 言語に対応しています。対象言語は c / cpp / csharp / go / java / javascript / kotlin / php / python / ruby / typescript です。",
+      "自動修正は 7 件あります。確認なしで適用できるものは 1 件だけで、残りの 6 件は needs-review と表示し、適用するかを人が判断します。",
       "公式サイトのルール一覧、検出例、バージョンは、リポジトリから自動生成しています。手入力の数値はありません。",
       "MCP サーバを提供しています。エージェントがファイルを書き込む前に同じ解析エンジンへ問い合わせ、ALLOWED / REFUSED を返します。",
       "テレメトリも外部送信もありません。ネットワークを遮断しても結果がバイト単位で一致することを、CI で検証しています。",
@@ -569,7 +658,7 @@ export const selectedWorks: readonly SelectedWork[] = [
     slug: "zumen-llm-docker",
     category: "LLM Workflow",
     title: "Zumen LLM Docker Lab",
-    subtitle: "図面業務を LLM で半自動化する実験基盤",
+    subtitle: "図面業務を大規模言語モデル（LLM）で半自動化する実験基盤",
     summary:
       "図面画像の説明生成、判定理由の文章化、プロンプトのバージョン管理、顧客別の用語集、評価データの自動採点、監査ログを、1 つの FastAPI + htmx アプリとして実装しました。Docker / Dev Container で再現でき、LLM は mock と OpenAI 互換 API を切り替えられます。",
     tags: [
@@ -610,9 +699,9 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     dateLabel: "2026.01.31",
     title: "SPRESENSEでインフラ点検向けのエッジAIドローン",
     summary:
-      "カメラ、BLE、エッジ AI、軽量ドローンを組み合わせ、機体側で判断するインフラ点検を試作した作品です。",
+      "カメラ、BLE、エッジ AI、軽量ドローンを組み合わせ、機体側で判断するインフラ点検を試作した作品の解説記事です。",
     tags: ["AI", "BLE", "SPRESENSE", "Edge AI", "Drone"],
-    awards: ["2025年 SPRESENSE 活用コンテスト クレイン電子 BLEアドオンボード特別賞"],
+    awards: ["2025 年 SPRESENSE 活用コンテスト クレイン電子 BLEアドオンボード特別賞"],
     href: "https://elchika.com/article/663a49cf-c895-44d7-a989-6e45e7d92056/",
   },
   {
@@ -621,7 +710,7 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     dateLabel: "2026.01.31",
     title: "加速度・音響信号を活用した異常検知エッジAIモデルの構築",
     summary:
-      "加速度と音響を 1 kHz で取得し、FFT ベースの特徴から軽量に異常兆候を判定する構成を整理した記事です。",
+      "加速度と音響を 1 kHz で取得し、FFT による特徴量から軽量に異常の兆候を判定する構成を整理した記事です。",
     tags: ["AI", "SPRESENSE", "FFT", "Sensor", "Audio"],
     awards: [],
     href: "https://elchika.com/article/7301ab59-0921-4ba7-9935-b9309cf8c59c/",
@@ -632,11 +721,11 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     dateLabel: "2025.01.31",
     title: "SPRESENSEと振動解析による設備保全の最前線",
     summary:
-      "LoRa と振動解析を組み合わせ、遠隔から設備の状態を監視する作品です。",
+      "LoRa と振動解析を組み合わせ、遠隔から設備の状態を監視する作品の解説記事です。",
     tags: ["Arduino", "IoT", "LoRa", "MPU6050", "SPRESENSE"],
     awards: [
-      "2024年 SPRESENSE 活用コンテスト LoRa活用アイデア賞",
-      "2024年 SPRESENSE 活用コンテスト JBAT Qanat Universe賞",
+      "2024 年 SPRESENSE 活用コンテスト LoRa活用アイデア賞",
+      "2024 年 SPRESENSE 活用コンテスト JBAT Qanat Universe賞",
     ],
     href: "https://elchika.com/article/ac986cc9-5c24-4778-952d-a3ec8dca25d0/",
   },
@@ -646,9 +735,9 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     dateLabel: "2025.01.31",
     title: "SPRESENSEとELTRES通信でCO2濃度をマッピング",
     summary:
-      "ELTRES とセンシングを組み合わせ、都市部と郊外の CO2 濃度差を可視化した環境モニタリング研究です。",
+      "ELTRES とセンシングを組み合わせ、都市部と郊外の CO2 濃度差を可視化した作品の解説記事です。",
     tags: ["ELTRES", "IoT", "MATLAB", "SPRESENSE", "Sensor"],
-    awards: ["2024年 SPRESENSE 活用コンテスト クレスコ ELTRESアドオンボード優秀賞"],
+    awards: ["2024 年 SPRESENSE 活用コンテスト クレスコ ELTRESアドオンボード優秀賞"],
     href: "https://elchika.com/article/504f286c-413b-47d3-89f9-38920ca5e5c7/",
   },
 ] as const;
@@ -663,20 +752,30 @@ const ses2026Paper: PaperRef = {
 export const recognitions: readonly Recognition[] = [
   {
     year: "2026",
-    award: "CSS2026 一般発表（4D2-3）",
+    award: "学生AIリーダーズ大賞 2026 自然科学部門 最優秀賞",
+    project:
+      "AIの発見をAIに反証させる自己対戦型自律実験：製造公差にロバストなスーパーキャパシタ充電制御則の獲得と16バイトへの蒸留",
+    organization: "日経BP",
+    note:
+      "AI が見つけた充電制御則に対し、別の AI が製造公差の範囲内で制約に違反する個体を探し、見つけた個体を学習用の個体に加えて再探索する自己対戦型の自律実験です。回路シミュレーションで検証し、2026 年 10 月 29 日の最終審査で発表しました。",
+    href: aiLeadersAwardUrl,
+  },
+  {
+    year: "2026",
+    award: "CSS2026 一般発表 4D2-3",
     project:
       "VibeGuard Compiler：コンパイラ最適化におけるセキュリティ性質消失の追跡と第一喪失点の特定",
     organization: "コンピュータセキュリティシンポジウム 2026（浜松）",
     note:
-      "コンパイラ最適化の過程でセキュリティ性質が失われる点を追跡し、第一喪失点を特定する方式を、セキュア開発セッションで 2026 年 10 月 22 日に発表予定です。",
+      "コンパイラ最適化の過程でセキュリティ性質が失われる様子を追跡し、最初に失われる工程（第一喪失点）を特定する方式を、2026 年 10 月 22 日にセキュア開発セッションで発表しました。",
     href: "https://www.iwsec.org/css/2026/program.html",
   },
   {
     year: "2026",
-    award: "SES2026 一般論文 発表",
+    award: "SES2026 一般論文",
     project:
       "AI生成コードの採用判断点に基づくマルチコンテキストセキュリティ診断配置方式の提案とVibeGuardによる検証",
-    organization: "ソフトウェアエンジニアリングシンポジウム 2026（慶應義塾大学 日吉）",
+    organization: "ソフトウェアエンジニアリングシンポジウム 2026（慶應義塾大学 日吉キャンパス）",
     note:
       "AI 生成コードの安全確認を採用判断点への診断配置の問題として扱い、VibeGuard の実装と測定で検証した単著論文を 2026 年 9 月 11 日に発表しました。",
     href: "https://ses.sigse.jp/2026/program.html",
@@ -688,12 +787,12 @@ export const recognitions: readonly Recognition[] = [
     project: "EdgeOps Command Agent",
     organization: "Microsoft Agent Hackathon powered by Tokyo Electron Device",
     note:
-      "点検データからリスク判定、原因の推定、作業指示、報告書までを出力する 8 エージェントの保全 AI です。人の承認を挟む構成と監査ログが評価されました。",
+      "点検データからリスク判定、原因の推定、作業指示、報告書までを出力する 8 エージェントの保全 AI です。出力ごとに人が承認、修正依頼、却下を選び、その操作を監査ログに記録します。",
     href: "https://zenn.dev/kd_yuta/articles/edgeops-command-agent",
   },
   {
     year: "2026",
-    award: "SecHack365 '26 トレーニー採択",
+    award: "SecHack365 2026 トレーニー採択",
     project: "セキュリティ開発者育成プログラム",
     organization: "NICT（情報通信研究機構）",
     note:
@@ -706,14 +805,14 @@ export const recognitions: readonly Recognition[] = [
     project: "振動・音響センサを用いた異常兆候検知システムの開発と AI 識別モデル構築",
     organization: "電気学会 電子・情報・システム部門大会（金沢工業大学）",
     note:
-      "振動・音響センサによる異常兆候検知と AI 識別モデル構築を、学生ポスターセッション（PS8-8）で発表しました。",
+      "振動・音響センサによる異常兆候の検知と AI 識別モデルの構築について、学生ポスターセッション（PS8-8）で発表しました。",
     href: "https://www.iee.jp/blog/c-taikai-2025/",
   },
   {
     year: "2025",
-    award: "IEEJ U-21 2025 奨励賞",
+    award: "電気学会 U-21 学生研究発表会 奨励賞",
     project: "LoRa通信とAIを活用した振動検知による異常予知システムの構築",
-    organization: "電気学会 U-21 学生研究発表会",
+    organization: "電気学会",
     note:
       "LoRa 通信と AI を組み合わせた振動検知システムで受賞しました。",
     href: "https://www.iee.jp/u-21-2025-award/",
@@ -722,7 +821,7 @@ export const recognitions: readonly Recognition[] = [
     year: "2025",
     award: "クレイン電子 BLEアドオンボード特別賞",
     project: "SPRESENSEでインフラ点検向けのエッジAIドローン",
-    organization: "2025年 SPRESENSE 活用コンテスト",
+    organization: "2025 年 SPRESENSE 活用コンテスト",
     note:
       "免許が不要な軽量ドローンと SPRESENSE で、インフラ点検の課題を扱った点が評価されました。",
     href: "https://elchika.com/promotion/spresense2025/winner/#nav",
@@ -731,18 +830,18 @@ export const recognitions: readonly Recognition[] = [
     year: "2024",
     award: "クレスコ ELTRESアドオンボード優秀賞",
     project: "SPRESENSEとELTRES通信でCO2濃度をマッピング",
-    organization: "2024年 SPRESENSE 活用コンテスト",
+    organization: "2024 年 SPRESENSE 活用コンテスト",
     note:
       "エリアごとの CO2 濃度を地図上に可視化した点が評価されました。",
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
   {
     year: "2024",
-    award: "LoRa活用アイデア賞 / JBAT Qanat Universe賞",
+    award: "LoRa活用アイデア賞、JBAT Qanat Universe賞",
     project: "SPRESENSEと振動解析による設備保全の最前線",
-    organization: "2024年 SPRESENSE 活用コンテスト",
+    organization: "2024 年 SPRESENSE 活用コンテスト",
     note:
-      "遠隔から設備を監視する構成で、LoRa 活用と IoT 活用の 2 つの賞を受賞しました。",
+      "LoRa で設備の振動を遠隔から監視する構成で、両賞を受賞しました。",
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
 ] as const;
@@ -773,7 +872,7 @@ export const talks: readonly Talk[] = [
     id: "talk-css2026",
     date: "2026-10-22",
     dateLabel: "2026.10.22",
-    status: "upcoming",
+    status: "presented",
     venueShort: "CSS2026",
     venue: "コンピュータセキュリティシンポジウム 2026",
     kind: "一般発表",
@@ -823,7 +922,7 @@ export const talks: readonly Talk[] = [
     venueShort: "IEEJ U-21 2025",
     venue: "電気学会 U-21 学生研究発表会",
     kind: "学生研究発表",
-    session: "2D-2 · 奨励賞",
+    session: "2D-2、奨励賞",
     title: "LoRa通信とAIを活用した振動検知による異常予知システムの構築",
     project: "振動解析による設備保全",
     href: "https://www.iee.jp/u-21-2025-award/",
@@ -847,10 +946,9 @@ export type Profile = {
 export const profile: Profile = {
   nameJa: "近藤悠太",
   nameEn: "Kondo Yuta",
-  role: "エッジ AI、組み込み",
+  role: "エッジ AI、組み込み、AI 生成コードのセキュリティ",
   base: "広島",
   facts: [
-    { label: "プログラム", value: "SecHack365 2026 トレーニー（研究駆動コース）" },
     {
       label: "資格",
       value: "AWS Certified Solutions Architect – Associate",
@@ -886,7 +984,7 @@ export const heroCopyV2: HeroCopyV2 = {
   headlineJa: "マイコン上で動作する AI と、AI 生成コードの診断ツールを開発しています。",
   headlineEn: "Sense. Decide. Share.",
   subJa:
-    "研究では、振動、音響、画像を SPRESENSE 上で判定しています。診断ツールの VibeGuard は 4 つのストアで公開しており、2026 年 9 月に SES2026 で論文を発表しました。",
+    "研究では、振動、音響、画像を SPRESENSE 上で判定しています。診断ツールの VibeGuard は 4 つのストアで公開しており、2026 年 9 月に SES2026、10 月に CSS2026 で発表しました。",
   subEn:
     "Edge AI, from the lab to the marketplace.",
   primaryCta: {
@@ -895,9 +993,9 @@ export const heroCopyV2: HeroCopyV2 = {
   },
   secondaryCta: { label: "研究を読む", href: "/research" },
   latestUpdate: {
-    dateLabel: "2026.09.11",
-    title: "SES2026 で VibeGuard の論文を発表しました。次の発表は CSS2026（2026.10.22、浜松）です。",
-    href: "https://ses.sigse.jp/2026/program.html",
+    dateLabel: "2026.10.29",
+    title: "日経BP 学生AIリーダーズ大賞 2026 の自然科学部門で、最優秀賞を受賞しました。",
+    href: aiLeadersAwardUrl,
   },
 } as const;
 
@@ -918,15 +1016,21 @@ export type AwardBadge = {
 export const awardBadges: readonly AwardBadge[] = [
   {
     year: "2026",
-    organization: "CSS2026 · セキュア開発",
-    award: "一般発表 4D2-3",
+    organization: "学生AIリーダーズ大賞（日経BP）",
+    award: "自然科学部門 最優秀賞",
+    href: aiLeadersAwardUrl,
+  },
+  {
+    year: "2026",
+    organization: "コンピュータセキュリティシンポジウム 2026",
+    award: "CSS2026 一般発表 4D2-3",
     href: "https://www.iwsec.org/css/2026/program.html",
     kind: "presentation",
   },
   {
     year: "2026",
-    organization: "SES2026 · 慶應日吉",
-    award: "一般論文 発表",
+    organization: "ソフトウェアエンジニアリングシンポジウム 2026",
+    award: "SES2026 一般論文",
     href: "https://ses.sigse.jp/2026/program.html",
     kind: "presentation",
   },
@@ -938,45 +1042,45 @@ export const awardBadges: readonly AwardBadge[] = [
   },
   {
     year: "2026",
-    organization: "SecHack365",
-    award: "'26 トレーニー採択",
+    organization: "NICT（情報通信研究機構）",
+    award: "SecHack365 2026 トレーニー",
     href: "https://sechack365.nict.go.jp/",
     kind: "selection",
   },
   {
     year: "2025",
-    organization: "IEEJ C部門大会",
-    award: "学生ポスター発表",
+    organization: "電気学会 電子・情報・システム部門大会",
+    award: "学生ポスター（PS8-8）",
     href: "https://www.iee.jp/blog/c-taikai-2025/",
     kind: "presentation",
   },
   {
     year: "2025",
-    organization: "IEEJ U-21",
+    organization: "電気学会 U-21 学生研究発表会",
     award: "奨励賞",
     href: "https://www.iee.jp/u-21-2025-award/",
   },
   {
     year: "2025",
-    organization: "SPRESENSE Contest",
+    organization: "SPRESENSE 活用コンテスト",
     award: "クレイン電子 BLEアドオンボード特別賞",
     href: "https://elchika.com/promotion/spresense2025/winner/#nav",
   },
   {
     year: "2024",
-    organization: "SPRESENSE Contest",
-    award: "クレスコ ELTRES優秀賞",
+    organization: "SPRESENSE 活用コンテスト",
+    award: "クレスコ ELTRESアドオンボード優秀賞",
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
   {
     year: "2024",
-    organization: "SPRESENSE Contest",
+    organization: "SPRESENSE 活用コンテスト",
     award: "LoRa活用アイデア賞",
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
   {
     year: "2024",
-    organization: "SPRESENSE Contest",
+    organization: "SPRESENSE 活用コンテスト",
     award: "JBAT Qanat Universe賞",
     href: "https://elchika.com/promotion/spresense2024/winner/#nav",
   },
@@ -988,7 +1092,7 @@ export function isAwardPrize(badge: AwardBadge): boolean {
   return badge.kind === undefined || badge.kind === "award";
 }
 
-/** Canonical 受賞 count (currently 6). Use this everywhere "受賞 N 件" appears. */
+/** Canonical 受賞 count (currently 7). Use this everywhere "受賞 N 件" appears. */
 export const awardPrizeCount = awardBadges.filter(isAwardPrize).length;
 
 /** VibeGuard shipping stats — from CHANGELOG.md of the v0.3.6 release
@@ -1069,7 +1173,7 @@ export const positioning: Positioning = {
       labelJa: "研究の公開",
       score: 9,
       evidence:
-        "記事 5 本、受賞 6 件、SES2026 発表、CSS2026 発表予定、電気学会 2 件、SecHack365 '26",
+        "記事 5 本、受賞 7 件、SES2026・CSS2026 発表、電気学会 2 件、SecHack365 2026",
     },
     {
       key: "ops",

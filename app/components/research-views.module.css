@@ -1,0 +1,164 @@
+/* ==========================================================================
+   Research index and research pages.
+   They are built from the home page's sheet (home-page-view.module.css):
+   the same header, the heading in the side column, rows between hairlines.
+   This sheet adds only what those pages have and the home page does not.
+   ========================================================================== */
+
+/* the line above a research title: year in blue, then the field */
+.kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  color: var(--color-ink-soft);
+  font-family: var(--font-mono-stack);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.kicker time {
+  color: var(--color-iris);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Research page hero: the text, then the instrument, both on the measure
+   the home page's hero note uses. */
+.detailHero {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 32px clamp(28px, 5vw, 72px);
+  align-items: start;
+  margin-top: clamp(36px, 5vw, 64px);
+  padding-left: var(--side);
+}
+
+.detailHero p {
+  color: var(--color-ink-soft);
+  font-size: 16px;
+  line-height: 1.95;
+}
+
+.detailHero > div > p + p {
+  margin-top: 14px;
+}
+
+.detailFigure {
+  position: relative;
+  aspect-ratio: 16 / 9;
+}
+
+/* a row of plain links, set like the home page's 入手先 */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 26px;
+  margin-top: 24px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.actions a {
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
+  transition:
+    color 160ms ease,
+    text-decoration-color 160ms ease;
+}
+
+.actions a:hover {
+  color: var(--color-iris);
+  text-decoration-color: var(--color-iris);
+}
+
+/* the first row of a list carries the ink rule, as on the home page */
+.ruled > :first-child {
+  border-top-color: var(--color-ink);
+}
+
+/* titles in the left half of a row that are sentences, not names */
+.rowTitle {
+  font-family: var(--font-sans-stack) !important;
+  font-size: clamp(17px, 1.5vw, 20px) !important;
+  line-height: 1.65 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* An award's name is a run of proper nouns split by spaces
+   (学生AIリーダーズ大賞 2026 自然科学部門 最優秀賞): break at the spaces only,
+   and even out the two lines. */
+.awardName {
+  word-break: keep-all;
+  text-wrap: balance;
+}
+
+.org {
+  margin-top: 6px;
+  color: var(--color-ink-mute) !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+
+/* the right half of a row: a subtitle, then the text under it */
+.body > p + p {
+  margin-top: 10px;
+}
+
+/* an award an article received; not a link, so no underline */
+.awardNote {
+  color: var(--color-iris) !important;
+  font-size: 14px !important;
+  font-weight: 700;
+  line-height: 1.6 !important;
+}
+
+.body > .awardNote + .awardNote {
+  margin-top: 2px;
+}
+
+/* a block that starts with the ink rule: the slide deck and the highlights */
+.block {
+  padding-top: 32px;
+  border-top: 1px solid var(--color-ink);
+}
+
+.block > :first-child {
+  margin-top: 0;
+}
+
+.block > p {
+  max-width: 40em;
+}
+
+/* keep a bullet to a readable line, about the home page's 7fr column */
+.block > ul {
+  max-width: 46em;
+}
+
+.block > p + * {
+  margin-top: 28px;
+}
+
+/* Not found */
+.notFound {
+  padding-top: clamp(56px, 9vw, 132px);
+  padding-bottom: clamp(96px, 12vw, 176px);
+}
+
+@media (max-width: 860px) {
+  .detailHero {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: 0;
+  }
+
+  /* stacked, the two halves of 「ほかの研究」 read as one list */
+  .related {
+    gap: 0 !important;
+  }
+
+  .related > ul + ul {
+    border-top: 0;
+  }
+}

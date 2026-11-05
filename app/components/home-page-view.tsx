@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { LiveScanner } from "./live-scanner";
 import { ResearchInstrument, instrumentModeFor } from "./research-instrument";
-import { Ja } from "./ja";
+import { Ja, tagLine } from "./ja";
+import { SiteHeader } from "./site-header";
 import { heroCopyV2, vibeguardStats } from "../portfolio-data";
 import type {
   AwardBadge,
@@ -55,18 +56,7 @@ export function HomePageView({
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <a className={styles.brand} href="#top">
-          {profile.nameJa}
-        </a>
-        <nav className={styles.nav} aria-label="主要セクション">
-          <a href="#works">制作物</a>
-          <a href="#research">研究</a>
-          <a href="#talks">学会発表</a>
-          <a href="#records">受賞と記事</a>
-          <a href="#contact">プロフィールと連絡先</a>
-        </nav>
-      </header>
+      <SiteHeader page="home" />
 
       <main id="top" className={styles.main}>
         {/* ---------------- hero: a sentence, then the product itself ---------------- */}
@@ -210,7 +200,7 @@ export function HomePageView({
                   <p>
                     <Ja>{work.summary}</Ja>
                   </p>
-                  <p className={styles.stack}>{work.tags.slice(0, 6).join(" / ")}</p>
+                  <p className={styles.stack}>{tagLine(work.tags.slice(0, 6))}</p>
                 </div>
               </article>
             ))}
@@ -242,7 +232,7 @@ export function HomePageView({
                   <p>
                     <Ja>{project.cardSummary}</Ja>
                   </p>
-                  <p className={styles.stack}>{project.tags.slice(0, 5).join(" / ")}</p>
+                  <p className={styles.stack}>{tagLine(project.tags.slice(0, 5))}</p>
                 </div>
               </article>
             ))}
@@ -257,9 +247,10 @@ export function HomePageView({
               <li key={talk.id}>
                 <div className={styles.talkWhen}>
                   <time>{talk.dateLabel}</time>
-                  <span data-status={talk.status}>
-                    {talk.status === "presented" ? "発表済" : "発表予定"}
-                  </span>
+                  {/* a past date already says it was given; only a future talk gets a label */}
+                  {talk.status === "upcoming" && (
+                    <span data-status={talk.status}>発表予定</span>
+                  )}
                 </div>
                 <div>
                   <h3>
@@ -268,15 +259,15 @@ export function HomePageView({
                     </a>
                   </h3>
                   <p>
-                    {talk.venue}
-                    {talk.place ? `（${talk.place}）` : ""}、{talk.kind}
-                    {talk.session ? `、${talk.session}` : ""}
+                    <Ja>
+                      {`${talk.venue}${talk.place ? `（${talk.place}）` : ""}、${talk.kind}${talk.session ? `、${talk.session}` : ""}`}
+                    </Ja>
                   </p>
                   {talk.paper && (
                     <p className={styles.paper}>
                       <span>論文</span>
                       <a href={talk.paper.href} target="_blank" rel="noreferrer">
-                        {talk.paper.citation}
+                        <Ja>{talk.paper.citation}</Ja>
                       </a>
                       （{talk.paper.source}）
                     </p>
@@ -292,7 +283,10 @@ export function HomePageView({
           <h2 className={styles.heading}>受賞と記事</h2>
           <div className={styles.records}>
             <ul className={styles.list}>
-              {awardBadges.map((award) => (
+              {/* talks are listed in full under 学会発表 just above */}
+              {awardBadges
+                .filter((award) => award.kind !== "presentation")
+                .map((award) => (
                 <li key={`${award.year}-${award.organization}-${award.award}`}>
                   <span>
                     {award.year} {kindLabel(award.kind)}
@@ -319,7 +313,9 @@ export function HomePageView({
 
         {/* ---------------- profile & contact ---------------- */}
         <section id="contact" className={styles.section}>
-          <h2 className={styles.heading}>{philosophy.title}</h2>
+          <h2 className={styles.heading}>
+            <Ja>{philosophy.title}</Ja>
+          </h2>
           <div className={styles.contact}>
             <div className={styles.contactCopy}>
               <p>
@@ -339,7 +335,9 @@ export function HomePageView({
                 </div>
                 <div>
                   <dt>分野</dt>
-                  <dd>{profile.role}</dd>
+                  <dd>
+                    <Ja>{profile.role}</Ja>
+                  </dd>
                 </div>
                 <div>
                   <dt>拠点</dt>

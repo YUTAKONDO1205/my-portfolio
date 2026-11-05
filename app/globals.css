@@ -918,6 +918,9 @@ b {
 
 .platform-card-dark {
   display: grid;
+  /* a card stretched to its neighbour's height must not hand the spare
+     height to its rows, or its heading sits lower than the neighbour's */
+  align-content: start;
   gap: var(--spacing-6);
   background: none;
   border: none;
@@ -991,6 +994,11 @@ b {
   font-size: clamp(42px, 6vw, var(--text-heading-lg));
   line-height: var(--leading-heading-lg);
   letter-spacing: var(--tracking-tight);
+  /* A Japanese title wraps at phone width. auto-phrase sees 「自己対戦型自律実験」
+     as one phrase and falls back to breaking anywhere, stranding 「験」; with
+     normal breaking, balance evens it out to 「自己対戦型／自律実験」. */
+  word-break: normal;
+  text-wrap: balance;
 }
 
 .project-hero-subtitle {
@@ -1122,9 +1130,123 @@ b {
   line-height: 1.7;
 }
 
+/* Slide deck viewer — one page at a time at its own 16:9 shape. The image is
+   contained, never stretched. */
+.slide-viewer {
+  display: grid;
+  gap: var(--spacing-18);
+  /* the slide plus its controls fit in one screen */
+  max-width: min(100%, 1040px, calc((100svh - 240px) * 16 / 9));
+}
+
+.slide-viewer-frame {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid rgba(11, 13, 20, 0.1);
+  border-radius: 10px;
+  background: var(--color-white);
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.slide-viewer-frame:focus-visible {
+  outline: 2px solid var(--color-iris);
+  outline-offset: 4px;
+}
+
+.slide-viewer-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.slide-viewer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-12) var(--spacing-24);
+}
+
+.slide-viewer-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+}
+
+.slide-viewer-nav button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(11, 13, 20, 0.14);
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 160ms ease;
+}
+
+.slide-viewer-nav button:hover:not(:disabled) {
+  border-color: var(--color-ink);
+}
+
+.slide-viewer-nav button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.slide-viewer-count {
+  min-width: 5.5em;
+  color: var(--color-ink-soft);
+  font-family: var(--font-mono-stack);
+  font-size: var(--text-nav-label);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.slide-viewer-jump {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-6) var(--spacing-18);
+  font-family: var(--font-mono-stack);
+  font-size: var(--text-nav-label);
+}
+
+.slide-viewer-jump button {
+  padding: 6px 0;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background: none;
+  color: var(--color-ink-mute);
+  font: inherit;
+  cursor: pointer;
+}
+
+.slide-viewer-jump button[aria-pressed="true"] {
+  border-bottom-color: currentColor;
+  color: var(--color-ink);
+}
+
+.slide-viewer-jump a {
+  color: var(--color-iris);
+}
+
+.slide-viewer-title {
+  color: var(--color-ink-soft);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* 「ほかの研究」 lists the other four projects; two columns keep them in two
+   full rows instead of three and an orphan. */
 .project-mini-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--spacing-60);
 }
 
@@ -1177,6 +1299,13 @@ b {
   --theme-color: var(--spectrum-teal);
 }
 
+.theme-supercap {
+  --theme-color: var(--spectrum-violet);
+}
+
+.theme-supercap .card-label,
+.theme-supercap .card-label-inverse,
+.theme-supercap .quick-link-label,
 .theme-drone .card-label,
 .theme-pdm .card-label,
 .theme-anomaly .card-label,
@@ -1296,9 +1425,10 @@ h3 {
   font-feature-settings: "palt" 1;
 }
 
-/* anchor jumps from the rail and the hero nav land with a little air */
+/* an anchor jump lands below the sticky header (65px) with the section's
+   first rule in view */
 main [id] {
-  scroll-margin-top: 40px;
+  scroll-margin-top: 96px;
 }
 
 /* the rail carries scroll progress on wide screens; the top bar is for the

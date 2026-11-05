@@ -1,16 +1,9 @@
 "use client";
 
-import type { PropsWithChildren } from "react";
 import Link from "next/link";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-  type Variants,
-} from "motion/react";
 import { ResearchInstrument, instrumentModeFor } from "./research-instrument";
-import { Ja } from "./ja";
+import { Ja, softBreakTitle, tagLine } from "./ja";
+import { SiteHeader } from "./site-header";
 import type {
   PlatformLink,
   PublicationEntry,
@@ -18,6 +11,12 @@ import type {
   ResearchProject,
   SiteAxis,
 } from "../portfolio-data";
+import styles from "./home-page-view.module.css";
+import local from "./research-views.module.css";
+
+/* The research index, set like the home page: the header, a title with its
+   note, then sections whose heading stays in the side column while their
+   rows scroll past. */
 
 type ResearchPageViewProps = {
   platformLinks: readonly PlatformLink[];
@@ -27,89 +26,6 @@ type ResearchPageViewProps = {
   siteAxis: SiteAxis;
 };
 
-const easeOutExpo = [0.22, 1, 0.36, 1] as const;
-const viewport = { once: true, amount: 0.22 } as const;
-
-/* Latin project names like "Eltres_CO2_Mapping" have no natural break
-   points — insert zero-width spaces after underscores so wrapping happens
-   there instead of orphaning a single character. */
-function softBreakTitle(title: string) {
-  return title.replace(/_/g, "_​");
-}
-
-const sectionVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 106,
-    filter: "blur(26px)",
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 1.0,
-      ease: easeOutExpo,
-    },
-  },
-};
-
-const groupVariants: Variants = {
-  hidden: {},
-  show: {
-    transition: {
-      delayChildren: 0.08,
-      staggerChildren: 0.12,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 66,
-    scale: 0.9,
-    filter: "blur(18px)",
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.9,
-      ease: easeOutExpo,
-    },
-  },
-};
-
-function MotionCardShell({ children }: PropsWithChildren) {
-  const reduceMotion = useReducedMotion();
-
-  return (
-    <motion.div
-      className="motion-card-shell"
-      variants={itemVariants}
-      whileHover={
-        reduceMotion
-          ? undefined
-          : {
-              y: -10,
-              scale: 1.018,
-            }
-      }
-      transition={{
-        type: "spring",
-        stiffness: 240,
-        damping: 20,
-        mass: 0.82,
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
 export function ResearchPageView({
   platformLinks,
   publicationTimeline,
@@ -117,342 +33,157 @@ export function ResearchPageView({
   researchProjects,
   siteAxis,
 }: ResearchPageViewProps) {
-  const reduceMotion = useReducedMotion();
-  const { scrollY } = useScroll();
-
-  const heroY = useTransform(scrollY, [0, 620], [0, 74]);
-  const heroOpacity = useTransform(scrollY, [0, 620], [1, 0.76]);
-  const chipsY = useTransform(scrollY, [0, 620], [0, -26]);
-
   return (
-    <main className="research-page">
-      <motion.section className="shell base-hero base-hero-compact">
-        <motion.div
-          className="hero-ambient hero-ambient-left ambient-clouds"
-          aria-hidden="true"
-        />
-        <div className="research-feature-artwork" aria-hidden="true">
-          <ResearchInstrument mode="pdm" />
-        </div>
-        <motion.div
-          className="hero-ambient hero-ambient-right ambient-machine"
-          aria-hidden="true"
-        />
+    <div className={styles.page}>
+      <SiteHeader page="research-index" />
 
-        <motion.header
-          className="landing-header"
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: easeOutExpo }}
-        >
-          <div>
-            <p className="site-mark">研究一覧</p>
-            <p className="site-caption">Sense / Decide / Share</p>
+      <main className={styles.main}>
+        <section className={styles.hero}>
+          <h1 className={styles.statement}>研究一覧</h1>
+          <div className={styles.heroNote}>
+            <p>
+              <Ja>
+                公開している研究の一覧です。概要はこのページに、背景、構成、測定結果は個別ページに記載しています。
+              </Ja>
+            </p>
+            <p>
+              <Ja>{siteAxis.summary}</Ja>
+            </p>
           </div>
+        </section>
 
-          <nav className="hero-nav" aria-label="研究ページナビゲーション">
-            <Link href="/">ホーム</Link>
-            <a href="#project-sites">研究テーマ</a>
-            <a href="#research-archive">記事と受賞</a>
-          </nav>
-        </motion.header>
-
-        <motion.div
-          className="base-hero-copy base-hero-copy-wide"
-          style={reduceMotion ? undefined : { y: heroY, opacity: heroOpacity }}
-        >
-          <motion.p
-            className="eyebrow"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.54, ease: easeOutExpo, delay: 0.08 }}
-          >
-            Research
-          </motion.p>
-          <motion.h1
-            className="base-hero-title"
-            initial={{
-              opacity: 0,
-              y: 48,
-              rotateX: reduceMotion ? 0 : -50,
-            }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-            transition={{ duration: 0.84, ease: easeOutExpo, delay: 0.18 }}
-            style={reduceMotion ? undefined : { transformPerspective: 1200 }}
-          >
-            研究一覧
-          </motion.h1>
-          <motion.p
-            className="base-hero-lead"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.72, ease: easeOutExpo, delay: 0.28 }}
-          >
-            <Ja>公開している研究の一覧です。概要はこのページに、背景、構成、測定結果は個別ページに記載しています。</Ja>
-          </motion.p>
-
-          <motion.div
-            className="research-axis-strip"
-            aria-label="サイトの軸"
-            variants={groupVariants}
-            initial="hidden"
-            animate="show"
-            style={reduceMotion ? undefined : { y: chipsY }}
-          >
-            {siteAxis.steps.map((step) => (
-              <motion.div
-                key={step.en}
-                className="research-axis-chip"
-                variants={itemVariants}
-                whileHover={
-                  reduceMotion
-                    ? undefined
-                    : {
-                        y: -8,
-                        scale: 1.018,
-                      }
-                }
-                transition={{
-                  type: "spring",
-                  stiffness: 220,
-                  damping: 20,
-                  mass: 0.8,
-                }}
-              >
-                <strong>{step.en}</strong>
-                <span>{step.ja}</span>
-              </motion.div>
+        <section id="projects" className={styles.section}>
+          <h2 className={styles.heading}>研究テーマ</h2>
+          <div className={styles.rows}>
+            {researchProjects.map((project) => (
+              <article key={project.slug} className={styles.research}>
+                <Link
+                  href={`/research/${project.slug}`}
+                  className={styles.figure}
+                  aria-hidden="true"
+                  tabIndex={-1}
+                >
+                  <ResearchInstrument mode={instrumentModeFor(project.themeClass)} />
+                </Link>
+                <div className={styles.researchBody}>
+                  <p className={styles.year}>{project.year}</p>
+                  <h3>
+                    <Link href={`/research/${project.slug}`}>
+                      {softBreakTitle(project.title)}
+                    </Link>
+                  </h3>
+                  <p className={styles.subtitle}>
+                    <Ja>{project.subtitle}</Ja>
+                  </p>
+                  <p>
+                    <Ja>{project.cardSummary}</Ja>
+                  </p>
+                  <p className={styles.stack}>{tagLine(project.tags.slice(0, 5))}</p>
+                </div>
+              </article>
             ))}
-          </motion.div>
-        </motion.div>
-      </motion.section>
+          </div>
+        </section>
 
-      <motion.section
-        id="project-sites"
-        className="shell section dark-panel"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewport}
-      >
-        <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">Projects</p>
-          <h2>研究テーマ</h2>
-          <p className="section-intro">
-            センサ信号を SPRESENSE 上で処理する研究が 3 件、検知結果を運用で利用するための API が 1 件あります。
-          </p>
-        </div>
-
-        <motion.div className="project-preview-grid" variants={groupVariants}>
-          {researchProjects.map((project) => {
-            return (
-              <MotionCardShell key={project.slug}>
-                <article
-                  className={`project-preview-card ${project.themeClass}`}
-                >
-                  <div
-                    className={`project-preview-photo ${project.ambientClass}`}
-                    aria-hidden="true"
-                  />
-                  <div className="project-preview-artwork" aria-hidden="true">
-                    <ResearchInstrument
-                      mode={instrumentModeFor(project.themeClass)}
-                    />
-                  </div>
-                  <div className="project-preview-inner">
-                    <p className="card-label card-label-inverse">
-                      {project.heroKicker}
-                    </p>
-                    <h3>{softBreakTitle(project.title)}</h3>
-                    <p className="project-preview-subtitle">
-                      <Ja>{project.subtitle}</Ja>
-                    </p>
-                    <p className="project-preview-summary">
-                      <Ja>{project.cardSummary}</Ja>
-                    </p>
-                    <div className="tag-row">
-                      {project.tags.slice(0, 5).map((tag) => (
-                        <span key={tag} className="tag">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="link-row">
-                      <Link
-                        href={`/research/${project.slug}`}
-                        className="arrow-link"
+        <section id="awards" className={styles.section}>
+          <h2 className={styles.heading}>受賞と発表</h2>
+          <div className={`${styles.rows} ${local.ruled}`}>
+            {recognitions.map((recognition) => (
+              <article
+                key={`${recognition.year}-${recognition.award}`}
+                className={styles.row}
+              >
+                <div className={styles.rowHead}>
+                  <p className={styles.year}>{recognition.year}</p>
+                  <h3 className={`${local.rowTitle} ${local.awardName}`}>
+                    <a href={recognition.href} target="_blank" rel="noreferrer">
+                      {recognition.award}
+                    </a>
+                  </h3>
+                  <p className={local.org}>
+                    <Ja>{recognition.organization}</Ja>
+                  </p>
+                </div>
+                <div className={`${styles.rowBody} ${local.body}`}>
+                  <p className={styles.subtitle}>
+                    <Ja>{recognition.project}</Ja>
+                  </p>
+                  <p>
+                    <Ja>{recognition.note}</Ja>
+                  </p>
+                  {recognition.paper && (
+                    <p className={styles.paper}>
+                      <span>論文</span>
+                      <a
+                        href={recognition.paper.href}
+                        target="_blank"
+                        rel="noreferrer"
                       >
-                        詳細を見る
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              </MotionCardShell>
-            );
-          })}
-        </motion.div>
-      </motion.section>
-
-      <motion.section
-        id="research-archive"
-        className="shell section archive-panel"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewport}
-      >
-        <div className="section-heading">
-          <p className="eyebrow eyebrow-dark">Archive</p>
-          <h2>記事と受賞</h2>
-          <p className="section-intro">
-            執筆した記事と、受賞や発表の記録です。
-          </p>
-        </div>
-
-        <div className="archive-grid">
-          <motion.div className="archive-column" variants={groupVariants}>
-            <div className="subsection-heading">
-              <p className="card-label">記事</p>
-              <h3>公開記事</h3>
-            </div>
-
-            <div className="publication-grid">
-              {publicationTimeline.map((entry) => (
-                <MotionCardShell key={entry.id}>
-                  <article
-                    className={`publication-card ${entry.awards.length > 0 ? "award-accent-card" : ""}`}
-                  >
-                    <div className="publication-meta">
-                      <span>{entry.dateLabel}</span>
-                      <a href={entry.href} target="_blank" rel="noreferrer">
-                        記事を読む
+                        <Ja>{recognition.paper.citation}</Ja>
                       </a>
-                    </div>
-                    <h3>
+                      <Ja>{`（${recognition.paper.source}）`}</Ja>
+                    </p>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="articles" className={styles.section}>
+          <h2 className={styles.heading}>記事</h2>
+          <div className={`${styles.rows} ${local.ruled}`}>
+            {publicationTimeline.map((entry) => (
+              <article key={entry.id} className={styles.row}>
+                <div className={styles.rowHead}>
+                  <p className={styles.year}>{entry.dateLabel}</p>
+                  <h3 className={local.rowTitle}>
+                    <a href={entry.href} target="_blank" rel="noreferrer">
                       <Ja>{entry.title}</Ja>
-                    </h3>
-                    <p>
-                      <Ja>{entry.summary}</Ja>
+                    </a>
+                  </h3>
+                </div>
+                <div className={`${styles.rowBody} ${local.body}`}>
+                  <p>
+                    <Ja>{entry.summary}</Ja>
+                  </p>
+                  <p className={styles.stack}>{tagLine(entry.tags)}</p>
+                  {entry.awards.map((award) => (
+                    <p key={award} className={local.awardNote}>
+                      <Ja>{award}</Ja>
                     </p>
-                    <div className="tag-row">
-                      {entry.tags.map((tag) => (
-                        <span key={tag} className="tag tag-light">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    {entry.awards.length > 0 && (
-                      <div className="award-strip-list">
-                        {entry.awards.map((award) => (
-                          <span key={award} className="award-strip">
-                            {award}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </article>
-                </MotionCardShell>
-              ))}
-            </div>
-          </motion.div>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
-          <motion.div className="archive-column" variants={groupVariants}>
-            <div className="subsection-heading">
-              <p className="card-label">受賞</p>
-              <h3>受賞の記録</h3>
-            </div>
-
-            <div className="recognition-grid">
-              {recognitions.map((recognition) => (
-                <MotionCardShell
-                  key={`${recognition.year}-${recognition.award}`}
-                >
-                  <article className="recognition-card award-accent-card">
-                    <div className="publication-meta">
-                      <span>{recognition.year}</span>
-                      <span className="publication-links">
-                        {recognition.paper && (
-                          <a
-                            href={recognition.paper.href}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            論文を見る
-                          </a>
-                        )}
-                        <a
-                          href={recognition.href}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          詳細を見る
-                        </a>
-                      </span>
-                    </div>
-                    <h3>
-                      <Ja>{recognition.award}</Ja>
-                    </h3>
-                    <p className="recognition-project">{recognition.project}</p>
-                    <p>
-                      <Ja>{recognition.note}</Ja>
-                    </p>
-                    <span className="recognition-org">
-                      {recognition.organization}
-                    </span>
-                  </article>
-                </MotionCardShell>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      <motion.section
-        className="shell section dark-panel"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={viewport}
-      >
-        <div className="section-heading section-heading-inverse">
-          <p className="eyebrow">Links</p>
-          <h2>公開先</h2>
-          <p className="section-intro">
-            コード、記事、VibeGuard の公式サイトです。
-          </p>
-        </div>
-
-        <motion.div className="platform-grid-light" variants={groupVariants}>
-          {platformLinks.map((platform) => (
-            <motion.a
-              key={platform.label}
-              href={platform.href}
-              className="platform-card-dark"
-              variants={itemVariants}
-              whileHover={
-                reduceMotion
-                  ? undefined
-                  : {
-                      y: -10,
-                      scale: 1.015,
-                    }
-              }
-              transition={{
-                type: "spring",
-                stiffness: 240,
-                damping: 20,
-                mass: 0.8,
-              }}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span className="quick-link-label">{platform.label}</span>
-              <strong>{platform.description}</strong>
-              <p>{platform.detail}</p>
-            </motion.a>
-          ))}
-        </motion.div>
-      </motion.section>
-    </main>
+        <section id="links" className={styles.section}>
+          <h2 className={styles.heading}>公開先</h2>
+          <div className={`${styles.rows} ${local.ruled}`}>
+            {platformLinks.map((platform) => (
+              <article key={platform.label} className={styles.row}>
+                <div className={styles.rowHead}>
+                  <h3 className={local.rowTitle}>
+                    <a href={platform.href} target="_blank" rel="noreferrer">
+                      {platform.label}
+                    </a>
+                  </h3>
+                </div>
+                <div className={`${styles.rowBody} ${local.body}`}>
+                  <p className={styles.subtitle}>
+                    <Ja>{platform.description}</Ja>
+                  </p>
+                  <p>
+                    <Ja>{platform.detail}</Ja>
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      </main>
+    </div>
   );
 }
