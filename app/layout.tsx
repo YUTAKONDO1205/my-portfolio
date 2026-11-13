@@ -8,6 +8,7 @@ import {
   siteTitle,
   siteUrl,
 } from "./site-metadata";
+import { jsonLdScript, siteJsonLd } from "./structured-data";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
   applicationName: siteLabel,
   keywords: [
     "近藤悠太",
+    "近藤 悠太",
     "Yuta Kondo",
     "Portfolio",
     "VibeGuard",
@@ -35,6 +37,8 @@ export const metadata: Metadata = {
     "AI生成コード セキュリティ",
     "SES2026",
     "CSS2026",
+    "情報処理学会",
+    "電気学会",
     "Sense Decide Share",
   ],
   authors: [{ name: personName, url: siteUrl }],
@@ -69,27 +73,6 @@ export const metadata: Metadata = {
   },
 };
 
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: siteLabel,
-  alternateName: siteTitle,
-  description: siteDescription,
-  url: siteUrl,
-};
-
-const personJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: personName,
-  url: siteUrl,
-  sameAs: [
-    "https://github.com/YUTAKONDO1205",
-    "https://elchika.com/user/kd_yuta/?page=0",
-    "https://zenn.dev/kd_yuta",
-  ],
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -103,11 +86,7 @@ export default function RootLayout({
       <body className="site-body">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(siteJsonLd) }}
         />
         <LenisProvider>{children}</LenisProvider>
       </body>

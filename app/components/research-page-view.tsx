@@ -166,7 +166,7 @@ export function ResearchPageView({
               <article key={platform.label} className={styles.row}>
                 <div className={styles.rowHead}>
                   <h3 className={local.rowTitle}>
-                    <a href={platform.href} target="_blank" rel="noreferrer">
+                    <a href={platform.href} target="_blank" rel="me noreferrer">
                       {platform.label}
                     </a>
                   </h3>
