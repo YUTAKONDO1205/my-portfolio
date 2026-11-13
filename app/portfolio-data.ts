@@ -218,6 +218,12 @@ export const philosophy: Philosophy = {
 // Official page (results not posted there as of 2026-11-05; prize per the owner).
 const aiLeadersAwardUrl = "https://events.nikkeibp.co.jp/xtechnext/2026tky/ailaward/";
 
+// Official program of the 2025 C部門大会 (rev. 2025-07-18). PS8-8 is listed
+// there with the title and the presenter's name as text; the C部門大会 blog
+// post (www.iee.jp/blog/c-taikai-2025/) names no presenters.
+const ieejC2025ProgramUrl =
+  "https://www.iee.jp/eiss/wp-content/uploads/sites/4/2025/07/program20250718.pdf";
+
 export const researchProjects: readonly ResearchProject[] = [
   // Numbers: final-review deck 学生AIリーダーズ大賞2026_最終審査_近藤悠太.pptx
   // (2026-10-24 build), main slides 2–15. All are circuit/battery simulation values.
@@ -383,6 +389,10 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         href: "https://elchika.com/article/7301ab59-0921-4ba7-9935-b9309cf8c59c/",
         label: "Elchika 記事",
+      },
+      {
+        href: ieejC2025ProgramUrl,
+        label: "C部門大会のプログラム（PDF）",
       },
     ],
     sections: [
@@ -765,7 +775,7 @@ export const recognitions: readonly Recognition[] = [
     award: "CSS2026 一般発表 4D2-3",
     project:
       "VibeGuard Compiler：コンパイラ最適化におけるセキュリティ性質消失の追跡と第一喪失点の特定",
-    organization: "コンピュータセキュリティシンポジウム 2026（浜松）",
+    organization: "情報処理学会 コンピュータセキュリティシンポジウム 2026（浜松）",
     note:
       "コンパイラ最適化の過程でセキュリティ性質が失われる様子を追跡し、最初に失われる工程（第一喪失点）を特定する方式を、2026 年 10 月 22 日にセキュア開発セッションで発表しました。",
     href: "https://www.iwsec.org/css/2026/program.html",
@@ -775,7 +785,7 @@ export const recognitions: readonly Recognition[] = [
     award: "SES2026 一般論文",
     project:
       "AI生成コードの採用判断点に基づくマルチコンテキストセキュリティ診断配置方式の提案とVibeGuardによる検証",
-    organization: "ソフトウェアエンジニアリングシンポジウム 2026（慶應義塾大学 日吉キャンパス）",
+    organization: "情報処理学会 ソフトウェアエンジニアリングシンポジウム 2026（慶應義塾大学 日吉キャンパス）",
     note:
       "AI 生成コードの安全確認を採用判断点への診断配置の問題として扱い、VibeGuard の実装と測定で検証した単著論文を 2026 年 9 月 11 日に発表しました。",
     href: "https://ses.sigse.jp/2026/program.html",
@@ -806,7 +816,7 @@ export const recognitions: readonly Recognition[] = [
     organization: "電気学会 電子・情報・システム部門大会（金沢工業大学）",
     note:
       "振動・音響センサによる異常兆候の検知と AI 識別モデルの構築について、学生ポスターセッション（PS8-8）で発表しました。",
-    href: "https://www.iee.jp/blog/c-taikai-2025/",
+    href: ieejC2025ProgramUrl,
   },
   {
     year: "2025",
@@ -874,7 +884,7 @@ export const talks: readonly Talk[] = [
     dateLabel: "2026.10.22",
     status: "presented",
     venueShort: "CSS2026",
-    venue: "コンピュータセキュリティシンポジウム 2026",
+    venue: "情報処理学会 コンピュータセキュリティシンポジウム 2026",
     kind: "一般発表",
     session: "4D2-3 セキュア開発 2",
     place: "浜松",
@@ -889,7 +899,7 @@ export const talks: readonly Talk[] = [
     dateLabel: "2026.09.11",
     status: "presented",
     venueShort: "SES2026",
-    venue: "ソフトウェアエンジニアリングシンポジウム 2026",
+    venue: "情報処理学会 ソフトウェアエンジニアリングシンポジウム 2026",
     kind: "一般論文",
     session: "コード解析・セキュリティ・テスト支援",
     place: "慶應義塾大学 日吉キャンパス",
@@ -912,7 +922,7 @@ export const talks: readonly Talk[] = [
     title:
       "振動・音響センサを用いた異常兆候検知システムの開発と AI 識別モデル構築",
     project: "pdm_edge",
-    href: "https://www.iee.jp/blog/c-taikai-2025/",
+    href: ieejC2025ProgramUrl,
   },
   {
     id: "talk-ieej-u21-2025",
@@ -1022,14 +1032,14 @@ export const awardBadges: readonly AwardBadge[] = [
   },
   {
     year: "2026",
-    organization: "コンピュータセキュリティシンポジウム 2026",
+    organization: "情報処理学会 コンピュータセキュリティシンポジウム 2026",
     award: "CSS2026 一般発表 4D2-3",
     href: "https://www.iwsec.org/css/2026/program.html",
     kind: "presentation",
   },
   {
     year: "2026",
-    organization: "ソフトウェアエンジニアリングシンポジウム 2026",
+    organization: "情報処理学会 ソフトウェアエンジニアリングシンポジウム 2026",
     award: "SES2026 一般論文",
     href: "https://ses.sigse.jp/2026/program.html",
     kind: "presentation",
@@ -1051,7 +1061,7 @@ export const awardBadges: readonly AwardBadge[] = [
     year: "2025",
     organization: "電気学会 電子・情報・システム部門大会",
     award: "学生ポスター（PS8-8）",
-    href: "https://www.iee.jp/blog/c-taikai-2025/",
+    href: ieejC2025ProgramUrl,
     kind: "presentation",
   },
   {

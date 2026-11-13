@@ -9,18 +9,25 @@ import {
   selectedWorks,
   talks,
 } from "./portfolio-data";
+import { homeJsonLd, jsonLdScript } from "./structured-data";
 
 export default function Home() {
   return (
-    <HomePageView
-      awardBadges={awardBadges}
-      platformLinks={platformLinks}
-      profile={profile}
-      publicationTimeline={publicationTimeline}
-      researchProjects={researchProjects}
-      selectedWorks={selectedWorks}
-      talks={talks}
-      philosophy={philosophy}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(homeJsonLd) }}
+      />
+      <HomePageView
+        awardBadges={awardBadges}
+        platformLinks={platformLinks}
+        profile={profile}
+        publicationTimeline={publicationTimeline}
+        researchProjects={researchProjects}
+        selectedWorks={selectedWorks}
+        talks={talks}
+        philosophy={philosophy}
+      />
+    </>
   );
 }

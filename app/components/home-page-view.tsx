@@ -244,7 +244,7 @@ export function HomePageView({
           <h2 className={styles.heading}>学会発表</h2>
           <ol className={styles.talks}>
             {talks.map((talk) => (
-              <li key={talk.id}>
+              <li key={talk.id} id={talk.id}>
                 <div className={styles.talkWhen}>
                   <time>{talk.dateLabel}</time>
                   {/* a past date already says it was given; only a future talk gets a label */}
@@ -355,7 +355,8 @@ export function HomePageView({
               <ul className={styles.links}>
                 {platformLinks.map((platform) => (
                   <li key={platform.label}>
-                    <a href={platform.href} target="_blank" rel="noreferrer">
+                    {/* rel="me": these profiles are the same person as this site */}
+                    <a href={platform.href} target="_blank" rel="me noreferrer">
                       {platform.label}
                     </a>
                     <span>{platform.description}</span>
