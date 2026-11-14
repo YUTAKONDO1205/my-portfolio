@@ -696,7 +696,7 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     date: "2026-06-01",
     dateLabel: "2026.06.01",
     title:
-      "異常検知で終わらせない。現場保全の判断と行動を支援するAIエージェントをAzureで作った",
+      "現場保全の判断と行動を支援する AI エージェントを Azure で作りました（EdgeOps Command Agent）",
     summary:
       "Microsoft Agent Hackathon 2026 に提出した EdgeOps Command Agent の設計記事です。8 エージェント構成、承認ゲート、監査ログの考え方を Zenn にまとめています。",
     tags: ["Azure", "Semantic Kernel", "Multi-Agent", "Anomaly", "Dashboard"],
