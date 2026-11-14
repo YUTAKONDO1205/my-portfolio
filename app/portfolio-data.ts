@@ -404,7 +404,7 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         title: "構成",
         body:
-          "1 kHz で取得した時系列を FFT で周波数特徴へ変換し、0〜500 Hz を固定したビンに集約して Random Forest へ渡します。学習後のモデルはヘッダファイルに変換し、SPRESENSE に組み込めるようにしています。",
+          "取得した時系列を FFT で周波数の特徴量に変換し、固定長のビンに集約して Random Forest へ渡します。学習後のモデルはヘッダファイルに変換し、SPRESENSE に組み込めるようにしています。",
       },
       {
         title: "現状",
@@ -720,7 +720,7 @@ export const publicationTimeline: readonly PublicationEntry[] = [
     dateLabel: "2026.01.31",
     title: "加速度・音響信号を活用した異常検知エッジAIモデルの構築",
     summary:
-      "加速度と音響を 1 kHz で取得し、FFT による特徴量から軽量に異常の兆候を判定する構成を整理した記事です。",
+      "加速度と音響の信号を FFT で特徴量に変換し、軽量に異常の兆候を判定する構成を整理した記事です。",
     tags: ["AI", "SPRESENSE", "FFT", "Sensor", "Audio"],
     awards: [],
     href: "https://elchika.com/article/7301ab59-0921-4ba7-9935-b9309cf8c59c/",
