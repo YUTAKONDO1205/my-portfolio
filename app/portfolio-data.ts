@@ -46,7 +46,8 @@ export type PublicationEntry = {
 };
 
 /** A paper as published in the proceedings. `citation` keeps the
-    proceedings title as printed; `href` is the publisher's record page. */
+    proceedings title as printed; `href` is the publisher's record page, or
+    the national bibliographic record when the publisher has none online. */
 export type PaperRef = {
   citation: string;
   source: string;
@@ -224,6 +225,16 @@ const aiLeadersAwardUrl = "https://events.nikkeibp.co.jp/xtechnext/2026tky/ailaw
 const ieejC2025ProgramUrl =
   "https://www.iee.jp/eiss/wp-content/uploads/sites/4/2025/07/program20250718.pdf";
 
+// The PS8-8 paper in 電気学会電子・情報・システム部門大会論文集 2025年, as
+// recorded by CiNii Research (from NDL Search, collected under the NDL online
+// deposit system; dl.ndl.go.jp/pid/14673456). The full text can be read only
+// inside the NDL, so the link is a bibliographic record, not a "read the paper".
+const ieejC2025Paper: PaperRef = {
+  citation: "電気学会電子・情報・システム部門大会論文集 2025年",
+  source: "CiNii Research",
+  href: "https://cir.nii.ac.jp/crid/2050590834884103040",
+};
+
 export const researchProjects: readonly ResearchProject[] = [
   // Numbers: final-review deck 学生AIリーダーズ大賞2026_最終審査_近藤悠太.pptx
   // (2026-10-24 build), main slides 2–15. All are circuit/battery simulation values.
@@ -393,6 +404,10 @@ export const researchProjects: readonly ResearchProject[] = [
       {
         href: ieejC2025ProgramUrl,
         label: "C部門大会のプログラム（PDF）",
+      },
+      {
+        href: ieejC2025Paper.href,
+        label: "C部門大会論文集の書誌（CiNii）",
       },
     ],
     sections: [
@@ -817,6 +832,7 @@ export const recognitions: readonly Recognition[] = [
     note:
       "振動・音響センサによる異常兆候の検知と AI 識別モデルの構築について、学生ポスターセッション（PS8-8）で発表しました。",
     href: ieejC2025ProgramUrl,
+    paper: ieejC2025Paper,
   },
   {
     year: "2025",
@@ -923,6 +939,7 @@ export const talks: readonly Talk[] = [
       "振動・音響センサを用いた異常兆候検知システムの開発と AI 識別モデル構築",
     project: "pdm_edge",
     href: ieejC2025ProgramUrl,
+    paper: ieejC2025Paper,
   },
   {
     id: "talk-ieej-u21-2025",

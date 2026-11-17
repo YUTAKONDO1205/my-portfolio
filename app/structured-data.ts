@@ -13,11 +13,13 @@ const personId = `${siteUrl}/#person`;
 const websiteId = `${siteUrl}/#website`;
 
 /** Profiles that are about this person, not pages that merely mention them.
+    The CiNii Research author record lists the 2025 C部門大会 paper.
     Add ORCID / researchmap / Google Scholar here once those profiles exist. */
 const sameAs = [
   "https://github.com/YUTAKONDO1205",
   "https://elchika.com/user/kd_yuta/?page=0",
   "https://zenn.dev/kd_yuta",
+  "https://cir.nii.ac.jp/crid/2060590834884103040",
 ];
 
 /** Spellings used by the conference programs and proceedings
