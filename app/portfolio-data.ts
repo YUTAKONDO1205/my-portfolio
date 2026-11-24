@@ -7,31 +7,11 @@ export type PlatformLink = {
   detail: string;
 };
 
-export type FocusArea = {
-  label: string;
-  title: string;
-  description: string;
-};
-
-export type SiteAxisStep = {
-  en: string;
-  ja: string;
-  description: string;
-};
-
+/** The research index lead. Only what the page renders: an object passed to a
+    client component is serialized into the HTML whole, so fields that are
+    never shown still reach the page source. */
 export type SiteAxis = {
-  label: string;
-  title: string;
   summary: string;
-  detail: string;
-  steps: readonly SiteAxisStep[];
-};
-
-export type Philosophy = {
-  label: string;
-  title: string;
-  body: string;
-  english: string;
 };
 
 export type PublicationEntry = {
@@ -74,7 +54,6 @@ export type ResearchProject = {
   /** meta description of the research page: 1–2 sentences, 50–90 characters */
   description: string;
   heroKicker: string;
-  heroEnglish: string;
   themeClass:
     | "theme-drone"
     | "theme-pdm"
@@ -158,62 +137,9 @@ export const platformLinks: readonly PlatformLink[] = [
   },
 ] as const;
 
-export const focusAreas: readonly FocusArea[] = [
-  {
-    label: "Signal",
-    title: "現場の信号を取る",
-    description:
-      "画像、振動、音響、位置情報を、現場に設置できるセンサで計測します。",
-  },
-  {
-    label: "Edge",
-    title: "軽量に判断する",
-    description:
-      "SPRESENSE のメモリと演算性能に収まるよう、FFT、Random Forest、MobileNetV2 を用いて端末上で判定します。",
-  },
-  {
-    label: "Open",
-    title: "公開しながら磨く",
-    description:
-      "コードと記事を、研究の途中から公開しています。",
-  },
-] as const;
-
 export const siteAxis: SiteAxis = {
-  label: "Research Flow",
-  title: "研究テーマ",
   summary:
     "SPRESENSE 上でセンサ信号を処理する研究が 3 件、検知結果を運用で利用するための API が 1 件、回路シミュレーション上で AI どうしを対戦させる自律実験が 1 件あります。",
-  detail:
-    "いずれの研究も、信号の計測、端末上での判定、公開の順に進めています。背景の粒子は、この 3 段階に対応する形へ変化します。",
-  steps: [
-    {
-      en: "Sense",
-      ja: "現場での計測",
-      description:
-        "画像、振動、音響、位置情報、CO2 濃度を、現場に設置したセンサで計測します。",
-    },
-    {
-      en: "Decide",
-      ja: "端末上での判定",
-      description:
-        "SPRESENSE のメモリと演算性能に収まるよう、FFT による特徴量と軽量なモデルで判定します。",
-    },
-    {
-      en: "Share",
-      ja: "公開",
-      description:
-        "コードは GitHub で、経緯と評価は Elchika と Zenn で公開しています。学会でも発表しています。",
-    },
-  ],
-} as const;
-
-export const philosophy: Philosophy = {
-  label: "Philosophy",
-  title: "プロフィールと連絡先",
-  body: "開発したものが動作しても、現場で使われなければ意味がないと考えています。そのため、センサ、端末上の推論、通信、API、画面までを一通り自分で実装しています。送信するデータは必要な範囲に絞り、検知結果は記録して、あとから参照できるようにしています。",
-  english:
-    "I build things until they can actually be used in the field.",
 } as const;
 
 // Official page (results not posted there as of 2026-11-05; prize per the owner).
@@ -250,7 +176,6 @@ export const researchProjects: readonly ResearchProject[] = [
     description:
       "近藤悠太の研究「自己対戦型自律実験」のページです。AI が見つけた充電制御則の違反を別の AI に探させる手順と、回路シミュレーションでの結果を掲載しています。",
     heroKicker: "スーパーキャパシタ・自己対戦",
-    heroEnglish: "Falsify the optimum before adopting it.",
     themeClass: "theme-supercap",
     ambientClass: "ambient-machine",
     tags: [
@@ -314,7 +239,6 @@ export const researchProjects: readonly ResearchProject[] = [
     description:
       "近藤悠太の研究「DroneInspector」のページです。SPRESENSE 上で撮像から監督制御までを実行する、インフラ点検向けドローンの構成と測定結果を掲載しています。",
     heroKicker: "ドローン・画像",
-    heroEnglish: "Read the scene before the signal is lost.",
     themeClass: "theme-drone",
     ambientClass: "ambient-clouds",
     tags: [
@@ -381,7 +305,6 @@ export const researchProjects: readonly ResearchProject[] = [
     description:
       "近藤悠太の研究「pdm_edge」のページです。加速度と音響を FFT で特徴量に変換し、SPRESENSE 上で異常の兆候を判定する構成を掲載しています。",
     heroKicker: "振動・音響",
-    heroEnglish: "Turn vibration into a readable edge.",
     themeClass: "theme-pdm",
     ambientClass: "ambient-machine",
     tags: [
@@ -446,7 +369,6 @@ export const researchProjects: readonly ResearchProject[] = [
     description:
       "近藤悠太の研究「anomaly-event-api」のページです。異常検知の結果をイベントとして保存し、対応状況を管理する API の構成を掲載しています。",
     heroKicker: "API・運用",
-    heroEnglish: "From anomaly to action.",
     themeClass: "theme-anomaly",
     ambientClass: "ambient-server",
     tags: [
@@ -498,7 +420,6 @@ export const researchProjects: readonly ResearchProject[] = [
     description:
       "近藤悠太の研究「Eltres_CO2_Mapping」のページです。SPRESENSE と ELTRES で CO2 濃度と位置情報を送信し、地図上に可視化する構成を掲載しています。",
     heroKicker: "CO2・位置情報",
-    heroEnglish: "Make invisible signals visible.",
     themeClass: "theme-eltres",
     ambientClass: "ambient-tunnel",
     tags: [
@@ -996,29 +917,15 @@ export function getResearchProject(slug: string) {
 // ============================================================================
 
 export type HeroCopyV2 = {
-  eyebrow: string;
   headlineJa: string;
-  headlineEn: string;
   subJa: string;
-  subEn: string;
-  primaryCta: { label: string; href: string };
-  secondaryCta: { label: string; href: string };
   latestUpdate: { dateLabel: string; title: string; href: string };
 };
 
 export const heroCopyV2: HeroCopyV2 = {
-  eyebrow: "Embedded × Edge AI",
   headlineJa: "マイコン上で動作する AI と、AI 生成コードの診断ツールを開発しています。",
-  headlineEn: "Sense. Decide. Share.",
   subJa:
     "研究では、振動、音響、画像を SPRESENSE 上で判定しています。診断ツールの VibeGuard は 4 つのストアで公開しており、2026 年 9 月に SES2026、10 月に CSS2026 で発表しました。",
-  subEn:
-    "Edge AI, from the lab to the marketplace.",
-  primaryCta: {
-    label: "VibeGuard を試す",
-    href: "https://vibeguard-site.kondo-yuta-02.workers.dev",
-  },
-  secondaryCta: { label: "研究を読む", href: "/research" },
   latestUpdate: {
     dateLabel: "2026.10.29",
     title: "日経BP 学生AIリーダーズ大賞 2026 の自然科学部門で、最優秀賞を受賞しました。",
@@ -1132,103 +1039,4 @@ export const vibeguardStats = {
   languages: 11,
   fixers: 7,
   safeFixers: 1,
-} as const;
-
-// ============================================================================
-// Positioning radar — competitor-teardown derived
-// ============================================================================
-
-export type PositioningAxis = {
-  key: "signal" | "edge" | "ship" | "research" | "ops";
-  labelEn: string;
-  labelJa: string;
-  score: number; // 0-10
-  evidence: string;
-};
-
-export type PositioningSilhouette = {
-  id: "yuta" | "typical-embedded" | "typical-ai";
-  label: string;
-  scores: Record<PositioningAxis["key"], number>;
-  tone: "primary" | "ghost-embedded" | "ghost-ai";
-};
-
-export type Positioning = {
-  label: string;
-  title: string;
-  thesisJa: string;
-  thesisEn: string;
-  axes: readonly PositioningAxis[];
-  silhouettes: readonly PositioningSilhouette[];
-};
-
-export const positioning: Positioning = {
-  label: "Positioning",
-  title: "自己評価（5 軸）",
-  thesisJa:
-    "組み込みの研究に取り組みながら、VibeGuard を 4 つのストアで公開しています。下の 5 軸は自己評価です。",
-  thesisEn:
-    "Embedded research on one side, a shipped product on the other.",
-  axes: [
-    {
-      key: "signal",
-      labelEn: "Signal Breadth",
-      labelJa: "信号の幅",
-      score: 9,
-      evidence:
-        "画像、振動、音響、GPS+CO2、AI 生成コードの 5 種類",
-    },
-    {
-      key: "edge",
-      labelEn: "Edge Constraint",
-      labelJa: "エッジ制約下の実装",
-      score: 9,
-      evidence:
-        "SPRESENSE 上の FFT、Random Forest、TFLite Micro。.tflite は C++ ヘッダに変換",
-    },
-    {
-      key: "ship",
-      labelEn: "Ship to Market",
-      labelJa: "製品の公開",
-      score: 8,
-      evidence:
-        "VibeGuard v0.3.6 を GitHub Marketplace、VS Code、Chrome Web Store、Open VSX で公開",
-    },
-    {
-      key: "research",
-      labelEn: "Public Research",
-      labelJa: "研究の公開",
-      score: 9,
-      evidence:
-        "記事 5 本、受賞 7 件、SES2026・CSS2026 発表、電気学会 2 件、SecHack365 2026",
-    },
-    {
-      key: "ops",
-      labelEn: "Operationalization",
-      labelJa: "運用への組み込み",
-      score: 8,
-      evidence:
-        "EdgeOps の承認と監査のワークフロー、anomaly-event-api の 3 状態管理",
-    },
-  ],
-  silhouettes: [
-    {
-      id: "yuta",
-      label: "近藤悠太",
-      tone: "primary",
-      scores: { signal: 9, edge: 9, ship: 8, research: 9, ops: 8 },
-    },
-    {
-      id: "typical-embedded",
-      label: "一般的な組み込みエンジニア",
-      tone: "ghost-embedded",
-      scores: { signal: 5, edge: 8, ship: 3, research: 4, ops: 4 },
-    },
-    {
-      id: "typical-ai",
-      label: "一般的な AI エンジニア",
-      tone: "ghost-ai",
-      scores: { signal: 6, edge: 4, ship: 5, research: 6, ops: 8 },
-    },
-  ],
 } as const;

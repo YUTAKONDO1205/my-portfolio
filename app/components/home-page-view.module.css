@@ -501,21 +501,8 @@
 /* ---------- profile & contact ---------- */
 
 .contact {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: 32px clamp(28px, 5vw, 72px);
   padding-top: 36px;
   border-top: 1px solid var(--color-ink);
-}
-
-.contactCopy {
-  display: grid;
-  gap: 20px;
-  align-content: start;
-}
-
-.contactCopy p:first-child {
-  color: var(--color-ink);
 }
 
 .facts {
@@ -627,7 +614,6 @@
   .lead,
   .row,
   .research,
-  .contact,
   .records {
     grid-template-columns: minmax(0, 1fr);
   }

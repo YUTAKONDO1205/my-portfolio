@@ -1,7 +1,6 @@
 import { HomePageView } from "./components/home-page-view";
 import {
   awardBadges,
-  philosophy,
   platformLinks,
   profile,
   publicationTimeline,
@@ -26,7 +25,6 @@ export default function Home() {
         researchProjects={researchProjects}
         selectedWorks={selectedWorks}
         talks={talks}
-        philosophy={philosophy}
       />
     </>
   );
