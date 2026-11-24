@@ -11,7 +11,7 @@ const SECTIONS = [
   { id: "research", label: "研究" },
   { id: "talks", label: "学会発表" },
   { id: "records", label: "受賞と記事" },
-  { id: "contact", label: "プロフィールと連絡先" },
+  { id: "contact", label: "プロフィール" },
 ] as const;
 
 type SiteHeaderProps = {

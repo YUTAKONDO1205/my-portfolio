@@ -8,7 +8,6 @@ import { SiteHeader } from "./site-header";
 import { heroCopyV2, vibeguardStats } from "../portfolio-data";
 import type {
   AwardBadge,
-  Philosophy,
   PlatformLink,
   Profile,
   PublicationEntry,
@@ -26,7 +25,6 @@ type HomePageViewProps = {
   researchProjects: readonly ResearchProject[];
   selectedWorks: readonly SelectedWork[];
   talks: readonly Talk[];
-  philosophy: Philosophy;
 };
 
 function kindLabel(kind: AwardBadge["kind"]) {
@@ -48,7 +46,6 @@ export function HomePageView({
   researchProjects,
   selectedWorks,
   talks,
-  philosophy,
 }: HomePageViewProps) {
   const vibeguard = selectedWorks.find((work) => work.slug === "vibeguard");
   const otherWorks = selectedWorks.filter((work) => work.slug !== "vibeguard");
@@ -311,20 +308,11 @@ export function HomePageView({
           </div>
         </section>
 
-        {/* ---------------- profile & contact ---------------- */}
+        {/* ---------------- profile ----------------
+            The id stays "contact" so existing /#contact links keep working. */}
         <section id="contact" className={styles.section}>
-          <h2 className={styles.heading}>
-            <Ja>{philosophy.title}</Ja>
-          </h2>
+          <h2 className={styles.heading}>プロフィール</h2>
           <div className={styles.contact}>
-            <div className={styles.contactCopy}>
-              <p>
-                <Ja>{philosophy.body}</Ja>
-              </p>
-              <p>
-                <Ja>仕事や研究のご相談は、GitHub のプロフィールからご連絡ください。</Ja>
-              </p>
-            </div>
             <div>
               <dl className={styles.facts}>
                 <div>
