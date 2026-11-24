@@ -76,6 +76,7 @@ const KEEP_LATIN = [
   "MobileNetV2 int8",
   "focus regions",
   "attention grid",
+  "silent miss",
 ];
 const KEEP_LATIN_RE = new RegExp(KEEP_LATIN.join("|"), "g");
 
@@ -185,9 +186,15 @@ export function phrasesOf(text: string): readonly string[] {
     const last = merged.length - 1;
     // keep closing punctuation with the phrase it closes, and never leave a
     // single character stranded as its own phrase
+    // A one-kana particle right after a closing bracket stays with it, or a
+    // wrapped line starts with 「に、」 (「…（GitHub Actions / CLI） / に、同じ…」).
+    const particleAfterBracket =
+      last >= 0 && /[）)」』]$/.test(merged[last]) && /^[にのをがはでともへや](?![ぁ-ん])/.test(phrase);
     if (
       last >= 0 &&
-      (NO_BREAK_BEFORE.test(phrase) || Array.from(merged[last]).length === 1)
+      (NO_BREAK_BEFORE.test(phrase) ||
+        Array.from(merged[last]).length === 1 ||
+        particleAfterBracket)
     ) {
       merged[last] += phrase;
     } else {
@@ -207,6 +214,9 @@ export function phrasesOf(text: string): readonly string[] {
       phrase
         .replace(/(?<=[ぁ-んァ-ヶー一-龠々）」]) (?=\S)|(?<=\S) (?=[ぁ-んァ-ヶ一-龠々（「])/g, "\u00a0")
         .replace(/(?<=[A-Za-z0-9])([-\u2013\u301c\uff5e])(?=[A-Za-z0-9])/g, "$1\u2060")
+        // the browser may break after \u300c\uff09\u300d even inside a phrase; a particle
+        // after a closing bracket must not begin the next line
+        .replace(/(?<=[\uff09)\u300d\u300f])(?=[\u306b\u306e\u3092\u304c\u306f\u3067\u3068\u3082\u3078\u3084](?![\u3041-\u3093]))/g, "\u2060")
         // a number stays with its unit (\u300c500 / Hz\u300d\u300c2.9 / MB\u300d)
         .replace(/(?<=[0-9]) (?=(?:[kMGm]?(?:Hz|V|A|W|F|B))(?![A-Za-z]))/g, "\u00a0")
         .replace(KEEP_LATIN_RE, (name) => name.replace(/ /g, "\u00a0"))
